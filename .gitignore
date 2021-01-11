@@ -1,0 +1,10 @@
+*.suo
+*.lock
+*.ide
+*.pubxml
+*.user
+*.dll
+*.pdb
+.vs/
+MenaWeb/bin/
+MenaWeb/obj/
