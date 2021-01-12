@@ -15,6 +15,8 @@ using MenaWeb.Models;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Authorization;
 using MenaWeb.SecurityServices;
+using Microsoft.EntityFrameworkCore;
+using MenaWeb.DataServices;
 
 namespace MenaWeb
 {
@@ -73,7 +75,7 @@ namespace MenaWeb
                 requirements.Add(new CookieUserWithConnectionStringRequirement());
                 opts.DefaultPolicy = new AuthorizationPolicy(requirements, opts.DefaultPolicy.AuthenticationSchemes);
             });
-
+            services.AddTransient<ContractsService>();
             services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
