@@ -140,6 +140,11 @@ namespace MenaWeb.Models.EntityConfigurations
                 .HasForeignKey(r => r.IdDocumentIssued)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasOne(r => r.Document)
+                .WithMany(r => r.People)
+                .HasForeignKey(r => r.IdDocument)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasQueryFilter(r => !r.Deleted);
         }
     }

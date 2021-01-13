@@ -27,7 +27,11 @@ namespace MenaWeb.Models.Entities
         public virtual List<Contract> Side12Contracts { get; set; }
         public ApartmentType ApartmentType { get; set; }
         public virtual List<ApartmentEvaluation> ApartmentEvaluations { get; set; }
+        public virtual List<ApartmentRedemption> ApartmentRedemptions { get; set; }
+        public virtual List<BankInfo> BankInfos { get; set; }
+        public virtual List<RedEvaluation> RedEvaluations { get; set; }
         public virtual List<Land> Land { get; set; }
         public virtual List<Person> People { get; set; }
+        public virtual List<WarrantApartment> WarrantApartments { get; set; }
     }
 }

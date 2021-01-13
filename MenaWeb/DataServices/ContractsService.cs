@@ -18,8 +18,10 @@ namespace MenaWeb.DataServices
 
         public void GetContracts()
         {
-            var a = db.DocumentIssueds;
-            var s = db.People.Include(r => r.DocumentIssued);
+            var a = db.TemplateVariablesMeta;
+            var b = db.TemplateVariables;
+            var s = db.WarrantTemplates.Include(r => r.TemplateVariablesMeta);
+            var g = db.TemplateVariablesMeta.Include(r => r.TemplateVariables);
         }
     }
 }

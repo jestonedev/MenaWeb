@@ -32,6 +32,7 @@ namespace MenaWeb.Models.Entities
         public Contractor Contractor { get; set; }
         public PersonStatus PersonStatus { get; set; }
         public DocumentIssued DocumentIssued { get; set; }
+        public Document Document { get; set; }
 
     }
 }

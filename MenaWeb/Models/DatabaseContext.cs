@@ -31,6 +31,20 @@ namespace MenaWeb.Models
         public DbSet<Contractor> Contractors { get; set; }
         public DbSet<PersonStatus> PersonStatuses { get; set; }
         public DbSet<DocumentIssued> DocumentIssueds { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<Additional> Additionals { get; set; }
+        public DbSet<Predost> Predosts { get; set; }
+        public DbSet<Osnovanie> Osnovanies { get; set; }
+        public DbSet<CopyKgc> CopyKgcs { get; set; }
+        public DbSet<ApartmentRedemption> ApartmentRedemptions { get; set; }
+        public DbSet<BankInfo> BankInfos { get; set; }
+        public DbSet<RedEvaluation> RedEvaluations { get; set; }
+        public DbSet<RedOrganization> RedOrganizations { get; set; }
+        public DbSet<WarrantTemplate> WarrantTemplates { get; set; }
+        public DbSet<WarrantTemplateType> WarrantTemplateTypes { get; set; }
+        public DbSet<WarrantApartment> WarrantApartments { get; set; }
+        public DbSet<TemplateVariable> TemplateVariables { get; set; }
+        public DbSet<TemplateVariableMeta> TemplateVariablesMeta { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration config, IHttpContextAccessor httpContextAccessor)
             : base(options)
@@ -65,6 +79,20 @@ namespace MenaWeb.Models
             modelBuilder.ApplyConfiguration(new ContractorConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new PersonStatusConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new DocumentIssuedConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new DocumentConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new AdditionalConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new PredostConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new OsnovanieConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new CopyKgcConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new ApartmentRedemptionConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new BankInfoConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new RedEvaluationConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new RedOrganizationConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new WarrantTemplateConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new WarrantTemplateTypeConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new WarrantApartmentConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new TemplateVariableMetaConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new TemplateVariableConfiguration(nameDatebase));
         }
     }
 }

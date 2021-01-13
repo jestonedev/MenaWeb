@@ -35,6 +35,7 @@ namespace MenaWeb.Models.Entities
         public PreContractIssued PreContractIssued { get; set; }
         public ContractReason ContractReason { get; set; }
         public virtual List<ContractStatusHistory> ContractStatusHistory { get; set; }
+        public virtual List<Additional> Additionals { get; set; }
 
     }
 }
