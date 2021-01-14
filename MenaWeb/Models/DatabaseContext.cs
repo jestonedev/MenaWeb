@@ -45,6 +45,7 @@ namespace MenaWeb.Models
         public DbSet<WarrantApartment> WarrantApartments { get; set; }
         public DbSet<TemplateVariable> TemplateVariables { get; set; }
         public DbSet<TemplateVariableMeta> TemplateVariablesMeta { get; set; }
+        public DbSet<KladrStreet> KladrStreets { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration config, IHttpContextAccessor httpContextAccessor)
             : base(options)
@@ -93,6 +94,7 @@ namespace MenaWeb.Models
             modelBuilder.ApplyConfiguration(new WarrantApartmentConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new TemplateVariableMetaConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new TemplateVariableConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new KladrStreetConfiguration(nameDatebase));
         }
     }
 }

@@ -1,0 +1,239 @@
+﻿@using MenaWeb.ViewModels;
+@model ContractListVM
+
+<table class="table table-hover b-table">
+    <thead>
+        <tr>
+            <th class="align-middle" style="width:155px;">
+                № по реестру
+            </th>
+            <th class="align-middle">
+                Адрес
+            </th>
+            <th class="align-middle d-none d-md-table-cell">
+                Участники мены
+            </th>
+            <th class="align-middle"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Contracts)
+        {
+            <tr>
+                <td>@item.IdContract</td>
+                <td>
+                    @if (item.ApartmentSide1 == null && item.ApartmentSide12 == null && item.ApartmentSide2 == null)
+                    {
+                        <div><b>Сторона 1</b></div>
+                        <i class="text-danger">адрес не указан</i>
+                        <div class="mb-2"></div>
+                        <div><b>Сторона 2</b></div>
+                        <i class="text-danger">адрес не указан</i>
+                    }
+                    @if (item.ApartmentSide1 != null || item.ApartmentSide12 != null)
+                    {
+                        <div><b>Сторона 1</b></div>
+                    }
+                    @if (item.ApartmentSide1 != null)
+                    {
+                        var address = Model.Streets.FirstOrDefault(r => r.IdStreet == item.ApartmentSide1.IdStreet)?.StreetName;
+                        if (!string.IsNullOrEmpty(item.ApartmentSide1.House))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "д. " + item.ApartmentSide1.House;
+                        }
+                        if (!string.IsNullOrEmpty(item.ApartmentSide1.Flat))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "кв. " + item.ApartmentSide1.Flat;
+                        }
+                        if (!string.IsNullOrEmpty(item.ApartmentSide1.Room))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "ком. " + item.ApartmentSide1.Room;
+                        }
+                        if (string.IsNullOrEmpty(address))
+                        {
+                            <i class="text-danger">адрес не указан</i>
+                        }
+                        else
+                        {
+                            @address
+                        }
+                        <div class="m-contract-list__address-dopinfo">
+                            @if (item.ApartmentSide1.InventoryNumber != null)
+                            {
+                                <span>Кадастровый номер: </span>@item.ApartmentSide1.InventoryNumber
+                            }
+                            @if (item.ApartmentSide1.InventoryNumber != null && (item.ApartmentSide1.TotalArea != null))
+                            {
+                                <br />
+                            }
+                            @if (item.ApartmentSide1.TotalArea != null)
+                            {
+                                <span>Общая площадь: </span>@item.ApartmentSide1.TotalArea<span> м<sup>2</sup></span>
+                            }
+                        </div>
+                    }
+                    @if (item.ApartmentSide1 != null && item.ApartmentSide12 != null)
+                    {
+                        <div class="mb-2"></div>
+                    }
+                    @if (item.ApartmentSide12 != null)
+                    {
+                        var address = Model.Streets.FirstOrDefault(r => r.IdStreet == item.ApartmentSide12.IdStreet)?.StreetName;
+                        if (!string.IsNullOrEmpty(item.ApartmentSide12.House))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "д. " + item.ApartmentSide12.House;
+                        }
+                        if (!string.IsNullOrEmpty(item.ApartmentSide12.Flat))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "кв. " + item.ApartmentSide12.Flat;
+                        }
+                        if (!string.IsNullOrEmpty(item.ApartmentSide12.Room))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "ком. " + item.ApartmentSide12.Room;
+                        }
+                        if (string.IsNullOrEmpty(address))
+                        {
+                            <i class="text-danger">адрес не указан</i>
+                        }
+                        else
+                        {
+                            @address
+                        }
+                        <div class="m-contract-list__address-dopinfo">
+                            @if (item.ApartmentSide12.InventoryNumber != null)
+                            {
+                                <span>Кадастровый номер: </span>@item.ApartmentSide12.InventoryNumber
+                            }
+                            @if (item.ApartmentSide12.InventoryNumber != null && (item.ApartmentSide12.TotalArea != null))
+                            {
+                                <br />
+                            }
+                            @if (item.ApartmentSide12.TotalArea != null)
+                            {
+                                <span>Общая площадь: </span>@item.ApartmentSide12.TotalArea<span> м<sup>2</sup></span>
+                            }
+                        </div>
+                    }
+                    @if ((item.ApartmentSide1 != null || item.ApartmentSide12 != null) && item.ApartmentSide2 != null)
+                    {
+                        <div class="mb-2"></div>
+                    }
+                    @if (item.ApartmentSide2 != null)
+                    {
+                        <div><b>Сторона 2</b></div>
+                    }
+                    @if (item.ApartmentSide2 != null)
+                    {
+                        var address = Model.Streets.FirstOrDefault(r => r.IdStreet == item.ApartmentSide2.IdStreet)?.StreetName;
+                        if (!string.IsNullOrEmpty(item.ApartmentSide2.House))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "д. " + item.ApartmentSide2.House;
+                        }
+                        if (!string.IsNullOrEmpty(item.ApartmentSide2.Flat))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "кв. " + item.ApartmentSide2.Flat;
+                        }
+                        if (!string.IsNullOrEmpty(item.ApartmentSide2.Room))
+                        {
+                            if (!string.IsNullOrEmpty(address))
+                            {
+                                address += ", ";
+                            }
+                            address += "ком. " + item.ApartmentSide2.Room;
+                        }
+                        if (string.IsNullOrEmpty(address))
+                        {
+                            <i class="text-danger">адрес не указан</i>
+                        }
+                        else
+                        {
+                            @address
+                        }
+                        <div class="m-contract-list__address-dopinfo">
+                            @if (item.ApartmentSide2.InventoryNumber != null)
+                            {
+                                <span>Кадастровый номер: </span>@item.ApartmentSide2.InventoryNumber
+                            }
+                            @if (item.ApartmentSide2.InventoryNumber != null && (item.ApartmentSide2.TotalArea != null))
+                            {
+                                <br />
+                            }
+                            @if (item.ApartmentSide2.TotalArea != null)
+                            {
+                                <span>Общая площадь: </span>@item.ApartmentSide2.TotalArea<span> м<sup>2</sup></span>
+                            }
+                        </div>
+                    }
+
+                </td>
+                <td>
+                    @if(item.ApartmentSide2 != null && item.ApartmentSide2.People != null && item.ApartmentSide2.People.Any())
+                    {
+                        foreach(var person in item.ApartmentSide2.People)
+                        {
+                            <div class="@(person.IdPersonStatus == 1 ? "m-contract-list__requester" : "")">
+                                @(person.Family + " " + person.Name + (person.Father == null ? "" : " " + person.Father))
+                            </div>
+                        }
+                    } else
+                    {
+                        <i class="text-danger">отсутствуют</i>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Панель доступа">
+                        <div class="btn-group" role="group" aria-label="Панель доступа">
+                            <button class="btn btn-primary oi oi-wrench dropdown-toggle" type="button" title="Инструменты" aria-label="Инструменты" id="toolsBtn_@item.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu dropdown-menu-right but text-center" aria-labelledby="toolsBtn_@item.IdContract">
+                                <a class="btn btn-primary oi oi-eye" title="Подробнее" aria-label="Подробнее"
+                                   asp-controller="Buildings" asp-action="Details" asp-route-idContract="@item.IdContract" asp-route-action="Details" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                                <a class="btn btn-outline-dark oi oi-pencil" title="Изменить" aria-label="Изменить"
+                                   asp-controller="Buildings" asp-action="Edit" asp-route-idContract="@item.IdContract" asp-route-action="Edit" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                                <a class="btn btn-danger oi oi-x" title="Удалить" aria-label="Удалить"
+                                   asp-controller="Buildings" asp-action="Delete" asp-route-idContract="@item.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                            </div>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Отчеты">
+                            <button class="btn btn-success oi oi-document dropdown-toggle" type="button" title="Отчеты" aria-label="Отчеты" id="reportsBtn_@item.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="reportsBtn_@item.IdContract">
+                                <a class="dropdown-item rr-report-building-excerpt" href="#" title='Уведомление "прибыть" на мену' aria-label='Уведомление "прибыть" на мену' data-id-building="@item.IdContract">Уведомление "прибыть" на мену</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,17 @@
+﻿@using MenaWeb.ViewModels;
+@model ContractListVM
+
+@{
+    ViewData["Title"] = "Договоры мены";
+    var text = Model.PageOptions.TotalRows == Model.PageOptions.Rows ?
+        "(" + Model.PageOptions.TotalRows + ")" :
+        "(" + Model.PageOptions.Rows + " из " + Model.PageOptions.TotalRows + ")";
+}
+
+<div class="col info text-center" data-controller="ContractController"></div>
+
+<h2>@ViewData["Title"] @text</h2>
+
+<partial name="Filter" model="@Model">
+<partial name="DataTable" model="@Model">
+<page-link page-model="Model.PageOptions" page-action="Index"></page-link>

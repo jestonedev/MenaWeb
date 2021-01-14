@@ -15,7 +15,7 @@ using MySql.Data.MySqlClient;
 
 namespace MenaWeb.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : Controller  
     {
         private IConfiguration config;
         public AccountController(IConfiguration config)
@@ -59,13 +59,14 @@ namespace MenaWeb.Controllers
             }
             catch (Exception)
             {
+                ViewData["Controller"] = "Account";
                 ViewData["TextError"] = new HtmlString("Ошибка при соединении с базой данных. " +
                     "Возможно у вас нет прав доступа к данной программе. Нажмите кнопку \"Повторить\". " +
                     "В случае повтора ошибки обратитесь к администратору по телефону 349-671");
                 return View("Error");
             }
             if (returnUrl == null)
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Contract");
             else
                 return RedirectPermanent(returnUrl);
         }
