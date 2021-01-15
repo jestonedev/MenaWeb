@@ -1,7 +1,7 @@
 ﻿@using MenaWeb.ViewModels;
 @model ContractListVM
 
-<form asp-action="Index" method="get" class="filterForm">
+<form asp-action="Index" method="get" class="filterForm" autocomplete="off">
     <input type="hidden" asp-for="OrderOptions.OrderDirection" />
     <input type="hidden" asp-for="OrderOptions.OrderField" />
     <input type="hidden" asp-for="PageOptions.CurrentPage" />
@@ -12,23 +12,39 @@
             <a class="btn btn-success" title="Добавить" aria-label="Добавить" asp-controller="Contract" asp-action="Create">&#10010;</a>
         </div>
         <div class="form-group col-10 col-lg-6 mb-0">
-            <div class="input-group mb-3">
+            <div class="input-group m-contract-filter-fields mb-3">
                 <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary dropdown-toggle m-contract-filter__select-type-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@(!string.IsNullOrEmpty(Model.FilterOptions.PersonSnp) ? "По ФИО участника" : "По адресу")</button>
+                    @{ 
+                        var title = "По адресу";
+                        var className = "m-contract-filter__address";
+                        if (!string.IsNullOrEmpty(Model.FilterOptions.PersonSnp))
+                        {
+                            title = "По ФИО участника";
+                            className = "m-contract-filter__snp";
+                        }
+                        if (Model.FilterOptions.RegistrationDateFrom != null || Model.FilterOptions.RegistrationDateTo != null)
+                        {
+                            title = "По дате регистрации";
+                            className = "m-contract-filter__reg-date";
+                        }
+                    }
+                    <button class="btn btn-outline-secondary dropdown-toggle m-contract-filter__select-type-btn" type="button" data-toggle="dropdown" aria-haspopup="true" data-class="@className" aria-expanded="false">@title</button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item m-contract-filter__type" href="#" data-placeholder="Введите адрес помещения" data-name="FilterOptions.Address" data-id="FilterOptions_Address">По адресу</a>
-                        <a class="dropdown-item m-contract-filter__type" href="#" data-placeholder="Введите ФИО участника" data-name="FilterOptions.PersonSnp" data-id="FilterOptions_PersonSnp">По ФИО участника</a>
+                        <a class="dropdown-item m-contract-filter__type" data-class="m-contract-filter__address" href="#">По адресу</a>
+                        <a class="dropdown-item m-contract-filter__type" data-class="m-contract-filter__snp" href="#">По ФИО участника</a>
+                        <a class="dropdown-item m-contract-filter__type" data-class="m-contract-filter__reg-date" href="#">По дате регистрации</a>
                     </div>
                 </div>
-                @if (!string.IsNullOrEmpty(Model.FilterOptions.PersonSnp))
-                {
-                    <input type="text" autocomplete="off" class="form-control m-contract-filter__input" asp-for="FilterOptions.PersonSnp" placeholder="Введите ФИО участника" />
+                @{ 
+                    var filterIsNotEmpty = !string.IsNullOrEmpty(Model.FilterOptions.PersonSnp) || !string.IsNullOrEmpty(Model.FilterOptions.Address) ||
+                   Model.FilterOptions.RegistrationDateFrom != null || Model.FilterOptions.RegistrationDateTo != null;
                 }
-                else
-                {
-                    <input type="text" autocomplete="off" class="form-control m-contract-filter__input" asp-for="FilterOptions.Address" placeholder="Введите адрес помещения" />
-                }
-                @if (!string.IsNullOrEmpty(Model.FilterOptions.PersonSnp) || !string.IsNullOrEmpty(Model.FilterOptions.Address))
+
+                <input type="text" class="form-control m-contract-filter__snp m-contract-filter__input @(string.IsNullOrEmpty(Model.FilterOptions.PersonSnp) ? "d-none" : "")" asp-for="FilterOptions.PersonSnp" placeholder="Введите ФИО участника" />
+                <input type="date" class="form-control m-contract-filter__reg-date m-contract-filter__input @(Model.FilterOptions.RegistrationDateTo == null && Model.FilterOptions.RegistrationDateFrom == null ? "d-none" : "")" asp-for="FilterOptions.RegistrationDateFrom" />
+                <input type="date" class="form-control m-contract-filter__reg-date m-contract-filter__input @(Model.FilterOptions.RegistrationDateTo == null && Model.FilterOptions.RegistrationDateFrom == null ? "d-none" : "")" asp-for="FilterOptions.RegistrationDateTo" />
+                <input type="text" class="form-control m-contract-filter__address m-contract-filter__input @(filterIsNotEmpty && string.IsNullOrEmpty(Model.FilterOptions.Address) ? "d-none" : "")" asp-for="FilterOptions.Address" placeholder="Введите адрес помещения" />
+                @if (filterIsNotEmpty)
                 {
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary m-contract-filter__cancel" type="button">&#10006;</button>

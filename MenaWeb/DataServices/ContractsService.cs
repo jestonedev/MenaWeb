@@ -75,6 +75,16 @@ namespace MenaWeb.DataServices
         {
             query = FilterQueryByAddress(query, filterOptions.Address);
             query = FilterQueryByPersonSnp(query, filterOptions.PersonSnp);
+            query = FilterQueryRegistrationPeriod(query, filterOptions.RegistrationDateFrom, filterOptions.RegistrationDateTo);
+            return query;
+        }
+
+        private IQueryable<Contract> FilterQueryRegistrationPeriod(IQueryable<Contract> query, DateTime? from, DateTime? to)
+        {
+            if (from == null && to == null) return query;
+            if (from != null && to != null) return query.Where(r => r.ContractRegistrationDate >= from && r.ContractRegistrationDate <= to);
+            if (from != null) return query.Where(r => r.ContractRegistrationDate >= from);
+            if (to != null) return query.Where(r => r.ContractRegistrationDate <= to);
             return query;
         }
 

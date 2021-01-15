@@ -9,5 +9,7 @@ namespace MenaWeb.ViewOptions
     {
         public string Address { get; set; }
         public string PersonSnp { get; set; }
+        public DateTime? RegistrationDateFrom { get; set; }
+        public DateTime? RegistrationDateTo { get; set; }
     }
 }
