@@ -65,7 +65,29 @@ body {
     height: 100px;
 }
 
+input.input-validation-error, button.input-validation-error, textarea.input-validation-error {
+    border: 1px solid #dc3545;
+}
+
+.toggle-hide {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    visibility: hidden;
+}
+
 .m-contract-list__address-dopinfo {
     color: #888;
     font-size: 75%;
+}
+
+.m-contract-eviction-required-checkbox {
+    padding-left: 2.2rem;
+}
+
+@media(min-width: 768px) {
+    .m-contract-eviction-required-checkbox {
+        margin-top: 2.4rem;
+        padding-left: 2.2rem;
+    }
 }

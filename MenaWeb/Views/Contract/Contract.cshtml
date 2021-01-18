@@ -1,0 +1,183 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+@{
+    if (ViewBag.Action == ActionTypeEnum.Create)
+    {
+        ViewData["Title"] = "Создание нового договора";
+    }
+    else
+    {
+        ViewData["Title"] = "Договор мены №" + Model.Contract.IdContract;
+    }
+    var canEdit = ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create;
+}
+
+<form asp-controller="Contract" asp-action="@ViewBag.Action" id="ContractForm" data-action="@ViewBag.Action" method="post" enctype="multipart/form-data">
+    <div class="card">
+        <div class="card-header d-flex flex-column flex-lg-row">
+            <label class="form-check-label h2 col-sm-12 col-lg-6 col-xl-7 pl-0">@ViewData["Title"]</label>
+
+            <div class="col-sm-12 col-lg-6 col-xl-5 text-lg-right pl-0 pr-0 mt-2 mt-lg-0">
+                @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+                {
+                    <div class="btn-group" role="group" aria-label="Панель доступа">
+                        @if (ViewBag.Action == ActionTypeEnum.Details)
+                        {
+                            <div class="btn-group" role="group" aria-label="Панель доступа">
+                                <button class="btn btn-primary dropdown-toggle" type="button" title="Инструменты" aria-label="Инструменты" id="toolsBtn_@Model.Contract.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="oi oi-wrench"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right text-center" aria-labelledby="toolsBtn_@Model.Contract.IdContract">
+                                    <a class="btn btn-outline-dark oi oi-pencil" title="Изменить" aria-label="Изменить"
+                                       asp-controller="Contract" asp-action="Edit" asp-route-idContract="@Model.Contract.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+
+                                    <a class="btn btn-outline-dark oi oi-layers" title="Копировать" aria-label="Копировать"
+                                       asp-controller="Contract" asp-action="Create" asp-route-idContract="@Model.Contract.IdContract" asp-route-action="Create" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+
+
+                                    <a class="btn btn-danger oi oi-x @(ViewBag.CanEditBaseInfo ?? false ? "" : "disabled")" title="Удалить" aria-label="Удалить"
+                                       asp-controller="Contract" asp-action="Delete" asp-route-idContract="@Model.Contract.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="btn-group" role="group" aria-label="Отчеты">
+                            <button class="btn btn-success dropdown-toggle" type="button" title="Отчеты" aria-label="Отчеты" id="reportsBtn_@Model.Contract.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="oi oi-document"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="reportsBtn_@Model.Contract.IdContract">
+                                <a class="dropdown-item" href="#" title='Постановление' aria-label='Постановление' data-id-contract="@Model.Contract.IdContract">Постановление</a>
+                                <a class="dropdown-item" href="#" title='Соглашение' aria-label='Соглашение' data-id-contract="@Model.Contract.IdContract">Соглашение</a>
+                                <a class="dropdown-item" href="#" title='Соглашение о передаче в мун. собственность' aria-label='Соглашение о передаче в мун. собственность' data-id-contract="@Model.Contract.IdContract">Соглашение о передаче в мун. собственность</a>
+                                <a class="dropdown-item" href="#" title='Соглашение о возмещении за изымаемое помещение' aria-label='Соглашение о возмещении за изымаемое помещение' data-id-contract="@Model.Contract.IdContract">Соглашение о возмещении за изымаемое помещение</a>
+                                <a class="dropdown-item" href="#" title='Распоряжение' aria-label='Распоряжение' data-id-contract="@Model.Contract.IdContract">Распоряжение</a>
+                                <a class="dropdown-item" href="#" title='Уведомление "прибыть" на мену' aria-label='Уведомление "прибыть" на мену' data-id-contract="@Model.Contract.IdContract">Уведомление "прибыть" на мену</a>
+                                <a class="dropdown-item" href="#" title='Уведомление "прибыть" для суда - нотариус' aria-label='Уведомление "прибыть" для суда - нотариус' data-id-contract="@Model.Contract.IdContract">Уведомление "прибыть" для суда - нотариус</a>
+                                <a class="dropdown-item" href="#" title='Уведомление "прибыть" для суда - 1 собственник' aria-label='Уведомление "прибыть" для суда - 1 собственник' data-id-contract="@Model.Contract.IdContract">Уведомление "прибыть" для суда - 1 собственник</a>
+                                <a class="dropdown-item" href="#" title='Уведомление "правоустанавливающие документы по наследству"' aria-label='Уведомление "правоустанавливающие документы по наследству"' data-id-contract="@Model.Contract.IdContract">Уведомление "правоустанавливающие документы по наследству"</a>
+                                <a class="dropdown-item" href="#" title='Запрос в МВД (новый)' aria-label='Запрос в МВД (новый)' data-id-contract="@Model.Contract.IdContract">Запрос в МВД (новый)</a>
+                                <a class="dropdown-item" href="#" title='Запрос в МВД (старый)' aria-label='Запрос в МВД (старый)' data-id-contract="@Model.Contract.IdContract">Запрос в МВД (старый)</a>
+                                <a class="dropdown-item" href="#" title='Договор с датами' aria-label='Договор с датами' data-id-contract="@Model.Contract.IdContract">Договор с датами</a>
+                                <a class="dropdown-item" href="#" title='Договор без дат' aria-label='Договор без дат' data-id-contract="@Model.Contract.IdContract">Договор без дат</a>
+                                <a class="dropdown-item" href="#" title='Предварительный договор' aria-label='Предварительный договор' data-id-contract="@Model.Contract.IdContract">Предварительный договор</a>
+                                <a class="dropdown-item" href="#" title='Договор для ДКСР' aria-label='Договор для ДКСР' data-id-contract="@Model.Contract.IdContract">Договор для ДКСР</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="btn-group" role="group" aria-label="Панель доступа">
+                    @if (@ViewBag.ReturnUrl != null)
+                    {
+                        <a class="form-control btn btn-primary" href="@ViewBag.ReturnUrl">Назад</a>
+                    }
+                    else
+                    {
+                        <a class="form-control btn btn-primary" asp-controller="Contract" asp-action="Index" asp-route-isBack="true">Назад</a>
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <input type="submit" value="Создать" id="createBtn" class="form-control btn btn-success" />
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Edit)
+                    {
+                        <input type="submit" value="Сохранить" id="editBtn" class="form-control btn btn-success" />
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Delete)
+                    {
+                        <input type="submit" value="Удалить" id="deleteBtn" class="form-control btn btn-danger" />
+                    }
+
+                    <a href="#" data-for="Contract" class="form-control btn btn-primary contract-toggler" title="Развернуть мену жилья" style="font-weight:bold;">∧</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="Contract">
+            <input type="hidden" asp-for="Contract.IdContract" />
+            <input type="hidden" value="@ViewBag.ReturnUrl" name="ReturnUrl" />
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Contract.IdDelegate">В лице</label>
+                    <select disabled class="selectpicker form-control" asp-for="Contract.IdDelegate" asp-items="@(new SelectList(Model.Delegates, "IdDelegate", "Fio"))"
+                            title="В лице" data-val="true" data-val-required="Выберите значение из выпадающего списка">
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Contract.IdDelegate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Состояние</label>
+                    @{
+                        var currentState = Model.Contract.ContractStatusHistory.LastOrDefault();
+                        ProcessStatus ps = null;
+                        if (currentState != null)
+                        {
+                            ps = Model.ProcessStatuses.FirstOrDefault(p => p.IdProcessStatus == currentState.IdProcessStatus);
+                        }
+                    }
+                    <div class="input-group">
+                        <input disabled class="form-control m-input--disable-alwayes" type="text" value="@(ps != null ? ps.Step + ") " + ps.ProcessStatusName : "")" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+                                <span class="oi oi-ellipses"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 col-md-6">
+                    <label asp-for="Contract.ContractRegistrationDate">Дата регистрации</label>
+                    <input disabled type="date" class="form-control" asp-for="Contract.ContractRegistrationDate"
+                           value="@(Model.Contract.ContractRegistrationDate.HasValue ? Model.Contract.ContractRegistrationDate.Value.ToString("yyyy-MM-dd") : "")" title="Дата регистрации">
+                </div>
+                <div class="form-group col-lg-3 col-md-6">
+                    <label asp-for="Contract.FillingDate">Дата получения ключей</label>
+                    <input disabled type="date" class="form-control" asp-for="Contract.FillingDate"
+                           value="@(Model.Contract.FillingDate.HasValue ? Model.Contract.FillingDate.Value.ToString("yyyy-MM-dd") : "")" title="Дата получения ключей">
+                </div>
+                <div class="form-group col-lg-3 col-md-6">
+                    <label asp-for="Contract.OrderNumber">Номер постановления</label>
+                    <input disabled type="text" class="form-control" title="Номер постановления" asp-for="Contract.OrderNumber">
+                </div>
+                <div class="form-group col-lg-3 col-md-6">
+                    <label asp-for="Contract.OrderDate">Дата постановления</label>
+                    <input disabled type="date" class="form-control" asp-for="Contract.OrderDate"
+                           value="@(Model.Contract.OrderDate.HasValue ? Model.Contract.OrderDate.Value.ToString("yyyy-MM-dd") : "")" title="Дата постановления">
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Contract.IdExecutor">Подготовил</label>
+                    @{
+                        var signers = Model.Signers.Select(s => new
+                        {
+                            s.IdSigner,
+                            Snp = s.Family + " " + s.Name + " " + s.Father
+                        });
+                    }
+                    <select disabled class="selectpicker form-control" asp-for="Contract.IdExecutor" asp-items="@(new SelectList(signers, "IdSigner", "Snp"))"
+                            title="В лице" data-val="true" data-val-required="Выберите составителя договора">
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Contract.IdExecutor" class="text-danger"></span>
+                </div>
+                <div class="form-check col-md-6 m-contract-eviction-required-checkbox">
+                    <input disabled type="checkbox" class="form-check-input" asp-for="Contract.EvictionRequired">
+                    <label class="form-check-label" asp-for="Contract.EvictionRequired" title="Требуется снятие с учета участников">Требуется снятие с учета участников</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+    {
+        <script>
+            $(function () {
+                $('select, input, textarea').selectpicker("refresh").filter(function (idx, elem) {
+                    return !$(elem).hasClass("m-input--disable-alwayes");
+                }).prop('disabled', false).selectpicker("refresh");
+                $('input[type="hidden"]').prop('disabled', false);
+                $('input[type="submit"]').prop('disabled', false);
+            })
+        </script>
+    }
+}

@@ -24,6 +24,67 @@ function reinitSearchContractFields(text, className) {
     $(".m-contract-filter__select-type-btn").text(text).data("class", className);
 }
 
+function fixBootstrapSelectHighlight(form) {
+    form.find("select").each(function (idx, elem) {
+        var id = $(elem).prop("id");
+        var name = $(elem).prop("name");
+        var errorSpan = form.find("span[data-valmsg-for='" + name + "']");
+        if (errorSpan.hasClass("field-validation-error")) {
+            form.find("button[data-id='" + id + "']").addClass("input-validation-error");
+        } else {
+            form.find("button[data-id='" + id + "']").removeClass("input-validation-error");
+        }
+    });
+}
+
+function fixBootstrapSelectHighlightOnChange(select) {
+    var isValid = select.valid();
+    var id = select.prop("id");
+    if (!isValid) {
+        select.closest("form").find("button[data-id='" + id + "']").addClass("input-validation-error");
+    } else {
+
+        select.closest("form").find("button[data-id='" + id + "']").removeClass("input-validation-error");
+    }
+}
+
+function refreshValidationForm(form) {
+    form
+        .removeData("validator")
+        .removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse(form);
+    form.validate();
+}
+
+function clearValidationError(elem) {
+    var spanError = $("span[data-valmsg-for='" + elem.attr("name") + "']");
+    spanError.empty().removeClass("field-validation-error").addClass("field-validation-valid");
+    elem.removeClass("input-validation-error");
+}
+
+function elementToogleHide(event) {
+    var elementArrow = $(this);
+    var isDisplay = isExpandElemntArrow(elementArrow);
+    //свернуть
+    if (isDisplay) {
+        elementArrow.html('∨');
+        event.data.addClass("toggle-hide");
+    }
+    //развернуть
+    else {
+        elementArrow.html('∧');
+        event.data.removeClass("toggle-hide");
+    }
+    //event.data.toggle(!isDisplay);
+    event.preventDefault();
+}
+
+function isExpandElemntArrow(elemntArrow) {
+    if (elemntArrow.html() === '∧')
+        return true;
+    return false;
+}
+
 $(".m-contract-filter__type").on("click", function () {
     var text = $(this).text();
     var className = $(this).data("class");
@@ -82,4 +143,43 @@ $('.addselect').click(function (e) {
             }
         }
     });
+});
+
+$("form#ContractForm").on("submit", function (e) {
+    var action = $("#TenancyProcessForm").data("action");
+    $("button[data-id], .bootstrap-select").removeClass("input-validation-error");
+    var isFormValid = $(this).valid();
+
+    if (!isFormValid) {
+        fixBootstrapSelectHighlight($(this));
+
+        $(".toggle-hide").each(function (idx, elem) {
+            if ($(elem).find(".field-validation-error").length > 0) {
+                var toggler = $(elem).closest(".card").find(".card-header .contract-toggler").first();
+                if (!isExpandElemntArrow(toggler)) {
+                    toggler.click();
+                }
+            }
+        });
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $(".input-validation-error").first().offset().top - 35
+        }, 1000);
+
+        e.preventDefault();
+    }
+});
+
+$("form#ContractForm").on("change", "select", function () {
+    var isValid = $(this).valid();
+    var id = $(this).prop("id");
+    if (!isValid) {
+        $("button[data-id='" + id + "']").addClass("input-validation-error");
+    } else {
+
+        $("button[data-id='" + id + "']").removeClass("input-validation-error");
+    }
+});
+
+$('.contract-toggler').each(function (idx, e) {
+    $(e).on('click', $('#' + $(e).data("for")), elementToogleHide);
 });

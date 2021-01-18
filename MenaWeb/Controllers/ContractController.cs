@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using MenaWeb.Extensions;
 using MenaWeb.ViewOptions;
 using Newtonsoft.Json;
+using MenaWeb.Models;
 
 namespace MenaWeb.Controllers
 {
@@ -35,24 +36,90 @@ namespace MenaWeb.Controllers
 
         public IActionResult Details(int? idContract, string returnUrl)
         {
-            return null;
+            ViewBag.Action = ActionTypeEnum.Details;
+            ViewBag.ReturnUrl = returnUrl;
+            if (idContract == null)
+                return NotFound();
+            var contract = dataService.GetContract(idContract);
+            if (contract == null)
+                return NotFound();
+            var vm = dataService.GetViewModel(contract);
+            return View("Contract", vm);
         }
 
         public IActionResult Create(int? idContract)
         {
-            return null;
+            ViewBag.Action = ActionTypeEnum.Create;
+            var contract = dataService.CreateContract(idContract);
+            return View("Contract", dataService.GetViewModel(contract));
+        }
+
+        [HttpPost]
+        public ActionResult Create(ContractVM contractVM)
+        {
+            if (contractVM == null || contractVM.Contract == null)
+                return NotFound();
+            if (ModelState.IsValid)
+            {
+                dataService.Create(contractVM.Contract);
+                return RedirectToAction("Details", new { contractVM.Contract.IdContract });
+            }
+            ViewBag.Action = ActionTypeEnum.Create;
+            return View("Contract", dataService.GetViewModel(contractVM.Contract));
         }
 
         [HttpGet]
         public IActionResult Edit(int? idContract, string returnUrl)
         {
-            return null;
+            ViewBag.Action = ActionTypeEnum.Edit;
+            ViewBag.ReturnUrl = returnUrl;
+            if (idContract == null)
+                return NotFound();
+            var contract = dataService.GetContract(idContract);
+            if (contract == null)
+                return NotFound();
+            var vm = dataService.GetViewModel(contract);
+            return View("Contract", vm);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(ContractVM contractVM, string returnUrl)
+        {
+            if (contractVM == null || contractVM.Contract == null)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                dataService.Edit(contractVM.Contract);
+                return RedirectToAction("Details", new { contractVM.Contract.IdContract });
+            }
+            ViewBag.Action = ActionTypeEnum.Edit;
+            ViewBag.ReturnUrl = returnUrl;
+            return View("Contract", dataService.GetViewModel(contractVM.Contract));
         }
 
         [HttpGet]
         public IActionResult Delete(int? idContract, string returnUrl)
         {
-            return null;
+            ViewBag.Action = ActionTypeEnum.Delete;
+            ViewBag.ReturnUrl = returnUrl;
+            if (idContract == null)
+                return NotFound();
+            var contract = dataService.GetContract(idContract);
+            if (contract == null)
+                return NotFound();
+            var vm = dataService.GetViewModel(contract);
+            return View("Contract", vm);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(ContractVM contractVM)
+        {
+            if (contractVM == null || contractVM.Contract == null)
+                return NotFound();
+
+            dataService.Delete(contractVM.Contract.IdContract);
+            return RedirectToAction("Index");
         }
 
         public IActionResult ContractReports(PageOptions pageOptions)

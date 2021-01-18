@@ -2,6 +2,7 @@
 using MenaWeb.Models.Entities;
 using MenaWeb.ViewModels;
 using MenaWeb.ViewOptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace MenaWeb.DataServices
     public class ContractsService
     {
         private readonly DatabaseContext db;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ContractsService(DatabaseContext db)
+        public ContractsService(DatabaseContext db, IHttpContextAccessor httpContextAccessor)
         {
             this.db = db;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public IQueryable<Contract> GetQuery()
@@ -47,6 +50,97 @@ namespace MenaWeb.DataServices
             vm.PageOptions.CurrentPage = Math.Min(vm.PageOptions.CurrentPage, vm.PageOptions.TotalPages);
             vm.Contracts = GetQueryPage(query, vm.PageOptions).ToList();
             vm.Streets = GetActualStreets(vm.Contracts);
+            return vm;
+        }
+
+        public Contract CreateContract(int? idContract)
+        {
+            Contract contract = null;
+            if (idContract != null)
+                contract = GetContract(idContract);
+            if (contract == null)
+            {
+                contract = new Contract
+                {
+                    ContractStatusHistory = new List<ContractStatusHistory> (),
+                    Additionals = new List<Additional>(),
+                    ApartmentSide1 = new Apartment {
+                        WarrantApartments = new List<WarrantApartment>(),
+                        ApartmentEvaluations = new List<ApartmentEvaluation>()
+                    },
+                    ApartmentSide12 = new Apartment
+                    {
+                        WarrantApartments = new List<WarrantApartment>(),
+                        ApartmentEvaluations = new List<ApartmentEvaluation>()
+                    },
+                    ApartmentSide2 = new Apartment {
+                        WarrantApartments = new List<WarrantApartment>(),
+                        ApartmentEvaluations = new List<ApartmentEvaluation>(),
+                        People = new List<Person>(),
+                        RedEvaluations = new List<RedEvaluation>(),
+                        BankInfos = new List<BankInfo>(),
+                        Land = new List<Land>(),
+                        ApartmentRedemptions = new List<ApartmentRedemption>()
+                    }
+                };
+            }
+            return contract;
+        }
+
+        internal void Edit(Contract contract)
+        {
+            contract.LastChangeDate = DateTime.Now;
+            contract.LastChangeUser = httpContextAccessor.HttpContext.User.Identity.Name.ToLowerInvariant();
+            db.Contracts.Update(contract);
+            db.SaveChanges();
+        }
+
+        internal void Create(Contract contract)
+        {
+            contract.LastChangeDate = DateTime.Now;
+            contract.LastChangeUser = httpContextAccessor.HttpContext.User.Identity.Name.ToLowerInvariant();
+            db.Contracts.Add(contract);
+            db.SaveChanges();
+        }
+
+        public void Delete(int idContract)
+        {
+            var contracts = db.Contracts
+                    .FirstOrDefault(c => c.IdContract == idContract);
+            if (contracts != null)
+            {
+                contracts.Deleted = true;
+                db.SaveChanges();
+            }
+        }
+
+        public Contract GetContract(int? idContract)
+        {
+            return db.Contracts
+                .Include(c => c.ContractStatusHistory)
+                .Include(c => c.Additionals)
+                .Include(c => c.ApartmentSide1).ThenInclude(a => a.WarrantApartments)
+                .Include(c => c.ApartmentSide1).ThenInclude(a => a.ApartmentEvaluations)
+                .Include(c => c.ApartmentSide12).ThenInclude(a => a.WarrantApartments)
+                .Include(c => c.ApartmentSide12).ThenInclude(a => a.ApartmentEvaluations)
+                .Include(c => c.ApartmentSide2).ThenInclude(a => a.People)
+                .Include(c => c.ApartmentSide2).ThenInclude(a => a.WarrantApartments)
+                .Include(c => c.ApartmentSide2).ThenInclude(a => a.ApartmentEvaluations)
+                .Include(c => c.ApartmentSide2).ThenInclude(a => a.RedEvaluations)
+                .Include(c => c.ApartmentSide2).ThenInclude(a => a.BankInfos)
+                .Include(c => c.ApartmentSide2).ThenInclude(a => a.Land)
+                .Include(c => c.ApartmentSide2).ThenInclude(a => a.ApartmentRedemptions)
+                .FirstOrDefault(r => r.IdContract == idContract);
+        }
+
+        public ContractVM GetViewModel(Contract contract)
+        { 
+            var vm = new ContractVM {
+                Contract = contract,
+                Delegates = db.Delegates.ToList(),
+                Signers = db.Signers.Where(r => r.IdSignerType == 4).ToList(),
+                ProcessStatuses = db.ProcessStatuses.ToList()
+            };
             return vm;
         }
 
