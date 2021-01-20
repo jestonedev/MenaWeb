@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class PersonStatus
     {
-        public ushort IdPersonStatus { get; set; }
+        public short IdPersonStatus { get; set; }
         public string Status { get; set; }
         public virtual List<Person> People { get; set; }
     }

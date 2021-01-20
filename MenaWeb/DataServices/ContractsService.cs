@@ -27,6 +27,7 @@ namespace MenaWeb.DataServices
         {
             return db.Contracts
                 .Include(c => c.ApartmentSide1)
+                .Include(c => c.ApartmentSide12)
                 .Include(c => c.ApartmentSide2).ThenInclude(a => a.People);
         }
 
@@ -57,32 +58,19 @@ namespace MenaWeb.DataServices
         {
             Contract contract = null;
             if (idContract != null)
+            {
                 contract = GetContract(idContract);
+                contract.IdContract = 0;
+                contract.IdApartmentSide1 = null;
+                contract.IdApartmentSide2 = null;
+                contract.IdApartmentSide12 = null;
+                contract.ApartmentSide1.IdApartment = 0;
+                contract.ApartmentSide2.IdApartment = 0;
+                contract.ApartmentSide12.IdApartment = 0;
+            }
             if (contract == null)
             {
-                contract = new Contract
-                {
-                    ContractStatusHistory = new List<ContractStatusHistory> (),
-                    Additionals = new List<Additional>(),
-                    ApartmentSide1 = new Apartment {
-                        WarrantApartments = new List<WarrantApartment>(),
-                        ApartmentEvaluations = new List<ApartmentEvaluation>()
-                    },
-                    ApartmentSide12 = new Apartment
-                    {
-                        WarrantApartments = new List<WarrantApartment>(),
-                        ApartmentEvaluations = new List<ApartmentEvaluation>()
-                    },
-                    ApartmentSide2 = new Apartment {
-                        WarrantApartments = new List<WarrantApartment>(),
-                        ApartmentEvaluations = new List<ApartmentEvaluation>(),
-                        People = new List<Person>(),
-                        RedEvaluations = new List<RedEvaluation>(),
-                        BankInfos = new List<BankInfo>(),
-                        Land = new List<Land>(),
-                        ApartmentRedemptions = new List<ApartmentRedemption>()
-                    }
-                };
+                contract = new Contract();
             }
             return contract;
         }
@@ -91,6 +79,12 @@ namespace MenaWeb.DataServices
         {
             contract.LastChangeDate = DateTime.Now;
             contract.LastChangeUser = httpContextAccessor.HttpContext.User.Identity.Name.ToLowerInvariant();
+            if (contract.ApartmentSide12 != null && contract.ApartmentSide12.IsEmpty())
+            {
+                if (contract.ApartmentSide12.IdApartment != 0) db.Apartments.Remove(contract.ApartmentSide12);
+                contract.ApartmentSide12 = null;
+                contract.IdApartmentSide12 = null;
+            }
             db.Contracts.Update(contract);
             db.SaveChanges();
         }
@@ -99,6 +93,10 @@ namespace MenaWeb.DataServices
         {
             contract.LastChangeDate = DateTime.Now;
             contract.LastChangeUser = httpContextAccessor.HttpContext.User.Identity.Name.ToLowerInvariant();
+            if (contract.ApartmentSide12 != null && contract.ApartmentSide12.IsEmpty())
+            {
+                contract.ApartmentSide12 = null;
+            }
             db.Contracts.Add(contract);
             db.SaveChanges();
         }
@@ -134,12 +132,14 @@ namespace MenaWeb.DataServices
         }
 
         public ContractVM GetViewModel(Contract contract)
-        { 
+        {
             var vm = new ContractVM {
                 Contract = contract,
                 Delegates = db.Delegates.ToList(),
                 Signers = db.Signers.Where(r => r.IdSignerType == 4).ToList(),
-                ProcessStatuses = db.ProcessStatuses.ToList()
+                ProcessStatuses = db.ProcessStatuses.ToList(),
+                Streets = db.KladrStreets.ToList(),
+                ApartmentTypes = db.ApartmentTypes.ToList()
             };
             return vm;
         }
@@ -162,6 +162,7 @@ namespace MenaWeb.DataServices
         private IQueryable<Contract> GetQueryIncludes(IQueryable<Contract> query)
         {
             return query.Include(c => c.ApartmentSide1)
+                .Include(c => c.ApartmentSide12)
                 .Include(c => c.ApartmentSide2).ThenInclude(a => a.People);
         }
 

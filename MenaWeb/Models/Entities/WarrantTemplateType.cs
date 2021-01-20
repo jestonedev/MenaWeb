@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class WarrantTemplateType
     {
-        public ushort IdWarrantTemplateType { get; set; }
+        public short IdWarrantTemplateType { get; set; }
         public string WarrantTemplateTypeName { get; set; }
         public virtual List<WarrantTemplate> WarrantTemplates { get; set; }
     }

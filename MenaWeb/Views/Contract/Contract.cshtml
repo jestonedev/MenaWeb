@@ -163,6 +163,14 @@
                     <label class="form-check-label" asp-for="Contract.EvictionRequired" title="Требуется снятие с учета участников">Требуется снятие с учета участников</label>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-6 mb-3 mb-lg-0">
+                    <partial name="ApartmentSide1" model="Model" />
+                </div>
+                <div class="col-lg-6">
+                    <partial name="ApartmentSide2" model="Model" />
+                </div>
+            </div>
         </div>
     </div>
 </form>

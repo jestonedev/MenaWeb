@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class ApartmentType
     {
-        public ushort IdApartmentType { get; set; }
+        public short IdApartmentType { get; set; }
         public string ApartmentTypeName { get; set; }
         public string ApartmentTypeRod { get; set; }
         public string ApartmentTypePlur { get; set; }

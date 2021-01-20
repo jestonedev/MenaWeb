@@ -7,8 +7,8 @@ namespace MenaWeb.Models.Entities
 {
     public class Apartment
     {
-        public uint IdApartment { get; set; }
-        public ushort IdApartmentType { get; set; }
+        public int IdApartment { get; set; }
+        public short IdApartmentType { get; set; }
         public string IdStreet { get; set; }
         public string House { get; set; }
         public string Flat { get; set; }
@@ -33,5 +33,25 @@ namespace MenaWeb.Models.Entities
         public virtual List<Land> Land { get; set; }
         public virtual List<Person> People { get; set; }
         public virtual List<WarrantApartment> WarrantApartments { get; set; }
+
+        public Apartment()
+        {
+            IdApartmentType = 1;
+            Part = "1";
+            WarrantApartments = new List<WarrantApartment>();
+            ApartmentEvaluations = new List<ApartmentEvaluation>();
+            People = new List<Person>();
+            RedEvaluations = new List<RedEvaluation>();
+            BankInfos = new List<BankInfo>();
+            Land = new List<Land>();
+            ApartmentRedemptions = new List<ApartmentRedemption>();
+        }
+
+        public bool IsEmpty()
+        {
+            return IdStreet == null && House == null && Flat == null && Room == null && TotalArea == null && CadastralPrice == null && InventoryNumber == null &&
+                (IdApartmentType == 1 || IdApartmentType == 0) && (Part == "1" || Part == null) && (WarrantApartments == null || !WarrantApartments.Any()) &&
+                 (ApartmentEvaluations == null || !ApartmentEvaluations.Any());
+        }
     }
 }

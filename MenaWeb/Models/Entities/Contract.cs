@@ -8,13 +8,13 @@ namespace MenaWeb.Models.Entities
     public class Contract
     {
         public int IdContract { get; set; }
-        public ushort IdDelegate { get; set; }
-        public ushort IdExecutor { get; set; }
-        public uint? IdApartmentSide1 { get; set; }
-        public uint? IdApartmentSide2 { get; set; }
-        public uint? IdApartmentSide12 { get; set; }
+        public short IdDelegate { get; set; }
+        public short IdExecutor { get; set; }
+        public int? IdApartmentSide1 { get; set; }
+        public int? IdApartmentSide2 { get; set; }
+        public int? IdApartmentSide12 { get; set; }
         public DateTime? PreContractDate { get; set; }
-        public ushort IdPreContractIssued { get; set; }
+        public short IdPreContractIssued { get; set; }
         public int IdContractReason { get; set; }
         public DateTime? ContractRegistrationDate { get; set; }
         public DateTime? AgreementRegistrationDate { get; set; }
@@ -36,6 +36,15 @@ namespace MenaWeb.Models.Entities
         public ContractReason ContractReason { get; set; }
         public virtual List<ContractStatusHistory> ContractStatusHistory { get; set; }
         public virtual List<Additional> Additionals { get; set; }
+
+        public Contract()
+        {
+            ApartmentSide1 = new Apartment();
+            ApartmentSide12 = new Apartment();
+            ApartmentSide2 = new Apartment();
+            ContractStatusHistory = new List<ContractStatusHistory>();
+            Additionals = new List<Additional>();
+        }
 
     }
 }

@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class Signer
     {
-        public ushort IdSigner { get; set; }
+        public short IdSigner { get; set; }
         public string Post { get; set; }
         public string PostGenetive { get; set; }
         public string Family { get; set; }

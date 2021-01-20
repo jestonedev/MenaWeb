@@ -7,8 +7,8 @@ namespace MenaWeb.Models.Entities
 {
     public class BankInfo
     {
-        public uint IdBank { get; set; }
-        public uint IdApartment { get; set; }
+        public int IdBank { get; set; }
+        public int IdApartment { get; set; }
         public string Account { get; set; }
         public string AccountHolder { get; set; }
         public string Bank { get; set; }

@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class Osnovanie
     {
-        public ushort IdOsnovanie { get; set; }
+        public short IdOsnovanie { get; set; }
         public string OsnovanieName { get; set; }
     }
 }

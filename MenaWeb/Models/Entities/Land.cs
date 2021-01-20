@@ -8,7 +8,7 @@ namespace MenaWeb.Models.Entities
     public class Land
     {
         public int IdLand { get; set; }
-        public uint IdApartment { get; set; }
+        public int IdApartment { get; set; }
         public string IdStreet { get; set; }
         public string House { get; set; }
         public string InventoryNumber { get; set; }

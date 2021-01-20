@@ -8,9 +8,9 @@ namespace MenaWeb.Models.Entities
     public class Person
     {
         public int IdPerson { get; set; }
-        public uint? IdApartment { get; set; }
-        public ushort IdPersonStatus { get; set; }
-        public ushort IdContractor { get; set; }
+        public int? IdApartment { get; set; }
+        public short IdPersonStatus { get; set; }
+        public short IdContractor { get; set; }
         public string Family { get; set; }
         public string Name { get; set; }
         public string Father { get; set; }

@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class CopyKgc
     {
-        public ushort IdCopy { get; set; }
+        public short IdCopy { get; set; }
         public string CopyName { get; set; }
         public virtual List<Additional> Additionals { get; set; }
     }

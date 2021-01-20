@@ -1,4 +1,63 @@
-﻿$('.page-link').off("click");
+﻿if ($.validator !== undefined) {
+    $.extend($.validator.methods, {
+        number: function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+        },
+        range: function (value, element, param) {
+            return this.optional(element) || (Number(value.replace(",", ".")) >= param[0] && Number(value.replace(",", ".")) <= param[1]);
+        },
+        required: function (b, c, d) {
+            return $.trim(b).length > 0;
+        }
+    });
+    $("[data-val-number]").attr("data-val-number", "Введите числовое значение");
+    refreshValidationForm($("form"));
+}
+
+$.fn.inputFilter = function (inputFilter) {
+    return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+        if (inputFilter(this.value)) {
+            this.oldValue = this.value;
+            this.oldSelectionStart = this.selectionStart;
+            this.oldSelectionEnd = this.selectionEnd;
+        } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue;
+            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+        } else {
+            this.value = "";
+        }
+    });
+};
+
+$('.input-filter-numbers, .input-numbers').inputFilter(function (value) {
+    return /^\d*$/.test(value);
+});
+
+$('.input-filter-chars, .input-chars').inputFilter(function (value) {
+    return /^[а-яА-Я]*$/.test(value);
+});
+
+$('.input-filter-snp, .input-snp').inputFilter(function (value) {
+    return /^([а-яА-Я]+[ ]?)*$/.test(value);
+});
+
+$('.input-filter-cadastral-num, .input-cadastral-num').inputFilter(function (value) {
+    return /^(\d+:?)*$/.test(value);
+});
+
+$('.input-filter-decimal, .input-decimal').inputFilter(function (value) {
+    return /^-?\d*[.,]?\d{0,2}$/.test(value);
+});
+
+$('.input-filter-premise-num, .input-premise-num').inputFilter(function (value) {
+    return /^[0-9\\/а-яА-Я,-]*$/.test(value);
+});
+
+$('.input-filter-house, .input-house').inputFilter(function (value) {
+    return /^[0-9\\/а-яА-Я]*$/.test(value);
+});
+
+$('.page-link').off("click");
 $('.page-link').click(function (e) {
     $('input[name="PageOptions.CurrentPage"]').val($(this).data("page"));
     $("form.filterForm").submit();
@@ -146,8 +205,10 @@ $('.addselect').click(function (e) {
 });
 
 $("form#ContractForm").on("submit", function (e) {
-    var action = $("#TenancyProcessForm").data("action");
     $("button[data-id], .bootstrap-select").removeClass("input-validation-error");
+    $(this).find("input[id$='_TotalArea']").each(function (idx, elem) {
+        $(elem).val($(elem).val().replace('.', ','));
+    });
     var isFormValid = $(this).valid();
 
     if (!isFormValid) {
@@ -182,4 +243,21 @@ $("form#ContractForm").on("change", "select", function () {
 
 $('.contract-toggler').each(function (idx, e) {
     $(e).on('click', $('#' + $(e).data("for")), elementToogleHide);
+});
+
+$(".m-contract__add-side-12-btn").on("click", function (e) {
+    $(this).addClass("d-none");
+    $(".side-12-container").removeClass("d-none").find("input, select, textarea")
+        .valid();   
+    e.preventDefault();
+});
+
+$(".m-contract__remove-side-12-btn").on("click", function (e) {
+    $(".m-contract__add-side-12-btn").removeClass("d-none");
+    $(".side-12-container").find("input, select, textarea").val("");
+    $("#Contract_ApartmentSide12_Part").val("1");
+    $("#Contract_ApartmentSide12_IdApartmentType").val("1");
+    $(".side-12-container").find("select").selectpicker("refresh");
+    $(".side-12-container").addClass("d-none");
+    e.preventDefault();
 });

@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class Predost
     {
-        public ushort IdPredost { get; set; }
+        public short IdPredost { get; set; }
         public string PredostName { get; set; }
         public virtual List<Additional> Additionals { get; set; }
     }

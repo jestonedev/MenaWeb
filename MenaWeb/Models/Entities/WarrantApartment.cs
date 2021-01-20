@@ -9,7 +9,7 @@ namespace MenaWeb.Models.Entities
     {
         public int IdWarrantApartment { get; set; }
         public int IdWarrantTemplate { get; set; }
-        public uint IdApartment { get; set; }
+        public int IdApartment { get; set; }
         public WarrantTemplate WarrantTemplate { get; set; }
         public Apartment Apartment { get; set; }
     }

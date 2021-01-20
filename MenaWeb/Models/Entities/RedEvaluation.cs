@@ -7,9 +7,9 @@ namespace MenaWeb.Models.Entities
 {
     public class RedEvaluation
     {
-        public uint IdEvaluation { get; set; }
-        public uint? IdApartment { get; set; }
-        public uint? IdOrganization { get; set; }
+        public int IdEvaluation { get; set; }
+        public int? IdApartment { get; set; }
+        public int? IdOrganization { get; set; }
         public string EvaluationPrice { get; set; }
         public bool Deleted { get; set; }
         public Apartment Apartment { get; set; }

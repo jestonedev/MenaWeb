@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class Delegate
     {
-        public ushort IdDelegate { get; set; }
+        public short IdDelegate { get; set; }
         public string Fio { get; set; }
         public DateTime Birth { get; set; }
         public string PassportSeria { get; set; }

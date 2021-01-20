@@ -12,5 +12,7 @@ namespace MenaWeb.ViewModels
         public IList<Signer> Signers { get; set; }
         public IList<Models.Entities.Delegate> Delegates { get; set; }
         public IList<ProcessStatus> ProcessStatuses { get; set; }
+        public IList<KladrStreet> Streets { get; set; }
+        public IList<ApartmentType> ApartmentTypes { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class RedOrganization
     {
-        public uint IdOrganization { get; set; }
+        public int IdOrganization { get; set; }
         public string Name { get; set; }
         public List<RedEvaluation> RedEvaluations { get; set; }
     }

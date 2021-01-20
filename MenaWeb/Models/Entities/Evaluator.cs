@@ -7,7 +7,7 @@ namespace MenaWeb.Models.Entities
 {
     public class Evaluator
     {
-        public ushort IdEvaluator { get; set; }
+        public short IdEvaluator { get; set; }
         public string EvaluatorName { get; set; }
         public string EvaluatorBoss { get; set; }
         public virtual List<ApartmentEvaluation> ApartmentEvaluations { get; set; }

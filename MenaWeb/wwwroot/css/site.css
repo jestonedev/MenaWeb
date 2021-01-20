@@ -91,3 +91,7 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
         padding-left: 2.2rem;
     }
 }
+
+.m-tools-dropdown-menu.show {
+    display: flex;
+}

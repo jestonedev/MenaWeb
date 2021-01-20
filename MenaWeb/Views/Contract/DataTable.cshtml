@@ -51,6 +51,10 @@
                     {
                         <div><b>Сторона 1</b></div>
                     }
+
+                    @{
+                        string addressSide1 = null;
+                    }
                     @if (item.ApartmentSide1 != null)
                     {
                         var address = Model.Streets.FirstOrDefault(r => r.IdStreet == item.ApartmentSide1.IdStreet)?.StreetName;
@@ -78,13 +82,10 @@
                             }
                             address += "ком. " + item.ApartmentSide1.Room;
                         }
-                        if (string.IsNullOrEmpty(address))
-                        {
-                            <i class="text-danger">адрес не указан</i>
-                        }
-                        else
+                        if (!string.IsNullOrEmpty(address))
                         {
                             @address
+                            addressSide1 = address;
                         }
                         <div class="m-contract-list__address-dopinfo">
                             @if (item.ApartmentSide1.InventoryNumber != null)
@@ -101,9 +102,8 @@
                             }
                         </div>
                     }
-                    @if (item.ApartmentSide1 != null && item.ApartmentSide12 != null)
-                    {
-                        <div class="mb-2"></div>
+                    @{
+                        string addressSide12 = null;
                     }
                     @if (item.ApartmentSide12 != null)
                     {
@@ -132,13 +132,10 @@
                             }
                             address += "ком. " + item.ApartmentSide12.Room;
                         }
-                        if (string.IsNullOrEmpty(address))
-                        {
-                            <i class="text-danger">адрес не указан</i>
-                        }
-                        else
+                        if (!string.IsNullOrEmpty(address))
                         {
                             @address
+                            addressSide12 = address;
                         }
                         <div class="m-contract-list__address-dopinfo">
                             @if (item.ApartmentSide12.InventoryNumber != null)
@@ -154,6 +151,10 @@
                                 <span>Общая площадь: </span>@item.ApartmentSide12.TotalArea<span> м<sup>2</sup></span>
                             }
                         </div>
+                    }
+                    @if (string.IsNullOrEmpty(addressSide1) && string.IsNullOrEmpty(addressSide1))
+                    {
+                        <i class="text-danger">адрес не указан</i>
                     }
                     @if ((item.ApartmentSide1 != null || item.ApartmentSide12 != null) && item.ApartmentSide2 != null)
                     {
@@ -234,12 +235,14 @@
                     <div class="btn-group" role="group" aria-label="Панель доступа">
                         <div class="btn-group" role="group" aria-label="Панель доступа">
                             <button class="btn btn-primary oi oi-wrench dropdown-toggle" type="button" title="Инструменты" aria-label="Инструменты" id="toolsBtn_@item.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                            <div class="dropdown-menu dropdown-menu-right but text-center" aria-labelledby="toolsBtn_@item.IdContract">
-                                <a class="btn btn-primary oi oi-eye" title="Подробнее" aria-label="Подробнее"
+                            <div class="dropdown-menu dropdown-menu-right but text-center m-tools-dropdown-menu" aria-labelledby="toolsBtn_@item.IdContract">
+                                <a class="btn btn-primary oi oi-eye" style="margin-left: 10px; margin-right: 2px" title="Подробнее" aria-label="Подробнее"
                                    asp-controller="Contract" asp-action="Details" asp-route-idContract="@item.IdContract" asp-route-action="Details" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
-                                <a class="btn btn-outline-dark oi oi-pencil" title="Изменить" aria-label="Изменить"
+                                <a class="btn btn-outline-dark oi oi-pencil" style="margin-left: 2px; margin-right: 2px" title="Изменить" aria-label="Изменить"
                                    asp-controller="Contract" asp-action="Edit" asp-route-idContract="@item.IdContract" asp-route-action="Edit" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
-                                <a class="btn btn-danger oi oi-x" title="Удалить" aria-label="Удалить"
+                                <a class="btn btn-outline-dark oi oi-layers" style="margin-left: 2px; margin-right: 2px" title="Копировать" aria-label="Копировать"
+                                   asp-controller="Contract" asp-action="Create" asp-route-idContract="@item.IdContract" asp-route-action="Create" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                                <a class="btn btn-danger oi oi-x" style="margin-left: 2px; margin-right: 10px" title="Удалить" aria-label="Удалить"
                                    asp-controller="Contract" asp-action="Delete" asp-route-idContract="@item.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
                             </div>
                         </div>
