@@ -14,5 +14,6 @@ namespace MenaWeb.ViewModels
         public IList<ProcessStatus> ProcessStatuses { get; set; }
         public IList<KladrStreet> Streets { get; set; }
         public IList<ApartmentType> ApartmentTypes { get; set; }
+        public IList<Evaluator> Evaluators { get; set; }
     }
 }

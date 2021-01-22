@@ -54,6 +54,47 @@
                 <label asp-for="Contract.ApartmentSide2.CadastralPrice">Кадастровая стоимость</label>
                 <input disabled type="text" class="form-control input-decimal" asp-for="Contract.ApartmentSide2.CadastralPrice" title="Кадастровая стоимость">
             </div>
+            <div class="form-group col-12 m-evaluator" data-side="ApartmentSide2">
+                <label>Оценка</label>
+                <div class="m-evaluator-hidden-wrapper">
+                    @{
+                        string evaluatorTitle = null;
+                        if (Model.Contract.ApartmentSide2.ApartmentEvaluations != null && Model.Contract.ApartmentSide2.ApartmentEvaluations.Any())
+                        {
+
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentEvaluations[0].IdApartmentEvaluation" />
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentEvaluations[0].IdApartment" />
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentEvaluations[0].IdEvaluator" />
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentEvaluations[0].EvaluationDate"
+                                value="@(Model.Contract.ApartmentSide2.ApartmentEvaluations[0].EvaluationDate != null ? 
+                                        Model.Contract.ApartmentSide2.ApartmentEvaluations[0].EvaluationDate.Value.ToString("yyyy-MM-dd") : "")" />
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentEvaluations[0].EvaluationNumber" />
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentEvaluations[0].EvaluationPrice" />
+                            var evaluator = Model.Contract.ApartmentSide2.ApartmentEvaluations.FirstOrDefault();
+                            if (evaluator.Evaluator != null)
+                            {
+                                evaluatorTitle += evaluator.Evaluator.EvaluatorName;
+                            }
+                            if (evaluator.EvaluationPrice != null)
+                            {
+                                if (evaluatorTitle != null)
+                                {
+                                    evaluatorTitle += ": ";
+                                }
+                                evaluatorTitle += string.Format("{0} руб", evaluator.EvaluationPrice);
+                            }
+                        }
+                    }
+                </div>
+                <div class="input-group">
+                    <input disabled type="text" class="form-control m-input--disable-alwayes" name="Contract.ApartmentSide2.EvaluatorTitle" value="@evaluatorTitle" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary m-evaluator-btn" type="button" id="button-addon2">
+                            <span class="oi oi-ellipses"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

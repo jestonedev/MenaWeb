@@ -67,6 +67,21 @@ namespace MenaWeb.DataServices
                 contract.ApartmentSide1.IdApartment = 0;
                 contract.ApartmentSide2.IdApartment = 0;
                 contract.ApartmentSide12.IdApartment = 0;
+                if (contract.ApartmentSide1.ApartmentEvaluations != null && contract.ApartmentSide1.ApartmentEvaluations.Any())
+                {
+                    contract.ApartmentSide1.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
+                    contract.ApartmentSide1.ApartmentEvaluations[0].IdApartment = 0;
+                }
+                if (contract.ApartmentSide12.ApartmentEvaluations != null && contract.ApartmentSide12.ApartmentEvaluations.Any())
+                {
+                    contract.ApartmentSide12.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
+                    contract.ApartmentSide12.ApartmentEvaluations[0].IdApartment = 0;
+                }
+                if (contract.ApartmentSide2.ApartmentEvaluations != null && contract.ApartmentSide2.ApartmentEvaluations.Any())
+                {
+                    contract.ApartmentSide2.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
+                    contract.ApartmentSide2.ApartmentEvaluations[0].IdApartment = 0;
+                }
             }
             if (contract == null)
             {
@@ -139,7 +154,8 @@ namespace MenaWeb.DataServices
                 Signers = db.Signers.Where(r => r.IdSignerType == 4).ToList(),
                 ProcessStatuses = db.ProcessStatuses.ToList(),
                 Streets = db.KladrStreets.ToList(),
-                ApartmentTypes = db.ApartmentTypes.ToList()
+                ApartmentTypes = db.ApartmentTypes.ToList(),
+                Evaluators = db.Evaluators.ToList()
             };
             return vm;
         }

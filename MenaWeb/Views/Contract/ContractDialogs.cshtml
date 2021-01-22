@@ -1,0 +1,54 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+<form id="evaluatorForm" autocomplete="off">
+    <div class="modal fade" id="evaluatorModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Оценка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Evaluator.IdEvaluator">Оценщик</label>
+                            <select disabled class="selectpicker form-control" title="Оценщик" name="Evaluator.IdEvaluator"
+                                    id="Evaluator_IdEvaluator"
+                                    asp-items="@(new SelectList(Model.Evaluators, "IdEvaluator", "EvaluatorName"))"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Evaluator.EvaluationNumber">Номер отчета</label>
+                            <input disabled type="text" class="form-control" title="Номер отчета" name="Evaluator.EvaluationNumber" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Evaluator.EvaluationDate">Дата отчета</label>
+                            <input disabled type="date" class="form-control" title="Дата отчета" name="Evaluator.EvaluationDate" id="Evaluator_EvaluationDate" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Evaluator.EvaluationPrice">Оценочная стоимость</label>
+                            <input disabled type="text" class="form-control input-decimal" title="Оценочная стоимость" name="Evaluator.EvaluationPrice" id="Evaluator_EvaluationPrice" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <button type="button" class="btn btn-primary m-evaluator-submit">Сохранить</button>
+                        <button type="button" class="btn btn-danger m-evaluator-clear">Очистить</button>
+                    }
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

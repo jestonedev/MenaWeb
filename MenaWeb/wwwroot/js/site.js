@@ -257,7 +257,71 @@ $(".m-contract__remove-side-12-btn").on("click", function (e) {
     $(".side-12-container").find("input, select, textarea").val("");
     $("#Contract_ApartmentSide12_Part").val("1");
     $("#Contract_ApartmentSide12_IdApartmentType").val("1");
+    $(".side-12-container .m-evaluator-hidden-wrapper").empty();
+    $(".side-12-container input[name$='.EvaluatorTitle']").val("");
     $(".side-12-container").find("select").selectpicker("refresh");
     $(".side-12-container").addClass("d-none");
     e.preventDefault();
+});
+
+$(".m-evaluator-clear").on("click", function (e) {
+    var modal = $("#evaluatorModal");
+    modal.find("select, input, textarea").val("").selectpicker("refresh");
+});
+
+$(".m-evaluator-btn").on("click", function (e) {
+    var modal = $("#evaluatorModal");
+    modal.find("select, input, textarea").val("");
+    var inputsWrapper = $(this).closest(".m-evaluator").find(".m-evaluator-hidden-wrapper");
+    inputsWrapper.find("input[type='hidden']").each(function(idx, elem) {
+        var value = $(elem).val();
+        var name = $(elem).attr("name");
+        var nameParts = name.split('.');
+        var fieldName = nameParts[nameParts.length - 1];
+        modal.find("[name='Evaluator." + fieldName + "']").val(value);
+    });
+    modal.find(".m-evaluator-submit").off("click").on("click", function (ev) {
+        var apartmentSide = inputsWrapper.closest(".m-evaluator").data("side");
+        var title = "";
+        modal.find("select, input, textarea").each(function (idx, elem) {
+            var value = $(elem).val();
+            var name = $(elem).attr("name");
+            var nameParts = name.split('.');
+            var fieldName = nameParts[nameParts.length - 1];
+            var inputFieldName = "Contract." + apartmentSide + ".ApartmentEvaluations[0]." + fieldName;
+            var inputFieldId = inputFieldName.replace(/[.]/g, "_");
+            var input = inputsWrapper.find("[name='"+inputFieldName+"']");
+            if (input.length === 0) {
+                inputsWrapper.append("<input id='" + inputFieldId + "' name='" + inputFieldName + "' type='hidden' value='" + value + "'>");
+            } else {
+                input.val(value);
+            }
+            if (fieldName === "IdEvaluator" && value !== "") {
+                title += $(elem).find("option[value='" + value + "']").text();
+            }
+            if (fieldName === "EvaluationPrice" && value !== "") {
+                if (title !== "") {
+                    title += ": ";
+                }
+                title += value + " руб.";
+            }
+        });
+        var idAparmtnetEvaluatorName = "Contract." + apartmentSide + ".ApartmentEvaluations[0].IdApartmentEvaluation";
+        var idAparmtnetEvaluatorId = idAparmtnetEvaluatorName.replace(/[.]/g, "_");
+        if (inputsWrapper.find("[name='" + idAparmtnetEvaluatorName + "']").length === 0) {
+            inputsWrapper.append("<input id='" + idAparmtnetEvaluatorId + "' name='" + idAparmtnetEvaluatorName + "' type='hidden' value='0'>");
+        }
+        var idAparmtnetName = "Contract." + apartmentSide + ".ApartmentEvaluations[0].IdApartment";
+        var idAparmtnetId = idAparmtnetName.replace(/[.]/g, "_");
+        if (inputsWrapper.find("[name='" + idAparmtnetName + "']").length === 0) {
+            inputsWrapper.append("<input id='" + idAparmtnetId + "' name='" + idAparmtnetName + "' type='hidden' value='0'>");
+        }
+        inputsWrapper.closest(".m-evaluator").find("input[name$='.EvaluatorTitle']").val(title);
+        modal.modal('hide');
+    });
+    modal.modal('show');
+});
+
+$("#evaluatorModal").on("show.bs.modal", function () {
+    $(this).find("select").selectpicker("refresh");
 });
