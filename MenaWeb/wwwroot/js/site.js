@@ -245,6 +245,7 @@ $('.contract-toggler').each(function (idx, e) {
     $(e).on('click', $('#' + $(e).data("for")), elementToogleHide);
 });
 
+// Side 12
 $(".m-contract__add-side-12-btn").on("click", function (e) {
     $(this).addClass("d-none");
     $(".side-12-container").removeClass("d-none").find("input, select, textarea")
@@ -264,6 +265,8 @@ $(".m-contract__remove-side-12-btn").on("click", function (e) {
     e.preventDefault();
 });
 
+
+// Elevator
 $(".m-evaluator-clear").on("click", function (e) {
     var modal = $("#evaluatorModal");
     modal.find("select, input, textarea").val("").selectpicker("refresh");
@@ -323,5 +326,72 @@ $(".m-evaluator-btn").on("click", function (e) {
 });
 
 $("#evaluatorModal").on("show.bs.modal", function () {
+    $(this).find("select").selectpicker("refresh");
+});
+
+// Land
+$(".m-land-clear").on("click", function (e) {
+    var modal = $("#landModal");
+    modal.find("select, input, textarea").val("").selectpicker("refresh");
+});
+
+$(".m-land-btn").on("click", function (e) {
+    var modal = $("#landModal");
+    modal.find("select, input, textarea").val("");
+    var inputsWrapper = $(this).closest(".m-land").find(".m-land-hidden-wrapper");
+    inputsWrapper.find("input[type='hidden']").each(function (idx, elem) {
+        var value = $(elem).val();
+        var name = $(elem).attr("name");
+        var nameParts = name.split('.');
+        var fieldName = nameParts[nameParts.length - 1];
+        modal.find("[name='Land." + fieldName + "']").val(value);
+    });
+    modal.find(".m-land-submit").off("click").on("click", function (ev) {
+        var apartmentSide = inputsWrapper.closest(".m-land").data("side");
+        var title = "";
+
+        modal.find("select, input, textarea").each(function (idx, elem) {
+            var value = $(elem).val();
+            var name = $(elem).attr("name");
+            var nameParts = name.split('.');
+            var fieldName = nameParts[nameParts.length - 1];
+            var inputFieldName = "Contract." + apartmentSide + ".Land[0]." + fieldName;
+            var inputFieldId = inputFieldName.replace(/[.]/g, "_");
+            var input = inputsWrapper.find("[name='" + inputFieldName + "']");
+            if (fieldName === "TotalArea" && value !== "") {
+                value = value.replace('.', ',');
+            }
+            if (input.length === 0) {
+                inputsWrapper.append("<input id='" + inputFieldId + "' name='" + inputFieldName + "' type='hidden' value='" + value + "'>");
+            } else {
+                input.val(value);
+            }
+            if (fieldName === "IdStreet" && value !== "") {
+                title += $(elem).find("option[value='" + value + "']").text();
+            }
+            if (fieldName === "House" && value !== "") {
+                if (title !== "") {
+                    title += ", ";
+                }
+                title += value;
+            }
+        });
+        var idAparmtnetLandName = "Contract." + apartmentSide + ".Land[0].IdLand";
+        var idAparmtnetLandId = idAparmtnetLandName.replace(/[.]/g, "_");
+        if (inputsWrapper.find("[name='" + idAparmtnetLandName + "']").length === 0) {
+            inputsWrapper.append("<input id='" + idAparmtnetLandId + "' name='" + idAparmtnetLandName + "' type='hidden' value='0'>");
+        }
+        var idAparmtnetName = "Contract." + apartmentSide + ".Land[0].IdApartment";
+        var idAparmtnetId = idAparmtnetName.replace(/[.]/g, "_");
+        if (inputsWrapper.find("[name='" + idAparmtnetName + "']").length === 0) {
+            inputsWrapper.append("<input id='" + idAparmtnetId + "' name='" + idAparmtnetName + "' type='hidden' value='0'>");
+        }
+        inputsWrapper.closest(".m-land").find("input[name$='.LandAddress']").val(title);
+        modal.modal('hide');
+    });
+    modal.modal('show');
+});
+
+$("#landModal").on("show.bs.modal", function () {
     $(this).find("select").selectpicker("refresh");
 });

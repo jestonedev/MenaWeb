@@ -82,6 +82,11 @@ namespace MenaWeb.DataServices
                     contract.ApartmentSide2.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
                     contract.ApartmentSide2.ApartmentEvaluations[0].IdApartment = 0;
                 }
+                if (contract.ApartmentSide2.Land != null && contract.ApartmentSide2.Land.Any())
+                {
+                    contract.ApartmentSide2.Land[0].IdLand = 0;
+                    contract.ApartmentSide2.Land[0].IdApartment = 0;
+                }
             }
             if (contract == null)
             {

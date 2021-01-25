@@ -52,3 +52,56 @@
         </div>
     </div>
 </form>
+
+<form id="landForm" autocomplete="off">
+    <div class="modal fade" id="landModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Земельный участок</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Land.IdStreet">Улица</label>
+                            <select disabled class="selectpicker form-control" title="Улица" name="Land.IdStreet"
+                                    id="Land_IdStreet"
+                                    asp-items="@(new SelectList(Model.Streets, "IdStreet", "StreetName"))">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Land.House">Дом</label>
+                            <input disabled type="text" class="form-control input-house" title="Номер дома" name="Land.House" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-Land col-12">
+                            <label for="Land.InventoryNumber">Кадастровый номер</label>
+                            <input disabled type="text" class="form-control input-cadastral-num" title="Кадастровый номер" name="Land.InventoryNumber" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Land.TotalArea">Общая площадь</label>
+                            <input disabled type="text" class="form-control input-decimal" title="Общая площадь" name="Land.TotalArea" id="Land_TotalArea" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <button type="button" class="btn btn-primary m-land-submit">Сохранить</button>
+                        <button type="button" class="btn btn-danger m-land-clear">Очистить</button>
+                    }
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
