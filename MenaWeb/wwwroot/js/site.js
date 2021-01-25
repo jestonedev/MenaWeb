@@ -395,3 +395,10 @@ $(".m-land-btn").on("click", function (e) {
 $("#landModal").on("show.bs.modal", function () {
     $(this).find("select").selectpicker("refresh");
 });
+
+//Additional
+$(".m-additional__osnovanie select").on("change", function () {
+    var id = $(this).val();
+    var text = $(this).find("option[value='" + id + "']").text();
+    $(".m-additional__osnovanie input[type='hidden']").val(text);
+});

@@ -18,13 +18,15 @@
                             <label for="Evaluator.IdEvaluator">Оценщик</label>
                             <select disabled class="selectpicker form-control" title="Оценщик" name="Evaluator.IdEvaluator"
                                     id="Evaluator_IdEvaluator"
-                                    asp-items="@(new SelectList(Model.Evaluators, "IdEvaluator", "EvaluatorName"))"></select>
+                                    asp-items="@(new SelectList(Model.Evaluators, "IdEvaluator", "EvaluatorName"))">
+                                <option></option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="Evaluator.EvaluationNumber">Номер отчета</label>
-                            <input disabled type="text" class="form-control" title="Номер отчета" name="Evaluator.EvaluationNumber" />
+                            <input disabled type="text" class="form-control" maxlength="255" title="Номер отчета" name="Evaluator.EvaluationNumber" />
                         </div>
                     </div>
                     <div class="form-row">
@@ -77,13 +79,13 @@
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="Land.House">Дом</label>
-                            <input disabled type="text" class="form-control input-house" title="Номер дома" name="Land.House" />
+                            <input disabled type="text" class="form-control input-house" title="Номер дома" name="Land.House" maxlength="5" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-Land col-12">
                             <label for="Land.InventoryNumber">Кадастровый номер</label>
-                            <input disabled type="text" class="form-control input-cadastral-num" title="Кадастровый номер" name="Land.InventoryNumber" />
+                            <input disabled type="text" class="form-control input-cadastral-num" title="Кадастровый номер" name="Land.InventoryNumber" maxlength="50" />
                         </div>
                     </div>
                     <div class="form-row">

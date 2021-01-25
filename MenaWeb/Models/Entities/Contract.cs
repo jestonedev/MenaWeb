@@ -43,7 +43,7 @@ namespace MenaWeb.Models.Entities
             ApartmentSide12 = new Apartment();
             ApartmentSide2 = new Apartment();
             ContractStatusHistory = new List<ContractStatusHistory>();
-            Additionals = new List<Additional>();
+            Additionals = new List<Additional> ();
         }
 
     }

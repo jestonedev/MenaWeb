@@ -15,5 +15,8 @@ namespace MenaWeb.ViewModels
         public IList<KladrStreet> Streets { get; set; }
         public IList<ApartmentType> ApartmentTypes { get; set; }
         public IList<Evaluator> Evaluators { get; set; }
+        public IList<Predost> Predosts { get; set; }
+        public IList<Osnovanie> Osnovanies { get; set; }
+        public IList<CopyKgc> CopyKgcs { get; set; }
     }
 }

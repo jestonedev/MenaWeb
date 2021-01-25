@@ -87,6 +87,13 @@ namespace MenaWeb.DataServices
                     contract.ApartmentSide2.Land[0].IdLand = 0;
                     contract.ApartmentSide2.Land[0].IdApartment = 0;
                 }
+                if (contract.Additionals != null && contract.Additionals.Any())
+                {
+                    contract.Additionals[0].IdAddit = 0;
+                    contract.Additionals[0].IdContract = 0;
+                    contract.Additionals[0].IdApartment1 = 0;
+                    contract.Additionals[0].IdApartment2 = 0;
+                }
             }
             if (contract == null)
             {
@@ -160,7 +167,10 @@ namespace MenaWeb.DataServices
                 ProcessStatuses = db.ProcessStatuses.ToList(),
                 Streets = db.KladrStreets.ToList(),
                 ApartmentTypes = db.ApartmentTypes.ToList(),
-                Evaluators = db.Evaluators.ToList()
+                Evaluators = db.Evaluators.ToList(),
+                CopyKgcs = db.CopyKgcs.ToList(),
+                Osnovanies = db.Osnovanies.ToList(),
+                Predosts = db.Predosts.ToList()
             };
             return vm;
         }

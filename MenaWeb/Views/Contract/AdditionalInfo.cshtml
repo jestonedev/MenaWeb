@@ -1,0 +1,117 @@
+﻿@using MenaWeb.ViewModels
+@model ContractVM
+@{ 
+    if (!Model.Contract.Additionals.Any())
+    {
+        Model.Contract.Additionals.Add(new MenaWeb.Models.Entities.Additional {
+            IdContract = Model.Contract.IdContract,
+            IdApartment1 = Model.Contract.ApartmentSide1.IdApartment,
+            IdApartment2 = Model.Contract.ApartmentSide2.IdApartment
+        });
+    }
+}
+<div class="card rr-additional-card">
+    <div class="card-header d-flex justify-content-between">
+        <h3>Дополнительная информация</h3>
+        <div class="btn-group" role="group">
+            <a href="#" data-for="Additional" class="form-control btn btn-primary contract-toggler" title="Развернуть панель" style="font-weight:bold;">∨</a>
+        </div>
+    </div>
+    <div class="card-body toggle-hide" id="Additional">
+        <input type="hidden" asp-for="Contract.Additionals[0].IdAddit" />
+        <input type="hidden" asp-for="Contract.Additionals[0].IdContract" />
+        <input type="hidden" asp-for="Contract.Additionals[0].IdApartment1" />
+        <input type="hidden" asp-for="Contract.Additionals[0].IdApartment2" />
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].IdPredost">Предоставление ЖП</label>
+                <select disabled class="selectpicker form-control" asp-for="Contract.Additionals[0].IdPredost" asp-items="@(new SelectList(Model.Predosts, "IdPredost", "PredostName"))"
+                        title="Предоставление ЖП">
+                    <option></option>
+                </select>
+            </div>
+            <div class="form-group col-md-6 m-additional__osnovanie">
+                <label for="Contract.Additionals[0].IdOsnovanie">Основание проживания</label>
+                <input type="hidden" asp-for="Contract.Additionals[0].Osnovanie" />
+                <select disabled class="selectpicker form-control"
+                        name="Contract.Additionals[0].IdOsnovanie"
+                        title="Основание проживания">
+                    <option></option>
+                    @foreach (var osnovanie in Model.Osnovanies)
+                    {
+                        if (osnovanie.OsnovanieName == Model.Contract.Additionals[0].Osnovanie)
+                        {
+                            <option selected value="@osnovanie.IdOsnovanie">@osnovanie.OsnovanieName</option>
+                        }
+                        else
+                        {
+                            <option value="@osnovanie.IdOsnovanie">@osnovanie.OsnovanieName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].DogPor">Договор о порядке и условиях переселения</label>
+                <input disabled type="text" class="form-control" maxlength="255" asp-for="Contract.Additionals[0].DogPor"
+                       title="Договор о порядке и условиях переселения">
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+                <label asp-for="Contract.Additionals[0].DateDogPor">Дата сделки</label>
+                <input disabled type="date" class="form-control" asp-for="Contract.Additionals[0].DateDogPor"
+                       value="@(Model.Contract.Additionals[0].DateDogPor.HasValue ? Model.Contract.Additionals[0].DateDogPor.Value.ToString("yyyy-MM-dd") : "")" title="Дата совершения сделки">
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+                <label asp-for="Contract.Additionals[0].DateZaselenie">Дата заселения</label>
+                <input disabled type="date" class="form-control" asp-for="Contract.Additionals[0].DateZaselenie"
+                       value="@(Model.Contract.Additionals[0].DateZaselenie.HasValue ? Model.Contract.Additionals[0].DateZaselenie.Value.ToString("yyyy-MM-dd") : "")" title="Дата заселения в новостройку">
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].InfoEvualation">Информация по оценке</label>
+                <input disabled type="text" class="form-control" maxlength="255" asp-for="Contract.Additionals[0].InfoEvualation"
+                       title="Информация по оценке">
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+                <label asp-for="Contract.Additionals[0].DateEvualation">Дата заявки на оценку</label>
+                <input disabled type="date" class="form-control" asp-for="Contract.Additionals[0].DateEvualation"
+                       value="@(Model.Contract.Additionals[0].DateEvualation.HasValue ? Model.Contract.Additionals[0].DateEvualation.Value.ToString("yyyy-MM-dd") : "")" title="Дата заявки на оценку МЖП для мены">
+            </div>
+            <div class="form-group col-lg-3 col-md-6">
+                <label asp-for="Contract.Additionals[0].DateEvualDone">Дата изготовления оценки</label>
+                <input disabled type="date" class="form-control" asp-for="Contract.Additionals[0].DateEvualDone"
+                       value="@(Model.Contract.Additionals[0].DateEvualDone.HasValue ? Model.Contract.Additionals[0].DateEvualDone.Value.ToString("yyyy-MM-dd") : "")" title="Дата изготовления ОК оценки МЖП">
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].Ogranichenie">Ограничение на сделки</label>
+                <textarea disabled class="form-control" asp-for="Contract.Additionals[0].Ogranichenie" maxlength="255"
+                          title="Ограничение на сделки"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].InfoSnyatUchet">Информация по снятию с регистрации</label>
+                <textarea disabled class="form-control" asp-for="Contract.Additionals[0].InfoSnyatUchet" maxlength="500"
+                          title="Информация по снятию с регистрации по старому адресу"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].IdCopy">Копии переданы в КТС</label>
+                <select disabled class="selectpicker form-control" asp-for="Contract.Additionals[0].IdCopy" asp-items="@(new SelectList(Model.CopyKgcs, "IdCopy", "CopyName"))"
+                        title="Копии переданы в КТС">
+                    <option></option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].InfoUvedom">Информация по направленным уведомлениям</label>
+                <input disabled type="text" class="form-control" asp-for="Contract.Additionals[0].InfoUvedom" maxlength="255"
+                       title="Информация по оценке">
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].Primechanie">Примечание</label>
+                <textarea disabled class="form-control" asp-for="Contract.Additionals[0].Primechanie" maxlength="2000"
+                          title="Примечание"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Contract.Additionals[0].PhoneCivil">Телефоны граждан</label>
+                <textarea disabled class="form-control" asp-for="Contract.Additionals[0].PhoneCivil" maxlength="500"
+                          title="Телефоны граждан"></textarea>
+            </div>
+        </div>
+    </div>
+</div>

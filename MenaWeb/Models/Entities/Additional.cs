@@ -9,6 +9,8 @@ namespace MenaWeb.Models.Entities
     {
         public int IdAddit { get; set; }
         public int? IdContract { get; set; }
+        public int? IdApartment1 { get; set; }
+        public int? IdApartment2 { get; set; }
         public short? IdPredost { get; set; }
         public string Osnovanie { get; set; } // WTF?
         public DateTime? DateDogPor { get; set; }

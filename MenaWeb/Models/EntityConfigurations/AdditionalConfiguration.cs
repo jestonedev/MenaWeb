@@ -28,6 +28,14 @@ namespace MenaWeb.Models.EntityConfigurations
                 .HasColumnName("id_contract")
                 .HasColumnType("int(11)");
 
+            builder.Property(e => e.IdApartment1)
+                .HasColumnName("id_apart1")
+                .HasColumnType("int(11)");
+
+            builder.Property(e => e.IdApartment2)
+                .HasColumnName("id_apart")
+                .HasColumnType("int(11)");
+
             builder.Property(e => e.IdPredost)
                 .HasColumnName("id_predost")
                 .HasColumnType("tinyint(3)");
