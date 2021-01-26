@@ -107,6 +107,18 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Состояние</label>
+                    <div class="m-statuses-hidden-wrapper">
+                        @for (var i = 0; i < Model.Contract.ContractStatusHistory.Count; i++)
+                        {
+                            <div class="m-status-item">
+                                <input type="hidden" asp-for="Contract.ContractStatusHistory[i].IdHistoryStatus" />
+                                <input type="hidden" asp-for="Contract.ContractStatusHistory[i].IdContract" />
+                                <input type="hidden" asp-for="Contract.ContractStatusHistory[i].IdProcessStatus" />
+                                <input type="hidden" asp-for="Contract.ContractStatusHistory[i].StatusDate"
+                                         value="@(Model.Contract.ContractStatusHistory[i].StatusDate.ToString("yyyy-MM-dd"))"/>
+                            </div>
+                        }
+                    </div>
                     @{
                         var currentState = Model.Contract.ContractStatusHistory.LastOrDefault();
                         ProcessStatus ps = null;
@@ -116,9 +128,9 @@
                         }
                     }
                     <div class="input-group">
-                        <input disabled class="form-control m-input--disable-alwayes" type="text" value="@(ps != null ? ps.Step + ") " + ps.ProcessStatusName : "")" />
+                        <input disabled class="form-control m-input--disable-alwayes" id="ProcessStatusTitle" type="text" value="@(ps != null ? ps.Step + ") " + ps.ProcessStatusName : "")" />
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+                            <button class="btn btn-outline-secondary m-statuses-change-btn" type="button" id="button-addon2">
                                 <span class="oi oi-ellipses"></span>
                             </button>
                         </div>
@@ -187,9 +199,11 @@
     {
         <script>
             $(function () {
-                $('select, input, textarea').selectpicker("refresh").filter(function (idx, elem) {
+                $('select.selectpicker').selectpicker("refresh");
+                $('select, input, textarea').filter(function (idx, elem) {
                     return !$(elem).hasClass("m-input--disable-alwayes");
-                }).prop('disabled', false).selectpicker("refresh");
+                }).prop('disabled', false);
+                $('select.selectpicker').selectpicker("refresh");
                 $('input[type="hidden"]').prop('disabled', false);
                 $('input[type="submit"]').prop('disabled', false);
             })

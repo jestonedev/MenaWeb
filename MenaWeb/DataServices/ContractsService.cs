@@ -94,6 +94,11 @@ namespace MenaWeb.DataServices
                     contract.Additionals[0].IdApartment1 = 0;
                     contract.Additionals[0].IdApartment2 = 0;
                 }
+                foreach(var status in contract.ContractStatusHistory)
+                {
+                    status.IdContract = 0;
+                    status.IdHistoryStatus = 0;
+                }
             }
             if (contract == null)
             {
@@ -111,6 +116,13 @@ namespace MenaWeb.DataServices
                 if (contract.ApartmentSide12.IdApartment != 0) db.Apartments.Remove(contract.ApartmentSide12);
                 contract.ApartmentSide12 = null;
                 contract.IdApartmentSide12 = null;
+            }
+            foreach(var status in db.ContractStatusHistory.Where(r => r.IdContract == contract.IdContract).AsNoTracking())
+            {
+                if (!contract.ContractStatusHistory.Any(r => r.IdHistoryStatus == status.IdHistoryStatus))
+                {
+                    db.ContractStatusHistory.Remove(status);
+                }
             }
             db.Contracts.Update(contract);
             db.SaveChanges();

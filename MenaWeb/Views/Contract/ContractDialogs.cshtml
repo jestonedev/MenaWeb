@@ -107,3 +107,62 @@
         </div>
     </div>
 </form>
+
+<form id="statusesForm" autocomplete="off">
+    <div class="modal fade" id="statusesModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Статусы договора</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row m-status-row">
+                        <input type="hidden" name="Status.IdHistoryStatus" id="Status_IdHistoryStatus" value="0" />
+                        <input type="hidden" name="Status.IdContract" id="Status_IdContract" value="0" />
+                        <div class="form-group col-12 @(ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create ? "col-lg-8" : "col-lg-9")">
+                            <select disabled class="form-control" title="Статус" name="Status.IdProcessStatus"
+                                    id="Status_IdProcessStatus">
+                                <option></option>
+                                @foreach (var status in Model.ProcessStatuses)
+                                {
+                                    <option value="@status.IdProcessStatus" data-step="@status.Step">@status.ProcessStatusName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-3 @(ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create ? "col-10" : "col-12")">
+                            <input disabled type="date" class="form-control" title="Дата" name="Status.StatusDate" id="Status_StatusDate" 
+                                   data-val="true" data-val-required="Укажите дату"/>
+                            <span data-valmsg-for="Status.StatusDate" data-valmsg-replace="true" class="text-danger"></span>
+                        </div>
+                        @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                        {
+                            <div class="col-lg-1 col-2 text-right">
+                                <button class="btn btn-danger m-status-delete-btn">
+                                    <span class="oi oi-x"></span>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <div class="col-12 text-center">
+                            <button class="btn btn-success m-status-add-btn">
+                                Добавить
+                            </button>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <button type="button" class="btn btn-primary m-status-submit">Сохранить</button>
+                    }
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -57,6 +57,13 @@ $('.input-filter-house, .input-house').inputFilter(function (value) {
     return /^[0-9\\/а-яА-Я]*$/.test(value);
 });
 
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 $('.page-link').off("click");
 $('.page-link').click(function (e) {
     $('input[name="PageOptions.CurrentPage"]').val($(this).data("page"));
@@ -401,4 +408,104 @@ $(".m-additional__osnovanie select").on("change", function () {
     var id = $(this).val();
     var text = $(this).find("option[value='" + id + "']").text();
     $(".m-additional__osnovanie input[type='hidden']").val(text);
+});
+
+//Statuses
+function addEmtpyStatusRow() {
+    var modalBody = $("#statusesModal .modal-body");
+    if (modalBody.find(".m-status-row").length > 0) {
+        modalBody.prepend("<hr/>");
+    }
+    modalBody.prepend(statusRowTemplate.clone(true));
+    var lastInsertedItem = $(modalBody.find(".m-status-row")[0]);
+    lastInsertedItem.find("input, select, textarea").each(function (idx, elem) {
+        var elemName = $(elem).attr("name");
+        var spanError = $(elem).closest(".form-group").find("span[data-valmsg-for='" + elemName + "']");
+        var newId = $(elem).attr("id") + "_" + uuidv4();
+        var newName = newId.replace(/_/g, ".");
+        $(elem).attr("id", newId);
+        $(elem).attr("name", newName);
+        spanError.attr("data-valmsg-for", newName);
+    });
+
+    return lastInsertedItem;
+}
+
+var statusRowTemplate = undefined;
+
+$(".m-statuses-change-btn").on("click", function () {
+    if (statusRowTemplate === undefined) {
+        statusRowTemplate = $("#statusesModal .m-status-row").clone(true);
+    }
+    $("#statusesModal .m-status-row, #statusesModal .modal-body hr").remove();
+    
+    $(".m-statuses-hidden-wrapper .m-status-item").each(function (idx, elem) {
+        var item = addEmtpyStatusRow();
+        $(elem).find("input[type='hidden']").each(function (idxInput, elemInput) {
+            var value = $(elemInput).val();
+            var name = $(elemInput).prop("name");
+            var nameParts = name.split(".");
+            var modalElemName = "Status." + nameParts[nameParts.length - 1];
+            var elem = item.find("[name^='" + modalElemName + "']");
+            elem.val(value);
+        });
+        refreshValidationForm($("#statusesForm"));
+    });
+
+    var modal = $("#statusesModal");
+    modal.modal('show');
+});
+
+$(".m-status-add-btn").on("click", function (e) {
+    var lastInsertedItem = addEmtpyStatusRow();
+    lastInsertedItem.find("select").selectpicker("refresh");
+    refreshValidationForm($("#statusesForm"));
+    e.preventDefault();
+});
+
+$(".m-status-delete-btn").on("click", function (e) {
+    var row = $(this).closest(".m-status-row");
+    if ($("#statusesModal .m-status-row").length > 1) {
+        if (row.index(".m-status-row") === $("#statusesModal .m-status-row").length - 1) {
+            row.prev("hr").remove();
+        } else {
+            row.next("hr").remove();
+        }
+    }
+    row.remove();
+    e.preventDefault();
+});
+
+$(".m-status-submit").on("click", function (e) {
+    if ($(this).closest("form").valid()) {
+        var modal = $("#statusesModal");
+        $(".m-statuses-hidden-wrapper .m-status-item").remove();
+        $("#statusesModal .m-status-row").each(function (elemIdx, elem) {
+            $(".m-statuses-hidden-wrapper").prepend("<div class='m-status-item'></div>");
+            var insertedItem = $(".m-statuses-hidden-wrapper").find(".m-status-item").first();
+            $(elem).find("input, select, textarea").each(function (modalIdx, modalElem) {
+                var val = $(modalElem).val();
+                var name = $(modalElem).attr("name");
+                var nameParts = name.split(".");
+                var insertName = "Contract.ContractStatusHistory[" + elemIdx + "]." + nameParts[nameParts.length - 2];
+                var insertId = insertName.replace(/[\.\[\]]/g, "_");
+                insertedItem.append("<input type='hidden' name='" + insertName + "' id='" + insertId + "' value='" + val+"'>");
+            });
+        });
+        var processStatus = $("#statusesModal .m-status-row").first().find("select[name^='Status.IdProcessStatus']");
+        if (processStatus.length === 0) {
+            $("#ProcessStatusTitle").val("");
+        } else {
+            processStatusId = processStatus.val();
+            var processStatusOption = processStatus.find("option[value='" + processStatusId + "']");
+            processStatusName = processStatusOption.text();
+            processStatusStep = processStatusOption.data("step");
+            $("#ProcessStatusTitle").val(processStatusStep + ") " + processStatusName);
+        }
+        modal.modal('hide');
+    }
+});
+
+$("#statusesModal").on("show.bs.modal", function () {
+    $(this).find("select").selectpicker("refresh");
 });
