@@ -99,6 +99,11 @@ namespace MenaWeb.DataServices
                     status.IdContract = 0;
                     status.IdHistoryStatus = 0;
                 }
+                foreach (var person in contract.ApartmentSide2.People)
+                {
+                    person.IdApartment = 0;
+                    person.IdPerson = 0;
+                }
             }
             if (contract == null)
             {
@@ -111,6 +116,7 @@ namespace MenaWeb.DataServices
         {
             contract.LastChangeDate = DateTime.Now;
             contract.LastChangeUser = httpContextAccessor.HttpContext.User.Identity.Name.ToLowerInvariant();
+
             if (contract.ApartmentSide12 != null && contract.ApartmentSide12.IsEmpty())
             {
                 if (contract.ApartmentSide12.IdApartment != 0) db.Apartments.Remove(contract.ApartmentSide12);
@@ -122,6 +128,14 @@ namespace MenaWeb.DataServices
                 if (!contract.ContractStatusHistory.Any(r => r.IdHistoryStatus == status.IdHistoryStatus))
                 {
                     db.ContractStatusHistory.Remove(status);
+                }
+            }
+            foreach (var person in db.People.Where(r => r.IdApartment == contract.ApartmentSide2.IdApartment).AsNoTracking())
+            {
+                if (!contract.ApartmentSide2.People.Any(r => r.IdPerson == person.IdPerson))
+                {
+                    person.Deleted = true;
+                    db.People.Update(person);
                 }
             }
             db.Contracts.Update(contract);
@@ -182,9 +196,26 @@ namespace MenaWeb.DataServices
                 Evaluators = db.Evaluators.ToList(),
                 CopyKgcs = db.CopyKgcs.ToList(),
                 Osnovanies = db.Osnovanies.ToList(),
-                Predosts = db.Predosts.ToList()
+                Predosts = db.Predosts.ToList(),
+                Contractors = db.Contractors.ToList(),
+                PersonStatuses = db.PersonStatuses.ToList(),
+                Documents = db.Documents.ToList(),
+                DocumentIssueds = db.DocumentIssueds.ToList()
             };
             return vm;
+        }
+
+        public int AddDocumentIssued(string documentIssuedName)
+        {
+            var duplicates = db.DocumentIssueds.FirstOrDefault(r => r.DocumentIssuedName == documentIssuedName);
+            if (duplicates != null)
+            {
+                return -3;
+            }
+            var documentIssued = new DocumentIssued { DocumentIssuedName = documentIssuedName };
+            db.DocumentIssueds.Add(documentIssued);
+            db.SaveChanges();
+            return documentIssued.IdDocumentIssued;
         }
 
         private List<KladrStreet> GetActualStreets(List<Contract> contracts)

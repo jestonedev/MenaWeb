@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MenaWeb.Models.Entities
 {
-    public class Person
+    public class Person: Entity
     {
         public int IdPerson { get; set; }
         public int? IdApartment { get; set; }
@@ -24,7 +24,7 @@ namespace MenaWeb.Models.Entities
         public int? IdTemplate { get; set; } // TODO: Warrant relation
         public string Portion { get; set; }
         public string Phone { get; set; }
-        public byte Sex { get; set; }
+        public byte? Sex { get; set; }
         public string LastChangeUser { get; set; }
         public DateTime LastChangeDate { get; set; }
         public bool Deleted { get; set; }
@@ -34,5 +34,11 @@ namespace MenaWeb.Models.Entities
         public DocumentIssued DocumentIssued { get; set; }
         public Document Document { get; set; }
 
+        public Person() {
+            IdPersonStatus = 1;
+            IdContractor = 1;
+            IdDocument = 255;
+            Portion = "1";
+        }
     }
 }

@@ -1,0 +1,81 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+@{
+    Layout = null;
+    var index = (int)ViewData["Index"];
+}
+
+<li class="list-group-item">
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdPerson" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdApartment" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdContractor" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Family" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Name" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Father" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Portion" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdPersonStatus" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Birth"
+           value="@(Model.Contract.ApartmentSide2.People[index].Birth.HasValue ? Model.Contract.ApartmentSide2.People[index].Birth.Value.ToString("yyyy-MM-dd") : "")" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Sex" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].BornPlace" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdDocument" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].DocumentSeria" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].DocumentNumber" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].DocumentDate"
+           value="@(Model.Contract.ApartmentSide2.People[index].DocumentDate.HasValue ? Model.Contract.ApartmentSide2.People[index].DocumentDate.Value.ToString("yyyy-MM-dd") : "")" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdDocumentIssued" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdTemplate" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].LastChangeUser" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].LastChangeDate"
+        value="@Model.Contract.ApartmentSide2.People[index].LastChangeDate.ToString("yyyy-MM-dd HH:mm:ss")" />
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Фамилия</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].Family" title="Фамилия">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Имя</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].Name" title="Имя">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Отчество</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].Father" title="Отчество">
+        </div>
+        <div class="form-group col-md-5">
+            <label>Статус</label>
+            <select class="selectpicker form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].IdPersonStatus"
+                    asp-items="@(new SelectList(Model.PersonStatuses, "IdPersonStatus", "Status"))" title="Статус">
+                <option></option>
+            </select>
+        </div>
+        <div class="form-group col-9 col-md-5">
+            <label>Признак</label>
+            <select class="selectpicker form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].IdContractor"
+                    asp-items="@(new SelectList(Model.Contractors, "IdContractor", "ContractorName"))" title="Признак">
+                <option></option>
+            </select>
+        </div>
+
+        @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+        {
+            <div class="text-right col-3 col-md-2 m-person-edit-buttons">
+                <div class="btn-group edit-del-panel" role="group" aria-label="Панель реадктирования">
+                    <a class="btn btn-primary person-edit-btn" title="Редактировать" aria-label="Редактировать" href="#"><span class="oi oi-pencil"></span></a>
+                    <a class="btn btn-danger person-delete-btn" title="Удалить" aria-label="Удалить" href="#"><span class="oi oi-x delete"></span></a>
+                </div>
+            </div>
+        }
+        @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+        {
+            <div class="text-right col-3 col-md-2 m-person-view-buttons">
+                <a class="btn btn-primary person-open-btn" href="#" title="Открыть дополнительную информацию о собственнике"
+                   aria-label="Открыть дополнительную информацию о собственнике">
+                    <span class="oi oi-eye"></span>
+                </a>
+            </div>
+        }
+    </div>
+</li>

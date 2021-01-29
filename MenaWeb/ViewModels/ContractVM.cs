@@ -18,5 +18,9 @@ namespace MenaWeb.ViewModels
         public IList<Predost> Predosts { get; set; }
         public IList<Osnovanie> Osnovanies { get; set; }
         public IList<CopyKgc> CopyKgcs { get; set; }
+        public IList<PersonStatus> PersonStatuses { get; set; }
+        public IList<Contractor> Contractors { get; set; }
+        public IList<Document> Documents { get; set; }
+        public IList<DocumentIssued> DocumentIssueds { get; set; }
     }
 }

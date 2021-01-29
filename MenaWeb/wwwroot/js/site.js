@@ -57,6 +57,23 @@ $('.input-filter-house, .input-house').inputFilter(function (value) {
     return /^[0-9\\/а-яА-Я]*$/.test(value);
 });
 
+function updateControl(idx, control, namePropRegex, idPropRegex) {
+    $(control)
+        .find("[name]")
+        .filter(function (fieldIdx, field) {
+            return $(field).prop("name").match(namePropRegex) != null;
+        })
+        .each(function (fieldIdx, field) {
+            var name = $(field).prop("name").replace(namePropRegex, "$1[" + idx + "]");
+            $(field).prop("name", name);
+            var id = $(field).prop("id").replace(idPropRegex, "$1_" + idx + "__");
+            $(field).prop("id", id);
+            $(field).closest(".form-group").find("label").prop("for", id);
+            $(field).closest(".form-group").find("span[data-valmsg-for]").attr("data-valmsg-for", name);
+        });
+}
+
+
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -237,15 +254,8 @@ $("form#ContractForm").on("submit", function (e) {
     }
 });
 
-$("form#ContractForm").on("change", "select", function () {
-    var isValid = $(this).valid();
-    var id = $(this).prop("id");
-    if (!isValid) {
-        $("button[data-id='" + id + "']").addClass("input-validation-error");
-    } else {
-
-        $("button[data-id='" + id + "']").removeClass("input-validation-error");
-    }
+$("form#ContractForm, form#personModalForm").on("change", "select", function () {
+    fixBootstrapSelectHighlightOnChange($(this));
 });
 
 $('.contract-toggler').each(function (idx, e) {
@@ -508,4 +518,183 @@ $(".m-status-submit").on("click", function (e) {
 
 $("#statusesModal").on("show.bs.modal", function () {
     $(this).find("select").selectpicker("refresh");
+});
+
+$('body').on('click', '.person-open-btn, .person-edit-btn', function (e) {
+    var personElem = $(this).closest('.list-group-item');
+    var modal = $("#personModal");
+    modal.data("index", personElem.index());
+    personElem.find("input, select")
+        .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes") })
+        .each(function (idx, elem) {
+        var nameParts = $(elem).attr("name").split(".");
+        var name = nameParts[nameParts.length - 1];
+        modal.find("[name='Person." + name + "']").val($(elem).val());
+    });
+
+    modal.modal('show');
+    e.preventDefault();
+});
+
+$("#personModal").on("click", "#savePersonModalBtn", function (e) {
+    var form = $("#personModalForm");
+    var isValid = form.valid();
+
+    if (isValid) {
+        if (isCustomDocumentIssuedBy) {
+            if (!addCustomDocumentIssued())
+                return;
+        }
+        personCorrectSnp(form);
+        var index = $(this).closest("#personModal").data("index");
+        var personElem = $("#PeopleList").find(".list-group-item")[index];
+
+        var fields = $(personElem).find("input, select, textarea");
+        fields.each(function (idx, elem) {
+            var nameParts = $(elem).attr("name").split(".");
+            var name = nameParts[nameParts.length - 1];
+            formElem = form.find("[name='Person." + name + "']");
+            if (formElem.length > 0) {
+                var value = formElem.val();
+                $(elem).val(value);
+                if (elem.tagName === "SELECT") {
+                    $(elem).selectpicker("refresh");
+                }
+            }
+        });
+
+        $(personElem).removeData("in-process");
+        $("#personModal").modal('hide');
+    } else {
+        fixBootstrapSelectHighlight(form);
+        $([document.documentElement, document.body]).animate({
+            scrollTop: form.find(".input-validation-error").first().offset().top - 35
+        }, 1000);
+    }
+});
+
+$('body').on("click", ".person-delete-btn", function (e) {
+    var container = $("#PeopleList");
+    var personElem = $(this).closest('.list-group-item');
+    personElem.remove();
+    if (container.find(".list-group-item").length === 1) {
+        container.find(".list-group-item.rr-list-group-item-empty").show();
+    }
+    var namePropRegex = /(People)\[\d+\]/;
+    var idPropRegex = /(People)_\d+__/;
+    var people = $("#PeopleList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+    people.each(function (idx, elem) {
+        updateControl(idx, elem, namePropRegex, idPropRegex);
+    });
+
+    e.preventDefault();
+});
+
+function personCorrectSnp(form) {
+    $(form).find("#Person_Family, #Person_Name, #Person_Father").each(function (idx, elem) {
+        var value = $(elem).val();
+        if (value.length > 0) {
+            value = value[0].toUpperCase() + value.substring(1);
+            $(elem).val(value);
+        }
+    });
+}
+
+$("#personModal").on("show.bs.modal", function () {
+    $(this).find("select").selectpicker("refresh");
+});
+
+$("#personModal").on("hide.bs.modal", function () {
+    $(this).find(".input-validation-error").removeClass("input-validation-error").addClass("valid");
+    $(this).find(".field-validation-error").removeClass("field-validation-error").addClass("field-validation-valid").text("");
+    $("#cancelDocumentIssuedBtn").click();
+
+    $("#PeopleList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process") }).remove();
+});
+
+var isCustomDocumentIssuedBy = false;
+
+$("#addDocumentIssuedBtn").on('click', function (e) {
+    $("#addDocumentIssuedBtn").hide();
+    $("#cancelDocumentIssuedBtn").show();
+    $("#CustomDocumentIssued").show();
+    $("#Person_IdDocumentIssued").closest(".bootstrap-select").hide();
+    isCustomDocumentIssuedBy = true;
+    e.preventDefault();
+});
+
+$("#cancelDocumentIssuedBtn").on('click', function (e) {
+    $("#addDocumentIssuedBtn").show();
+    $("#cancelDocumentIssuedBtn").hide();
+    $("#CustomDocumentIssued").val("").hide();
+    $("#Person_IdDocumentIssued").closest(".bootstrap-select").show();
+    isCustomDocumentIssuedBy = false;
+    var customDocumentIssued = $("#CustomDocumentIssued").closest(".form-group");
+    customDocumentIssued.find(".input-validation-error").removeClass("input-validation-error").addClass("valid");
+    customDocumentIssued.find(".field-validation-error").removeClass("field-validation-error").addClass("field-validation-valid").text("");
+    e.preventDefault();
+});
+
+function addCustomDocumentIssued() {
+    let personDocumentIssuedElem = $("#Person_IdDocumentIssued");
+    let customDocumentIssued = $("#CustomDocumentIssued").val();
+    if (!$("#CustomDocumentIssued").valid()) return false;
+    let code = 0;
+    $.ajax({
+        type: 'POST',
+        url: window.location.origin + '/Contract/AddDocumentIssued',
+        data: { documentIssuedName: customDocumentIssued },
+        async: false,
+        success: function (id) {
+            code = id;
+            if (id > 0) {
+                personDocumentIssuedElem.append("<option value='" + id + "'>" + customDocumentIssued + "</option>");
+                $("#cancelDocumentIssuedBtn").click();
+                personDocumentIssuedElem.val(id).selectpicker("refresh");
+            } else
+                if (id === -3) {
+                    $("#cancelDocumentIssuedBtn").click();
+                    var duplicateOption = personDocumentIssuedElem.find("option").filter(function (idx, elem) {
+                        return $(elem).text() === customDocumentIssued;
+                    });
+                    var optionId = 0;
+                    if (duplicateOption.length > 0) {
+                        optionId = duplicateOption.prop("value");
+                    } else {
+                        alert('Произошла ошибка при сохранении органа, выдающего документы, удостоверяющие личность');
+                    }
+                    personDocumentIssuedElem.val(optionId).selectpicker("refresh");
+                    code = optionId;
+                } else {
+                    alert('Произошла ошибка при сохранении органа, выдающего документы, удостоверяющие личность');
+                    return false;
+                }
+        }
+    });
+    return code > 0;
+}
+
+$("#personAdd").on("click", function (e) {
+    let action = $('#ContractForm').data('action');
+    $.ajax({
+        type: 'POST',
+        url: window.location.origin + '/Contract/AddPerson',
+        data: { action },
+        success: function (elem) {
+            $("#PeopleList").find(".list-group-item.rr-list-group-item-empty").hide();
+            let personToggle = $('.contract-toggler[data-for="PeopleList"]');
+            if (!isExpandElemntArrow(personToggle)) // развернуть при добавлении, если было свернуто 
+                personToggle.click();
+            $("#PeopleList").append(elem).find("select").selectpicker("refresh");
+            var namePropRegex = /(People)\[\d+\]/;
+            var idPropRegex = /(People)_\d+__/;
+            var people = $("#PeopleList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+            people.each(function (idx, elem) {
+                updateControl(idx, elem, namePropRegex, idPropRegex);
+            });
+            $("#PeopleList").find(".list-group-item").last().data("in-process", true).find("input[name$='Sex']").val("");
+            $("#PeopleList").find(".list-group-item").last().find(".person-edit-btn").click();
+        }
+    });
+    e.preventDefault();
 });

@@ -220,5 +220,21 @@ namespace MenaWeb.Controllers
             }
             return Json(-1);
         }
+
+        public IActionResult AddDocumentIssued(string documentIssuedName)
+        {
+            if (string.IsNullOrEmpty(documentIssuedName))
+                return Json(-1);
+            return Json(dataService.AddDocumentIssued(documentIssuedName));
+        }
+
+        public IActionResult AddPerson(ActionTypeEnum action)
+        {
+            ViewBag.Action = action;
+            ViewBag.Index = 0;
+            var contract = dataService.CreateContract(null);
+            contract.ApartmentSide2.People.Add(new Models.Entities.Person());
+            return PartialView("Person", dataService.GetViewModel(contract));
+        }
     }
 }

@@ -133,8 +133,8 @@
                             </select>
                         </div>
                         <div class="form-group col-lg-3 @(ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create ? "col-10" : "col-12")">
-                            <input disabled type="date" class="form-control" title="Дата" name="Status.StatusDate" id="Status_StatusDate" 
-                                   data-val="true" data-val-required="Укажите дату"/>
+                            <input disabled type="date" class="form-control" title="Дата" name="Status.StatusDate" id="Status_StatusDate"
+                                   data-val="true" data-val-required="Укажите дату" />
                             <span data-valmsg-for="Status.StatusDate" data-valmsg-replace="true" class="text-danger"></span>
                         </div>
                         @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
@@ -161,6 +161,145 @@
                         <button type="button" class="btn btn-primary m-status-submit">Сохранить</button>
                     }
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="personModalForm">
+    <div class="modal fade bd-example-modal-xl" id="personModal" data-index="0" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Собственник</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_IdContractor">Признак</label>
+                            <select disabled class="selectpicker form-control" id="Person_IdContractor" name="Person.IdContractor" title="Признак"
+                                    asp-items="@(new SelectList(Model.Contractors, "IdContractor", "ContractorName"))"
+                                    data-val="true" data-val-required="Выберите признак"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Person.IdContractor" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_Portion">Доля</label>
+                            <input disabled type="text" id="Person_Portion" maxlength="5" name="Person.Portion" class="form-control" title="Доля собственника"
+                                   data-val="true" data-val-required="Укажите долю" />
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Person.Portion" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group col-12 col-lg-4">
+                            <label for="Person_IdPersonStatus">Статус</label>
+                            <select disabled class="selectpicker form-control" data-live-search="true" id="Person_IdPersonStatus" name="Person.IdPersonStatus" title="Статус"
+                                    asp-items="@(new SelectList(Model.PersonStatuses, "IdPersonStatus", "Status"))"
+                                    data-val="true" data-val-required="Выберите статус"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Person.IdPersonStatus" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <h5>Личные данные</h5>
+                            <hr />
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_Family">Фамилия</label>
+                            <input disabled type="text" id="Person_Family" maxlength="50" name="Person.Family" class="form-control input-chars" title="Фамилия собственника"
+                                   data-val="true" data-val-required="Укажите фамилию" />
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Person.Family" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_Name">Имя</label>
+                            <input disabled type="text" id="Person_Name" maxlength="50" name="Person.Name" class="form-control input-chars" title="Имя собственника"
+                                   data-val="true" data-val-required="Укажите имя" />
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Person.Name" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_Father">Отчество</label>
+                            <input disabled type="text" id="Person_Father" maxlength="50" name="Person.Father" class="form-control input-chars" title="Отчетство участника" />
+                        </div>
+
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_Sex">Пол</label>
+                            <select disabled class="selectpicker form-control" id="Person_Sex" name="Person.Sex" title="Пол">
+                                <option></option>
+                                <option value="0">Ж</option>
+                                <option value="1">М</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_Birth">Дата рождения</label>
+                            <div class="input-group date">
+                                <input disabled type="date" id="Person_Birth" name="Person.Birth" class="form-control" title="Дата рождения собственника">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_BornPlace">Место рождения</label>
+                            <input disabled type="text" id="Person_BornPlace" maxlength="255" name="Person.BornPlace" class="form-control" title="Место рождения" />
+                        </div>
+
+
+                        <div class="col-md-12">
+                            <h5>Документы, удостоверяющие личность</h5>
+                            <hr />
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_IdDocument">Вид документа</label>
+                            <select disabled class="selectpicker form-control" id="Person_IdDocument" name="Person.IdDocument" title="Вид документа, удостоверяющего личность" asp-items="@(new SelectList(Model.Documents, "IdDocument", "DocumentName"))"
+                                    data-val="true" data-val-required="Выберите вид документа"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Person.IdDocument" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_DocumentSeria">Серия</label>
+                            <input disabled type="text" id="Person_DocumentSeria" maxlength="8" name="Person.DocumentSeria" class="form-control" title="Серия документа, удостоверяющего личность" />
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_DocumentNumber">Номер</label>
+                            <input disabled type="text" id="Person_DocumentNumber" maxlength="8" name="Person.DocumentNumber" class="form-control" title="Номер документа, удостоверяющего личность" />
+                        </div>
+                        <div class="form-group col-md-6 col-lg-4">
+                            <label for="Person_DocumentDate">Дата выдачи</label>
+                            <div class="input-group date">
+                                <input disabled type="date" id="Person_DocumentDate" name="Person.DocumentDate" class="form-control" title="Дата выдачи документа, удостоверяющего личность">
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-lg-8">
+                            <label for="Person_IdDocumentIssued">Кем выдан</label>
+                            @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                            {
+                                <button id="addDocumentIssuedBtn" class="btn pt-0 pb-0 pl-1 pr-1 text-success" title="Добавить новый орган, выдающий документы, удостоверяющие личность">
+                                    <span class="oi oi-plus"></span>
+                                </button>
+                                <button id="cancelDocumentIssuedBtn" style="display: none" class="btn pt-0 pb-0 pl-1 pr-1 text-danger" title="Отменить добавление">
+                                    <span class="oi oi-ban"></span>
+                                </button>
+                                <input type="text" style="display: none" class="form-control" id="CustomDocumentIssued" name="CustomDocumentIssued"
+                                       placeholder="Наименование органа" title="Наименование органа" data-val="true" data-val-required="Укажите наименование органа">
+                                <span class="text-danger field-validation-valid" data-valmsg-for="CustomDocumentIssued" data-valmsg-replace="true"></span>
+                            }
+                            <select class="selectpicker form-control" data-live-search="true" id="Person_IdDocumentIssued" name="Person.IdDocumentIssued" title="Кем выдан документ, удостоверяющий личность">
+                                <option></option>
+                                @foreach (DocumentIssued documentIssude in Model.DocumentIssueds)
+                                {
+                                    <option data-tokens="@documentIssude.DocumentIssuedName" title="@documentIssude.DocumentIssuedName" value="@documentIssude.IdDocumentIssued">@(documentIssude.DocumentIssuedName.Length > 50 ? documentIssude.DocumentIssuedName.Substring(0, 50) + "..." : documentIssude.DocumentIssuedName)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <button id="savePersonModalBtn" type="button" class="btn btn-secondary">Сохранить</button>
+                        <button id="cancelPersonModalBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+                    {
+                        <button id="closePersonModalBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    }
                 </div>
             </div>
         </div>

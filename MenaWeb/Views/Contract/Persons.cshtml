@@ -1,0 +1,30 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+<div class="card rr-people-card">
+    <div class="card-header d-flex justify-content-between">
+        <h3>Собственники</h3>
+        <div class="btn-group" role="group">
+            @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+            {
+                <a href="#" id="personAdd" class="form-control btn btn-success" title="Добавить собственника">&#10010;</a>
+            }
+            <a href="#" data-for="PeopleList" class="form-control btn btn-primary contract-toggler" title="Развернуть панель собственников" style="font-weight:bold;">∨</a>
+        </div>
+    </div>
+    <ul class="list-group list-group-flush toggle-hide" id="PeopleList">
+        <li class="list-group-item text-center rr-list-group-item-empty"
+            style="@((Model.Contract.ApartmentSide2.People != null && Model.Contract.ApartmentSide2.People.Any()) ? "display: none" : "")">
+            <i>Собственники отсутствуют</i>
+        </li>
+        @if (Model != null && Model.Contract.ApartmentSide2.People.Any())
+        {
+            for (var i = 0; i < Model.Contract.ApartmentSide2.People.Count; i++)
+            {
+                ViewData["Index"] = i;
+                <partial name="Person" model="Model" />
+            }
+        }
+    </ul>
+</div>

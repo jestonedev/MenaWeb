@@ -85,13 +85,21 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
     padding-left: 2.2rem;
 }
 
+.m-person-edit-buttons, .m-person-view-buttons {
+    margin-top: 28px;
+}
+
+.m-tools-dropdown-menu.show {
+    display: flex;
+}
+
 @media(min-width: 768px) {
     .m-contract-eviction-required-checkbox {
         margin-top: 2.4rem;
         padding-left: 2.2rem;
     }
-}
 
-.m-tools-dropdown-menu.show {
-    display: flex;
+    .m-person-edit-buttons, .m-person-view-buttons {
+        margin-top: 32px;
+    }
 }
