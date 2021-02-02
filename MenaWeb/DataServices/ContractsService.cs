@@ -104,6 +104,11 @@ namespace MenaWeb.DataServices
                     person.IdApartment = 0;
                     person.IdPerson = 0;
                 }
+                foreach (var bankInfo in contract.ApartmentSide2.BankInfos)
+                {
+                    bankInfo.IdApartment = 0;
+                    bankInfo.IdBank = 0;
+                }
             }
             if (contract == null)
             {
@@ -136,6 +141,14 @@ namespace MenaWeb.DataServices
                 {
                     person.Deleted = true;
                     db.People.Update(person);
+                }
+            }
+            foreach (var bankInfo in db.BankInfos.Where(r => r.IdApartment == contract.ApartmentSide2.IdApartment).AsNoTracking())
+            {
+                if (!contract.ApartmentSide2.BankInfos.Any(r => r.IdBank == bankInfo.IdBank))
+                {
+                    bankInfo.Deleted = true;
+                    db.BankInfos.Update(bankInfo);
                 }
             }
             db.Contracts.Update(contract);
@@ -200,7 +213,8 @@ namespace MenaWeb.DataServices
                 Contractors = db.Contractors.ToList(),
                 PersonStatuses = db.PersonStatuses.ToList(),
                 Documents = db.Documents.ToList(),
-                DocumentIssueds = db.DocumentIssueds.ToList()
+                DocumentIssueds = db.DocumentIssueds.ToList(),
+                RedOrganizations = db.RedOrganizations.ToList()
             };
             return vm;
         }

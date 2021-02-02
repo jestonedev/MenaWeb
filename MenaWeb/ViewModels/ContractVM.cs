@@ -22,5 +22,6 @@ namespace MenaWeb.ViewModels
         public IList<Contractor> Contractors { get; set; }
         public IList<Document> Documents { get; set; }
         public IList<DocumentIssued> DocumentIssueds { get; set; }
+        public IList<RedOrganization> RedOrganizations { get; set; }
     }
 }

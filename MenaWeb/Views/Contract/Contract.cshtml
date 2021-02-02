@@ -115,7 +115,7 @@
                                 <input type="hidden" asp-for="Contract.ContractStatusHistory[i].IdContract" />
                                 <input type="hidden" asp-for="Contract.ContractStatusHistory[i].IdProcessStatus" />
                                 <input type="hidden" asp-for="Contract.ContractStatusHistory[i].StatusDate"
-                                         value="@(Model.Contract.ContractStatusHistory[i].StatusDate.ToString("yyyy-MM-dd"))"/>
+                                       value="@(Model.Contract.ContractStatusHistory[i].StatusDate.ToString("yyyy-MM-dd"))" />
                             </div>
                         }
                     </div>
@@ -185,12 +185,17 @@
             </div>
             <div class="row mb-3">
                 <div class="col-12">
-                    <partial name="Persons" model="Model"/>
+                    <partial name="Persons" model="Model" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <partial name="AdditionalInfo" model="Model" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <partial name="AdditionalInfo" model="Model" />
+                    <partial name="Redemption" model="Model" />
                 </div>
             </div>
         </div>

@@ -520,6 +520,7 @@ $("#statusesModal").on("show.bs.modal", function () {
     $(this).find("select").selectpicker("refresh");
 });
 
+// PersonModal
 $('body').on('click', '.person-open-btn, .person-edit-btn', function (e) {
     var personElem = $(this).closest('.list-group-item');
     var modal = $("#personModal");
@@ -694,6 +695,161 @@ $("#personAdd").on("click", function (e) {
             });
             $("#PeopleList").find(".list-group-item").last().data("in-process", true).find("input[name$='Sex']").val("");
             $("#PeopleList").find(".list-group-item").last().find(".person-edit-btn").click();
+        }
+    });
+    e.preventDefault();
+});
+
+// AccountModal
+$('body').on('click', '.account-open-btn, .account-edit-btn', function (e) {
+    var accountElem = $(this).closest('.list-group-item');
+    var modal = $("#accountModal");
+    modal.data("index", accountElem.index());
+    modal.find("input, select, textarea").val("");
+    accountElem.find("input, select")
+        .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes"); })
+        .each(function (idx, elem) {
+            var nameParts = $(elem).attr("name").split(".");
+            var name = nameParts[nameParts.length - 1];
+            modal.find("[name='Account." + name + "']").val($(elem).val());
+
+            if (name === "Bank") {
+                var bank = $(elem).val();
+                var corrAccount = "";
+                var bankParts = bank.split(", кор/счет ");
+                if (bankParts.length > 1) {
+                    corrAccount = bankParts[bankParts.length - 1];
+                    bank = "";
+                    for (var i = 0; i < bankParts.length - 1; i++) {
+                        if (bank !== "") {
+                            bank += ", кор/счет";
+                        }
+                        bank += bankParts[i];
+                    }
+                    modal.find("[name='Account.BankCorAccount']").val(corrAccount);
+                }
+                var bik = "";
+                bankParts = bank.split(", БИК ");
+                if (bankParts.length > 1) {
+                    bik = bankParts[bankParts.length - 1];
+                    bank = "";
+                    for (var i = 0; i < bankParts.length - 1; i++) {
+                        if (bank !== "") {
+                            bank += ", БИК ";
+                        }
+                        bank += bankParts[i];
+                    }
+                    modal.find("[name='Account.BankBik']").val(bik);
+                }
+                modal.find("[name='Account.BankName']").val(bank);
+            }
+        });
+
+    modal.modal('show');
+    e.preventDefault();
+});
+
+$("#accountModal").on("click", "#saveAccountModalBtn", function (e) {
+    var form = $("#accountModalForm");
+    accountCorrectData(form);
+    var index = $(this).closest("#accountModal").data("index");
+    var accountElem = $("#AccountList").find(".list-group-item")[index];
+
+    var fields = $(accountElem).find("input, select, textarea");
+    fields.each(function (idx, elem) {
+        var nameParts = $(elem).attr("name").split(".");
+        var name = nameParts[nameParts.length - 1];
+        formElem = form.find("[name='Account." + name + "']");
+        if (formElem.length > 0) {
+            var value = formElem.val();
+            $(elem).val(value);
+        }
+    });
+
+    $(accountElem).removeData("in-process");
+    $("#accountModal").modal('hide');
+});
+
+$('body').on("click", ".account-delete-btn", function (e) {
+    var container = $("#AccountList");
+    var accountElem = $(this).closest('.list-group-item');
+    accountElem.remove();
+    if (container.find(".list-group-item").length === 1) {
+        container.find(".list-group-item.rr-list-group-item-empty").show();
+    }
+    var namePropRegex = /(BankInfos)\[\d+\]/;
+    var idPropRegex = /(BankInfos)_\d+__/;
+    var accounts = $("#AccountList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+    accounts.each(function (idx, elem) {
+        updateControl(idx, elem, namePropRegex, idPropRegex);
+    });
+
+    e.preventDefault();
+});
+
+function accountCorrectData(form) {
+    var holderElem = $(form).find("#Account_AccountHolder");
+    var holderValue = $(holderElem).val();
+    if (holderValue.length > 0) {
+        valueParts = holderValue.split(' ');
+        var resultValue = "";
+        for (var i = 0; i < valueParts.length; i++) {
+            if (valueParts[i].length === 0) continue;
+            if (resultValue != "") {
+                resultValue += " ";
+            }
+            resultValue += valueParts[i][0].toUpperCase() + valueParts[i].substring(1);
+        }
+        $(holderElem).val(resultValue);
+    }
+
+    var sumElem = $(form).find("#Account_Sum");
+    $(sumElem).val($(sumElem).val().replace('.', ','));
+
+    var bankElem = $(form).find("#Account_Bank");
+    var bankName = $(form).find("#Account_BankName").val();
+    var bankBik = $(form).find("#Account_BankBik").val();
+    var bankCorAccount = $(form).find("#Account_BankCorAccount").val();
+    var result = "";
+    if (bankName !== "" && bankName !== null) {
+        result += bankName;
+    }
+    if (bankBik !== "" && bankBik !== null) {
+        if (result !== "") {
+            result += ", ";
+        }
+        result += "БИК " + bankBik;
+    }
+    if (bankCorAccount !== "" && bankCorAccount !== null) {
+        if (result !== "") {
+            result += ", ";
+        }
+        result += "кор/счет " + bankCorAccount;
+    }
+    bankElem.val(result);
+}
+
+$("#accountModal").on("hide.bs.modal", function () {
+    $("#AccountList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+});
+
+$("#accountAdd").on("click", function (e) {
+    let action = $('#ContractForm').data('action');
+    $.ajax({
+        type: 'POST',
+        url: window.location.origin + '/Contract/AddAccount',
+        data: { action },
+        success: function (elem) {
+            $("#AccountList").find(".list-group-item.rr-list-group-item-empty").hide();
+            $("#AccountList").append(elem);
+            var namePropRegex = /(BankInfos)\[\d+\]/;
+            var idPropRegex = /(BankInfos)_\d+__/;
+            var accounts = $("#AccountList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+            accounts.each(function (idx, elem) {
+                updateControl(idx, elem, namePropRegex, idPropRegex);
+            });
+            $("#AccountList").find(".list-group-item").last().data("in-process", true);
+            $("#AccountList").find(".list-group-item").last().find(".account-edit-btn").click();
         }
     });
     e.preventDefault();

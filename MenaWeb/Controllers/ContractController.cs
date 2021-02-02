@@ -236,5 +236,14 @@ namespace MenaWeb.Controllers
             contract.ApartmentSide2.People.Add(new Models.Entities.Person());
             return PartialView("Person", dataService.GetViewModel(contract));
         }
+
+        public IActionResult AddAccount(ActionTypeEnum action)
+        {
+            ViewBag.Action = action;
+            ViewBag.Index = 0;
+            var contract = dataService.CreateContract(null);
+            contract.ApartmentSide2.BankInfos.Add(new Models.Entities.BankInfo());
+            return PartialView("Account", dataService.GetViewModel(contract));
+        }
     }
 }

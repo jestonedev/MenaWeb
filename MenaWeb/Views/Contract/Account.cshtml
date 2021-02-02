@@ -1,0 +1,55 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+@{
+    Layout = null;
+    var index = (int)ViewData["Index"];
+}
+
+<li class="list-group-item">
+    <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].IdBank" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].IdApartment" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].Account" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].AccountHolder" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].Bank" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].Sum" />
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Лицевой счет</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].Account" title="Лицевой счет">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Держатель</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].AccountHolder" title="Держатель счета">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Сумма</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].Sum" title="Сумма">
+        </div>
+        <div class="form-group col-9 col-md-10">
+            <label>Банк</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].Bank" title="Сумма">
+        </div>
+
+        @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+        {
+            <div class="text-right col-3 col-md-2 m-account-edit-buttons">
+                <div class="btn-group edit-del-panel" role="group" aria-label="Панель реадктирования">
+                    <a class="btn btn-primary account-edit-btn" title="Редактировать" aria-label="Редактировать" href="#"><span class="oi oi-pencil"></span></a>
+                    <a class="btn btn-danger account-delete-btn" title="Удалить" aria-label="Удалить" href="#"><span class="oi oi-x delete"></span></a>
+                </div>
+            </div>
+        }
+        @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+        {
+            <div class="text-right col-3 col-md-2 m-account-view-buttons">
+                <a class="btn btn-primary account-open-btn" href="#" title="Открыть дополнительную информацию о лицевом счете"
+                   aria-label="Открыть дополнительную информацию о лицевом счете">
+                    <span class="oi oi-eye"></span>
+                </a>
+            </div>
+        }
+    </div>
+</li>

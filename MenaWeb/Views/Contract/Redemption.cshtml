@@ -1,0 +1,19 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+<div class="card rr-redemption-card">
+    <div class="card-header d-flex justify-content-between">
+        <h3>Информация о выкупе</h3>
+        <div class="btn-group" role="group">
+            <a href="#" data-for="RedemptionWrapper" class="form-control btn btn-primary contract-toggler" title="Развернуть панель информации о выкупе" style="font-weight:bold;">∨</a>
+        </div>
+    </div>
+    <dib class="card-body toggle-hide" id="RedemptionWrapper">
+        <div class="row">
+            <div class="col-12">
+                <partial name="Accounts" model="Model" />
+            </div>
+        </div>
+    </dib>
+</div>

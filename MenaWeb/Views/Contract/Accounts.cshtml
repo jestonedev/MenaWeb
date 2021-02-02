@@ -1,0 +1,29 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+<div class="card rr-accounts-card">
+    <div class="card-header d-flex justify-content-between">
+        <h3>Лицевые счета</h3>
+        <div class="btn-group" role="group">
+            @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+            {
+                <a href="#" id="accountAdd" class="form-control btn btn-success" title="Добавить лицевой счет">&#10010;</a>
+            }
+        </div>
+    </div>
+    <ul class="list-group list-group-flush" id="AccountList">
+        <li class="list-group-item text-center rr-list-group-item-empty"
+            style="@((Model.Contract.ApartmentSide2.BankInfos != null && Model.Contract.ApartmentSide2.BankInfos.Any()) ? "display: none" : "")">
+            <i>Лицевые счета отсутствуют</i>
+        </li>
+        @if (Model != null && Model.Contract.ApartmentSide2.BankInfos.Any())
+        {
+            for (var i = 0; i < Model.Contract.ApartmentSide2.BankInfos.Count; i++)
+            {
+                ViewData["Index"] = i;
+                <partial name="Account" model="Model" />
+            }
+        }
+    </ul>
+</div>

@@ -305,3 +305,64 @@
         </div>
     </div>
 </form>
+
+
+<form id="accountModalForm">
+    <div class="modal fade" id="accountModal" data-index="0" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Лицевой счет</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-lg-4">
+                            <label for="Account_Account">Лицевой счет</label>
+                            <input disabled type="text" id="Account_Account" maxlength="255" name="Account.Account"
+                                   class="form-control input-numbers" title="Лицевой счет" />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="Account_AccountHolder">Держатель</label>
+                            <input disabled type="text" id="Account_AccountHolder" maxlength="255" name="Account.AccountHolder" class="form-control"
+                                   title="Держатель лицевого счета" />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="Account_Sum">Сумма</label>
+                            <input disabled type="text" id="Account_Sum" name="Account.Sum" class="form-control input-decimal"
+                                   title="Сумма" />
+                        </div>
+                        <input type="hidden" name="Account.Bank" id="Account_Bank" />
+                        <div class="form-group col-12">
+                            <label for="Account_BankName">Счет открыт в (филиал банка)</label>
+                            <input disabled type="text" id="Account_BankName" maxlength="971" name="Account.BankName" class="form-control" title="Наименование филиала банка" />
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="Account_BankBik">БИК</label>
+                            <input disabled type="text" id="Account_BankBik" maxlength="9" name="Account.BankBik" class="form-control input-numbers" title="БИК" />
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="Account_BankCorAccount">Кор/счет</label>
+                            <input disabled type="text" id="Account_BankCorAccount" maxlength="20" name="Account.BankCorAccount" class="form-control input-numbers" title="Корреспондентский счет" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <button id="saveAccountModalBtn" type="button" class="btn btn-secondary">Сохранить</button>
+                        <button id="cancelAccountModalBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+                    {
+                        <button id="closeAccountModalBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
