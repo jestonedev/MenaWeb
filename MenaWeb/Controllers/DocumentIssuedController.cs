@@ -105,7 +105,10 @@ namespace MenaWeb.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            return StatusCode(406, "Нельзя удалить орган, так как есть зависимые записи. Сначала удалите их!"); // Сообщение об ошибке
+
+            ViewData["Controller"] = "DocumentIssued";
+            ViewData["TextError"] = "Нельзя удалить орган, так как есть зависимые записи. Сначала удалите их!";
+            return View("Error");
         }
     }
 }
