@@ -76,6 +76,7 @@ namespace MenaWeb
                 opts.DefaultPolicy = new AuthorizationPolicy(requirements, opts.DefaultPolicy.AuthenticationSchemes);
             });
             services.AddTransient<ContractsService>();
+            services.AddTransient<DocumentIssuedService>();
             services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

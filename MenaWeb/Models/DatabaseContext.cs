@@ -15,6 +15,10 @@ namespace MenaWeb.Models
         private string nameDatebase;
         private string connString;
 
+        public DatabaseContext()
+        {
+        }
+
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<Entities.Delegate> Delegates { get; set; }
         public DbSet<Signer> Signers { get; set; }
