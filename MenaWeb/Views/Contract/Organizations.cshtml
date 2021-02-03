@@ -1,0 +1,29 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+<div class="card rr-organizations-card">
+    <div class="card-header d-flex justify-content-between">
+        <h3>Источники финансирования</h3>
+        <div class="btn-group" role="group">
+            @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+            {
+                <a href="#" id="orgAdd" class="form-control btn btn-success" title="Добавить источник финансирования">&#10010;</a>
+            }
+        </div>
+    </div>
+    <ul class="list-group list-group-flush" id="OrgList">
+        <li class="list-group-item text-center rr-list-group-item-empty"
+            style="@((Model.Contract.ApartmentSide2.RedEvaluations != null && Model.Contract.ApartmentSide2.RedEvaluations.Any()) ? "display: none" : "")">
+            <i>Источники финансирования отсутствуют</i>
+        </li>
+        @if (Model != null && Model.Contract.ApartmentSide2.RedEvaluations.Any())
+        {
+            for (var i = 0; i < Model.Contract.ApartmentSide2.RedEvaluations.Count; i++)
+            {
+                ViewData["Index"] = i;
+                <partial name="Organization" model="Model" />
+            }
+        }
+    </ul>
+</div>

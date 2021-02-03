@@ -37,7 +37,7 @@
                                        asp-controller="Contract" asp-action="Create" asp-route-idContract="@Model.Contract.IdContract" asp-route-action="Create" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
 
 
-                                    <a class="btn btn-danger oi oi-x @(ViewBag.CanEditBaseInfo ?? false ? "" : "disabled")" title="Удалить" aria-label="Удалить"
+                                    <a class="btn btn-danger oi oi-x" title="Удалить" aria-label="Удалить"
                                        asp-controller="Contract" asp-action="Delete" asp-route-idContract="@Model.Contract.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
                                 </div>
                             </div>
@@ -193,11 +193,27 @@
                     <partial name="AdditionalInfo" model="Model" />
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-12">
                     <partial name="Redemption" model="Model" />
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-2 offset-lg-5 col-md-4 offset-md-4 col-sm-6 offset-sm-3">
+                    @if (ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <input type="submit" value="Создать" id="createBtn2" class="form-control btn btn-success" />
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Edit)
+                    {
+                        <input type="submit" value="Сохранить" id="editBtn2" class="form-control btn btn-success" />
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Delete)
+                    {
+                        <input type="submit" value="Удалить" id="deleteBtn2" class="form-control btn btn-danger" />
+                    }
+                </div>
+             </div>
         </div>
     </div>
 </form>

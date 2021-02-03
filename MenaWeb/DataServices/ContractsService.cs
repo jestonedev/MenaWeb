@@ -94,7 +94,20 @@ namespace MenaWeb.DataServices
                     contract.Additionals[0].IdApartment1 = 0;
                     contract.Additionals[0].IdApartment2 = 0;
                 }
-                foreach(var status in contract.ContractStatusHistory)
+                if (contract.ApartmentSide2.ApartmentRedemptions != null && contract.ApartmentSide2.ApartmentRedemptions.Any())
+                {
+                    contract.ApartmentSide2.ApartmentRedemptions[0].IdApartmentRedemption = 0;
+                    contract.ApartmentSide2.ApartmentRedemptions[0].IdApartment = 0;
+                }
+                if (contract.ApartmentSide2.RedEvaluations != null)
+                {
+                    foreach (var evaluation in contract.ApartmentSide2.RedEvaluations)
+                    {
+                        evaluation.IdApartment = 0;
+                        evaluation.IdEvaluation = 0;
+                    }
+                }
+                foreach (var status in contract.ContractStatusHistory)
                 {
                     status.IdContract = 0;
                     status.IdHistoryStatus = 0;
@@ -149,6 +162,14 @@ namespace MenaWeb.DataServices
                 {
                     bankInfo.Deleted = true;
                     db.BankInfos.Update(bankInfo);
+                }
+            }
+            foreach (var evaluation in db.RedEvaluations.Where(r => r.IdApartment == contract.ApartmentSide2.IdApartment).AsNoTracking())
+            {
+                if (!contract.ApartmentSide2.RedEvaluations.Any(r => r.IdEvaluation == evaluation.IdEvaluation))
+                {
+                    evaluation.Deleted = true;
+                    db.RedEvaluations.Update(evaluation);
                 }
             }
             db.Contracts.Update(contract);

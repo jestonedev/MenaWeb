@@ -1,0 +1,48 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+@{
+    Layout = null;
+    var index = (int)ViewData["Index"];
+}
+
+<li class="list-group-item">
+    <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdEvaluation" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdApartment" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdOrganization" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].EvaluationPrice" />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Наименование организации</label>
+            <select class="selectpicker form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdOrganization"
+                    asp-items="@(new SelectList(Model.RedOrganizations, "IdOrganization", "Name"))" title="Наименование организации">
+                <option></option>
+            </select>
+        </div>
+        <div class="form-group col-md-4 col-9">
+            <label>Размер возмещения</label>
+            <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.RedEvaluations[index].EvaluationPrice" title="Размер возмещения">
+        </div>
+
+        @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+        {
+            <div class="text-right col-3 col-md-2 m-org-edit-buttons">
+                <div class="btn-group edit-del-panel" role="group" aria-label="Панель реадктирования">
+                    <a class="btn btn-primary org-edit-btn" title="Редактировать" aria-label="Редактировать" href="#"><span class="oi oi-pencil"></span></a>
+                    <a class="btn btn-danger org-delete-btn" title="Удалить" aria-label="Удалить" href="#"><span class="oi oi-x delete"></span></a>
+                </div>
+            </div>
+        }
+        @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+        {
+            <div class="text-right col-3 col-md-2 m-org-view-buttons">
+                <a class="btn btn-primary org-open-btn" href="#" title="Открытьинформацию об источники финансирования"
+                   aria-label="Открыть информацию об источники финансирования">
+                    <span class="oi oi-eye"></span>
+                </a>
+            </div>
+        }
+    </div>
+</li>

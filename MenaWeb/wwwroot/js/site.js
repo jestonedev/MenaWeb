@@ -70,6 +70,7 @@ function updateControl(idx, control, namePropRegex, idPropRegex) {
             $(field).prop("id", id);
             $(field).closest(".form-group").find("label").prop("for", id);
             $(field).closest(".form-group").find("span[data-valmsg-for]").attr("data-valmsg-for", name);
+            $(field).closest(".form-group").find("button[data-id]").attr("data-id", id);
         });
 }
 
@@ -850,6 +851,96 @@ $("#accountAdd").on("click", function (e) {
             });
             $("#AccountList").find(".list-group-item").last().data("in-process", true);
             $("#AccountList").find(".list-group-item").last().find(".account-edit-btn").click();
+        }
+    });
+    e.preventDefault();
+});
+
+// OrgModal
+$('body').on('click', '.org-open-btn, .org-edit-btn', function (e) {
+    var orgElem = $(this).closest('.list-group-item');
+    var modal = $("#orgModal");
+    modal.data("index", orgElem.index());
+    modal.find("input, select, textarea").val("");
+    orgElem.find("input, select")
+        .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes"); })
+        .each(function (idx, elem) {
+            var nameParts = $(elem).attr("name").split(".");
+            var name = nameParts[nameParts.length - 1];
+            modal.find("[name='Org." + name + "']").val($(elem).val());
+        });
+
+    modal.modal('show');
+    e.preventDefault();
+});
+
+$("#orgModal").on("click", "#saveOrgModalBtn", function (e) {
+    var form = $("#orgModalForm");
+
+    var index = $(this).closest("#orgModal").data("index");
+    var orgElem = $("#OrgList").find(".list-group-item")[index];
+
+    var fields = $(orgElem).find("input, select, textarea");
+    fields.each(function (idx, elem) {
+        var nameParts = $(elem).attr("name").split(".");
+        var name = nameParts[nameParts.length - 1];
+        formElem = form.find("[name='Org." + name + "']");
+        if (formElem.length > 0) {
+            var value = formElem.val();
+            $(elem).val(value);
+            if (elem.tagName === "SELECT") {
+                $(elem).selectpicker("refresh");
+            }
+        }
+    });
+
+    $(orgElem).removeData("in-process");
+    $("#orgModal").modal('hide');
+});
+
+$('body').on("click", ".org-delete-btn", function (e) {
+    var container = $("#OrgList");
+    var orgElem = $(this).closest('.list-group-item');
+    orgElem.remove();
+    if (container.find(".list-group-item").length === 1) {
+        container.find(".list-group-item.rr-list-group-item-empty").show();
+    }
+    var namePropRegex = /(RedEvaluations)\[\d+\]/;
+    var idPropRegex = /(RedEvaluations)_\d+__/;
+    var orgs = $("#OrgList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+    orgs.each(function (idx, elem) {
+        updateControl(idx, elem, namePropRegex, idPropRegex);
+        // TODO - update bootstrap selectpicker
+    });
+
+    e.preventDefault();
+});
+
+$("#orgModal").on("hide.bs.modal", function () {
+    $("#OrgList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+});
+
+$("#orgModal").on("show.bs.modal", function () {
+    $(this).find("select").selectpicker("refresh");
+});
+
+$("#orgAdd").on("click", function (e) {
+    let action = $('#ContractForm').data('action');
+    $.ajax({
+        type: 'POST',
+        url: window.location.origin + '/Contract/AddEvaluation',
+        data: { action },
+        success: function (elem) {
+            $("#OrgList").find(".list-group-item.rr-list-group-item-empty").hide();
+            $("#OrgList").append(elem).find("select").selectpicker("refresh");
+            var namePropRegex = /(RedEvaluations)\[\d+\]/;
+            var idPropRegex = /(RedEvaluations)_\d+__/;
+            var orgs = $("#OrgList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+            orgs.each(function (idx, elem) {
+                updateControl(idx, elem, namePropRegex, idPropRegex);
+            });
+            $("#OrgList").find(".list-group-item").last().data("in-process", true);
+            $("#OrgList").find(".list-group-item").last().find(".org-edit-btn").click();
         }
     });
     e.preventDefault();

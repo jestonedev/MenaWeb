@@ -11,8 +11,26 @@
     </div>
     <dib class="card-body toggle-hide" id="RedemptionWrapper">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 mb-3">
                 <partial name="Accounts" model="Model" />
+            </div>
+
+            @{
+                if (!Model.Contract.ApartmentSide2.ApartmentRedemptions.Any())
+                {
+                    Model.Contract.ApartmentSide2.ApartmentRedemptions.Add(new ApartmentRedemption());
+                }
+            }
+            <div class="form-group col-lg-3 col-md-6 mb-4">
+                <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].IdApartmentRedemption" />
+                <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].IdApartment" />
+                <label asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption">Дата передачи ЖП</label>
+                <input disabled type="date" class="form-control" asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption"
+                       value="@(Model.Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption.HasValue ?
+                            Model.Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption.Value.ToString("yyyy-MM-dd") : "")" title="Дата передачи ЖП">
+            </div>
+            <div class="col-12">
+                <partial name="Organizations" model="Model" />
             </div>
         </div>
     </dib>
