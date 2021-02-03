@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using MenaWeb.SecurityServices;
 using Microsoft.EntityFrameworkCore;
 using MenaWeb.DataServices;
+using MenaWeb.ReportServices;
 
 namespace MenaWeb
 {
@@ -77,6 +78,7 @@ namespace MenaWeb
             });
             services.AddTransient<ContractsService>();
             services.AddTransient<DocumentIssuedService>();
+            services.AddTransient<ContractReportService>();
             services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
