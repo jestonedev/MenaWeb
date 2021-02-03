@@ -16,7 +16,7 @@
 }
 
 @section scripts
-    { <script src="~/js/documentIssue.js"></script>
+    { <script src="~/js/documentIssue.js"  asp-append-version="true"></script>
 }
 <form asp-controller="DocumentIssued" asp-action="@ViewBag.Action" id="deleteform" data-action="@ViewBag.Action">
     <div class="card">
@@ -35,7 +35,7 @@
                     }
                     @if (ViewBag.Action == "Delete")
                     {
-                        <input type="submit" value="Удалить" id="deleteBtn" class="form-control btn btn-success" />
+                        <input type="submit" value="Удалить" id="deleteBtn" class="form-control btn btn-danger" />
                     }
                     <a href="#" data-for="documentIssuer" class="form-control btn btn-primary document-issuer-toggler" title="Развернуть помещение" style="font-weight:bold;">∧</a>
                 </div>
@@ -46,7 +46,8 @@
             <div class="form-group">
                 <input type="hidden" asp-for="DocumentIssue.IdDocumentIssued" />
                 <label asp-for="DocumentIssue.DocumentIssuedName" class="control-label">Наименование</label>
-                <input type="text" asp-for="DocumentIssue.DocumentIssuedName" class="form-control" />
+                <input type="text" asp-for="DocumentIssue.DocumentIssuedName" maxlength="255" class="form-control" />
+                <span asp-validation-for="DocumentIssue.DocumentIssuedName" class="text-danger"></span>
             </div>
         </div>
     </div>
