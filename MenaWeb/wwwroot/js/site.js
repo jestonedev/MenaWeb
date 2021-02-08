@@ -527,7 +527,7 @@ $('body').on('click', '.person-open-btn, .person-edit-btn', function (e) {
     var modal = $("#personModal");
     modal.data("index", personElem.index());
     personElem.find("input, select")
-        .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes") })
+        .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes"); })
         .each(function (idx, elem) {
         var nameParts = $(elem).attr("name").split(".");
         var name = nameParts[nameParts.length - 1];
@@ -910,7 +910,6 @@ $('body').on("click", ".org-delete-btn", function (e) {
     var orgs = $("#OrgList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
     orgs.each(function (idx, elem) {
         updateControl(idx, elem, namePropRegex, idPropRegex);
-        // TODO - update bootstrap selectpicker
     });
 
     e.preventDefault();
@@ -945,3 +944,54 @@ $("#orgAdd").on("click", function (e) {
     });
     e.preventDefault();
 });
+
+// Warrants
+var warrantTemplateOptions = undefined;
+
+$('body').on('click', '.appartment-document-open-btn, .appartment-document-edit-btn', function (e) {
+    var docElem = $(this).closest('.list-group-item');
+    var modal = $("#docModal");
+    modal.data("index", docElem.index());
+    modal.data("target", $(this).data("target"));
+    modal.find(".m-variables-wrapper").empty();
+    var warrantTemplateSelect = modal.find("#Doc_IdWarrantTemplate");
+    warrantTemplateSelect.val("");
+    warrantType = "municipal";
+    if ($(this).data("target") === "appartment-side2") {
+        var warrantType = "ownership";
+    }
+    if (warrantTemplateOptions === undefined) {
+        warrantTemplateOptions = warrantTemplateSelect.find("option[data-warrant-type]").clone(true);
+    }
+    warrantTemplateSelect.find("option[data-warrant-type]").remove();
+    $(warrantTemplateOptions).each(function (idx, option) {
+        if ($(option).data("warrantType") === warrantType) {
+            warrantTemplateSelect.append($(option));
+        }
+    });
+
+    var idWarrantTemplate = docElem.find("input[id$='_IdWarrantTemplate']").val();
+    warrantTemplateSelect.val(idWarrantTemplate).change();
+
+    modal.modal('show');
+    e.preventDefault();
+});
+
+$("#docModal").on("show.bs.modal", function () {
+    $(this).find("select").selectpicker("refresh");
+});
+
+$("#Doc_IdWarrantTemplate").on("change", function (e) {
+    var idTemplate = parseInt($(this).val());
+    if (isNaN(idTemplate)) return;
+    $.ajax({
+        type: 'POST',
+        url: window.location.origin + '/Contract/GetWarrantVariablesMeta',
+        data: { idTemplate },
+        async: false,
+        success: function (result) {
+            // TODO:
+            console.log(result);
+        }
+    });
+})

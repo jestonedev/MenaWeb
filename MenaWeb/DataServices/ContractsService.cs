@@ -218,6 +218,11 @@ namespace MenaWeb.DataServices
                 .FirstOrDefault(r => r.IdContract == idContract);
         }
 
+        public List<TemplateVariableMeta> WarrantVariablesMeta(int idTemplate)
+        {
+            return db.TemplateVariablesMeta.Where(r => r.IdWarrantTemplate == idTemplate).ToList();
+        }
+
         public ContractVM GetViewModel(Contract contract)
         {
             var vm = new ContractVM {
@@ -235,8 +240,44 @@ namespace MenaWeb.DataServices
                 PersonStatuses = db.PersonStatuses.ToList(),
                 Documents = db.Documents.ToList(),
                 DocumentIssueds = db.DocumentIssueds.ToList(),
-                RedOrganizations = db.RedOrganizations.ToList()
+                RedOrganizations = db.RedOrganizations.ToList(),
+                WarrantsMunicipal = db.WarrantTemplates.Where(r => r.IdWarrantTemplateType == 2).ToList(),
+                WarrantsOwnership = db.WarrantTemplates.Where(r => r.IdWarrantTemplateType == 3).ToList(),
+                WarrantsPersons = db.WarrantTemplates.Where(r => r.IdWarrantTemplateType == 4).ToList()
             };
+            vm.WarrantTemplatesVM = new List<WarrantTemplateVM>();
+            foreach(var warrant in contract.ApartmentSide1.WarrantApartments.Union(contract.ApartmentSide12.WarrantApartments).Union(
+                contract.ApartmentSide2.WarrantApartments))
+            {
+                var warrantTemplate = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == warrant.IdWarrantTemplate);
+                var templateVM = new WarrantTemplateVM {
+                    IdWarrantTemplate = warrant.IdWarrantTemplate,
+                    IdWarrantObject = warrant.IdWarrantApartment,
+                    IdObject = warrant.IdApartment,
+                    WarrantTemplateBody = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == warrant.IdWarrantTemplate)?.WarrantTemplateBody,
+                    Variables = db.TemplateVariables.Include(r => r.TemplateVariableMeta)
+                        .Where(r => r.TemplateVariableMeta.IdWarrantTemplate == warrant.IdWarrantTemplate && r.IdObject == warrant.IdWarrantApartment)
+                        .ToList()
+                };
+                vm.WarrantTemplatesVM.Add(templateVM);
+            }
+            foreach(var person in contract.ApartmentSide2.People)
+            {
+                var idWarrant = person.IdTemplate;
+                if (idWarrant == null) continue;
+                var warrantTemplate = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == idWarrant);
+                var templateVM = new WarrantTemplateVM
+                {
+                    IdWarrantTemplate = idWarrant.Value,
+                    IdWarrantObject = person.IdPerson,
+                    IdObject = person.IdPerson,
+                    WarrantTemplateBody = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == idWarrant)?.WarrantTemplateBody,
+                    Variables = db.TemplateVariables.Include(r => r.TemplateVariableMeta)
+                        .Where(r => r.TemplateVariableMeta.IdWarrantTemplate == idWarrant && r.IdObject == person.IdPerson)
+                        .ToList()
+                };
+                vm.WarrantTemplatesVM.Add(templateVM);
+            }
             return vm;
         }
 

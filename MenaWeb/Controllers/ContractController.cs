@@ -254,5 +254,11 @@ namespace MenaWeb.Controllers
             contract.ApartmentSide2.RedEvaluations.Add(new Models.Entities.RedEvaluation());
             return PartialView("Organization", dataService.GetViewModel(contract));
         }
+
+        [HttpPost]
+        public IActionResult GetWarrantVariablesMeta(int idTemplate)
+        {
+            return Json(dataService.WarrantVariablesMeta(idTemplate));
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace MenaWeb.Models.Entities
     {
         public int IdTemplateVariableMeta { get; set; }
         public int IdWarrantTemplate { get; set; }
-        public string Patternt { get; set; }
+        public string Pattern { get; set; }
         public string Label { get; set; }
         public string Type { get; set; }
         public WarrantTemplate WarrantTemplate { get; set; }

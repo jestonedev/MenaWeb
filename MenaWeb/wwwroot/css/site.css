@@ -85,7 +85,8 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
     padding-left: 2.2rem;
 }
 
-.m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons {
+.m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons,
+.m-appartment-document-view-buttons, .m-appartment-document-edit-buttons {
     margin-top: 28px;
 }
 
@@ -99,7 +100,8 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
         padding-left: 2.2rem;
     }
 
-    .m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons {
+    .m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons,
+    .m-appartment-document-view-buttons, .m-appartment-document-edit-buttons {
         margin-top: 32px;
     }
 }

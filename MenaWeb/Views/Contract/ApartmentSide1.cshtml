@@ -63,7 +63,7 @@
                             <input type="hidden" asp-for="Contract.ApartmentSide1.ApartmentEvaluations[0].IdApartment" />
                             <input type="hidden" asp-for="Contract.ApartmentSide1.ApartmentEvaluations[0].IdEvaluator" />
                             <input type="hidden" asp-for="Contract.ApartmentSide1.ApartmentEvaluations[0].EvaluationDate"
-                                value="@(Model.Contract.ApartmentSide1.ApartmentEvaluations[0].EvaluationDate != null ? 
+                                   value="@(Model.Contract.ApartmentSide1.ApartmentEvaluations[0].EvaluationDate != null ?
                                         Model.Contract.ApartmentSide1.ApartmentEvaluations[0].EvaluationDate.Value.ToString("yyyy-MM-dd") : "")" />
                             <input type="hidden" asp-for="Contract.ApartmentSide1.ApartmentEvaluations[0].EvaluationNumber" />
                             <input type="hidden" asp-for="Contract.ApartmentSide1.ApartmentEvaluations[0].EvaluationPrice" />
@@ -92,17 +92,22 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-12 mb-3">
+                    <partial name="AppartmentSide1Documents" model="Model" />
+            </div>
+
         </div>
         @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
         {
-            <a href="#" class="m-contract__add-side-12-btn @(Model.Contract.ApartmentSide12.IsEmpty() ? "" : "d-none")">Добавить собственность</a>
+            <a href="#" class="m-contract__add-side-12-btn @(Model.Contract.ApartmentSide12.IsEmpty() ? "" : "d-none")">Добавить помещение</a>
         }
         @if (!Model.Contract.ApartmentSide12.IsEmpty() || ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
         {
             <div class="@(Model.Contract.ApartmentSide12.IsEmpty() ? "d-none" : "") side-12-container">
                 <hr />
                 <div class="clearfix mb-3">
-                    <b class="float-left">Собственность 2</b>
+                    <b class="float-left">Помещение 2</b>
                     @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
                     {
                         <button class="btn float-right p-0 text-danger m-contract__remove-side-12-btn"><span class="oi oi-trash"></span></button>
@@ -160,7 +165,7 @@
                                     <input type="hidden" asp-for="Contract.ApartmentSide12.ApartmentEvaluations[0].IdApartment" />
                                     <input type="hidden" asp-for="Contract.ApartmentSide12.ApartmentEvaluations[0].IdEvaluator" />
                                     <input type="hidden" asp-for="Contract.ApartmentSide12.ApartmentEvaluations[0].EvaluationDate"
-                                value="@(Model.Contract.ApartmentSide12.ApartmentEvaluations[0].EvaluationDate != null ? 
+                                           value="@(Model.Contract.ApartmentSide12.ApartmentEvaluations[0].EvaluationDate != null ?
                                         Model.Contract.ApartmentSide12.ApartmentEvaluations[0].EvaluationDate.Value.ToString("yyyy-MM-dd") : "")" />
                                     <input type="hidden" asp-for="Contract.ApartmentSide12.ApartmentEvaluations[0].EvaluationNumber" />
                                     <input type="hidden" asp-for="Contract.ApartmentSide12.ApartmentEvaluations[0].EvaluationPrice" />
@@ -188,6 +193,10 @@
                                 </button>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <partial name="AppartmentSide12Documents" model="Model" />
                     </div>
                 </div>
             </div>
