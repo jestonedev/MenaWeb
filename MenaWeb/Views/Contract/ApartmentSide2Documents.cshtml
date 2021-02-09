@@ -2,17 +2,17 @@
 @using MenaWeb.ViewModels
 @model ContractVM
 
-<div class="card rr-appartment-side2-documents-card">
+<div class="card rr-apartment-side2-documents-card">
     <div class="card-header d-flex justify-content-between">
         <h3>Документы</h3>
         <div class="btn-group" role="group">
             @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
             {
-                <a href="#" id="appartmentSide2DocumentAdd" class="form-control btn btn-success" title="Добавить документ">&#10010;</a>
+                <a href="#" id="apartmentSide2DocumentAdd" data-target="apartment-side2" class="form-control btn btn-success" title="Добавить документ">&#10010;</a>
             }
         </div>
     </div>
-    <ul class="list-group list-group-flush" id="AppartmentSide2DocumentList">
+    <ul class="list-group list-group-flush" id="ApartmentSide2DocumentList">
         <li class="list-group-item text-center rr-list-group-item-empty"
             style="@((Model.Contract.ApartmentSide2.WarrantApartments != null && Model.Contract.ApartmentSide2.WarrantApartments.Any()) ? "display: none" : "")">
             <i>Документы отсутствуют</i>
@@ -22,7 +22,7 @@
             for (var i = 0; i < Model.Contract.ApartmentSide2.WarrantApartments.Count; i++)
             {
                 ViewData["Index"] = i;
-                <partial name="AppartmentSide2Document" model="Model" />
+                <partial name="ApartmentSide2Document" model="Model" />
             }
         }
     </ul>

@@ -254,6 +254,7 @@ namespace MenaWeb.DataServices
                     IdWarrantTemplate = warrant.IdWarrantTemplate,
                     IdWarrantObject = warrant.IdWarrantApartment,
                     IdObject = warrant.IdApartment,
+                    ObjectType = WarrantObjectType.Apartment,
                     WarrantTemplateBody = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == warrant.IdWarrantTemplate)?.WarrantTemplateBody,
                     Variables = db.TemplateVariables.Include(r => r.TemplateVariableMeta)
                         .Where(r => r.TemplateVariableMeta.IdWarrantTemplate == warrant.IdWarrantTemplate && r.IdObject == warrant.IdWarrantApartment)
@@ -271,6 +272,7 @@ namespace MenaWeb.DataServices
                     IdWarrantTemplate = idWarrant.Value,
                     IdWarrantObject = person.IdPerson,
                     IdObject = person.IdPerson,
+                    ObjectType = WarrantObjectType.Person,
                     WarrantTemplateBody = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == idWarrant)?.WarrantTemplateBody,
                     Variables = db.TemplateVariables.Include(r => r.TemplateVariableMeta)
                         .Where(r => r.TemplateVariableMeta.IdWarrantTemplate == idWarrant && r.IdObject == person.IdPerson)

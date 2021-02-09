@@ -255,6 +255,26 @@ namespace MenaWeb.Controllers
             return PartialView("Organization", dataService.GetViewModel(contract));
         }
 
+        public IActionResult AddApartmentDocument(ActionTypeEnum action, string target)
+        {
+            ViewBag.Action = action;
+            ViewBag.Index = 0;
+            var contract = dataService.CreateContract(null);
+            switch(target)
+            {
+                case "apartment-side12":
+                    contract.ApartmentSide12.WarrantApartments.Add(new Models.Entities.WarrantApartment());
+                    return PartialView("ApartmentSide12Document", dataService.GetViewModel(contract));
+                case "apartment-side1":
+                    contract.ApartmentSide1.WarrantApartments.Add(new Models.Entities.WarrantApartment());
+                    return PartialView("ApartmentSide1Document", dataService.GetViewModel(contract));
+                case "apartment-side2":
+                    contract.ApartmentSide2.WarrantApartments.Add(new Models.Entities.WarrantApartment());
+                    return PartialView("ApartmentSide2Document", dataService.GetViewModel(contract));
+            }
+            return StatusCode(404);
+        }
+
         [HttpPost]
         public IActionResult GetWarrantVariablesMeta(int idTemplate)
         {

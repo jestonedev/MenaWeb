@@ -201,14 +201,18 @@
             <div class="m-variables">
                 @for (var i = 0; i < Model.WarrantTemplatesVM.Count; i++)
                 {
-                    for (var j = 0; j < Model.WarrantTemplatesVM[i].Variables.Count; j++)
-                    {
-                        <div class="m-variable">
-                            <input type="hidden" asp-for="WarrantTemplatesVM[i].Variables[j].IdObject" />
-                            <input type="hidden" asp-for="WarrantTemplatesVM[i].Variables[j].IdTemplateVariable" />
-                            <input type="hidden" asp-for="WarrantTemplatesVM[i].Variables[j].IdTemplateVariableMeta" />
-                        </div>
-                    }
+                    <div class="m-warrant">
+                        <input type="hidden" asp-for="WarrantTemplatesVM[i].IdWarrantObject" />
+                        <input type="hidden" asp-for="WarrantTemplatesVM[i].ObjectType" />
+                        @for (var j = 0; j < Model.WarrantTemplatesVM[i].Variables.Count; j++)
+                        {
+                            <div class="m-variable">
+                                <input type="hidden" asp-for="WarrantTemplatesVM[i].Variables[j].IdTemplateVariable" />
+                                <input type="hidden" asp-for="WarrantTemplatesVM[i].Variables[j].IdTemplateVariableMeta" />
+                                <input type="hidden" asp-for="WarrantTemplatesVM[i].Variables[j].Value" />
+                            </div>
+                        }
+                    </div>
                 }
             </div>
             <div class="row">

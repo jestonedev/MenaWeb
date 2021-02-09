@@ -20,24 +20,24 @@
                 var idObject = Model.Contract.ApartmentSide12.WarrantApartments[index].IdWarrantApartment;
                 var warrantTemplate = Model.WarrantTemplatesVM.FirstOrDefault(r => r.IdWarrantTemplate == idWarrantTemplate &&
                     r.IdWarrantObject == idObject);
-                var document = warrantTemplate.WarrantTemplateComplete;
+                var document = warrantTemplate?.WarrantTemplateComplete;
             }
-            <input type="text" class="form-control m-input--disable-alwayes"
+            <input type="text" class="form-control m-input--disable-alwayes m-apartment-document-title"
                    value="@document" disabled title="@document" data-template="@warrantTemplate?.WarrantTemplateBody">
         </div>
         @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
         {
-        <div class="text-right col-3 m-appartment-document-edit-buttons">
+        <div class="text-right col-3 m-apartment-document-edit-buttons">
             <div class="btn-group edit-del-panel" role="group" aria-label="Панель реадктирования">
-                <a class="btn btn-primary appartment-document-edit-btn" data-target="appartment-side12" title="Редактировать" aria-label="Редактировать" href="#"><span class="oi oi-pencil"></span></a>
-                <a class="btn btn-danger appartment-document-delete-btn" title="Удалить" aria-label="Удалить" href="#"><span class="oi oi-x delete"></span></a>
+                <a class="btn btn-primary apartment-document-edit-btn" data-target="apartment-side12" title="Редактировать" aria-label="Редактировать" href="#"><span class="oi oi-pencil"></span></a>
+                <a class="btn btn-danger apartment-document-delete-btn" title="Удалить" aria-label="Удалить" href="#"><span class="oi oi-x delete"></span></a>
             </div>
         </div>
         }
         @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
         {
-        <div class="text-right col-2 m-appartment-document-view-buttons">
-            <a class="btn btn-primary appartment-document-open-btn" data-target="appartment-side12" href="#" title="Открыть документ"
+        <div class="text-right col-2 m-apartment-document-view-buttons">
+            <a class="btn btn-primary apartment-document-open-btn" data-target="apartment-side12" href="#" title="Открыть документ"
                aria-label="Открыть документе">
                 <span class="oi oi-eye"></span>
             </a>

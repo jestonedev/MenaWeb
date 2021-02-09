@@ -8,9 +8,10 @@ namespace MenaWeb.ViewModels
 {
     public class WarrantTemplateVM
     {
-        public int IdWarrantTemplate { get; set; }
-        public int IdWarrantObject { get; set; }
-        public int IdObject { get; set; }
+        public int? IdWarrantTemplate { get; set; }
+        public int? IdWarrantObject { get; set; }
+        public int? IdObject { get; set; }
+        public WarrantObjectType ObjectType { get; set; }
         public string WarrantTemplateBody { get; set; }
 
         public IList<TemplateVariable> Variables { get; set; }

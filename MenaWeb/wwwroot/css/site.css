@@ -86,7 +86,7 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
 }
 
 .m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons,
-.m-appartment-document-view-buttons, .m-appartment-document-edit-buttons {
+.m-apartment-document-view-buttons, .m-apartment-document-edit-buttons {
     margin-top: 28px;
 }
 
@@ -101,7 +101,7 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
     }
 
     .m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons,
-    .m-appartment-document-view-buttons, .m-appartment-document-edit-buttons {
+    .m-apartment-document-view-buttons, .m-apartment-document-edit-buttons {
         margin-top: 32px;
     }
 }
