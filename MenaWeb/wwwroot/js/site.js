@@ -34,11 +34,11 @@ $('.input-filter-numbers, .input-numbers').inputFilter(function (value) {
 });
 
 $('.input-filter-chars, .input-chars').inputFilter(function (value) {
-    return /^[а-яА-Я]*$/.test(value);
+    return /^[а-яА-ЯёЁ]*$/.test(value);
 });
 
 $('.input-filter-snp, .input-snp').inputFilter(function (value) {
-    return /^([а-яА-Я]+[ ]?)*$/.test(value);
+    return /^([а-яА-ЯёЁ]+[ ]?)*$/.test(value);
 });
 
 $('.input-filter-cadastral-num, .input-cadastral-num').inputFilter(function (value) {
@@ -272,13 +272,26 @@ $(".m-contract__add-side-12-btn").on("click", function (e) {
 });
 
 $(".m-contract__remove-side-12-btn").on("click", function (e) {
-    $(".m-contract__add-side-12-btn").removeClass("d-none");
+
+    var documents = $(".rr-apartment-side12-documents-card .list-group-item").filter(function (idx, elem) {
+        return !$(elem).hasClass("rr-list-group-item-empty");
+    });
+    var warrantIds = documents.map(function (idx, elem) { return parseInt($(elem).find("input[id$='_IdWarrantApartment']").val()); }).toArray();
+    $(".m-variables .m-warrant").filter(function (idx, elem) {
+        return warrantIds.indexOf(parseInt($(elem).find("input[id$='_IdWarrantObject']").val())) > -1;
+    }).remove();
+    documents.remove();
+    $(".rr-apartment-side12-documents-card .list-group-item.rr-list-group-item-empty").show();
+
     $(".side-12-container").find("input, select, textarea").val("");
     $("#Contract_ApartmentSide12_Part").val("1");
     $("#Contract_ApartmentSide12_IdApartmentType").val("1");
     $(".side-12-container .m-evaluator-hidden-wrapper").empty();
     $(".side-12-container input[name$='.EvaluatorTitle']").val("");
+
     $(".side-12-container").find("select").selectpicker("refresh");
+
+    $(".m-contract__add-side-12-btn").removeClass("d-none");
     $(".side-12-container").addClass("d-none");
     e.preventDefault();
 });
@@ -608,7 +621,10 @@ $("#personModal").on("hide.bs.modal", function () {
     $(this).find(".field-validation-error").removeClass("field-validation-error").addClass("field-validation-valid").text("");
     $("#cancelDocumentIssuedBtn").click();
 
-    $("#PeopleList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process") }).remove();
+    $("#PeopleList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($("#PeopleList").find(".list-group-item").length === 1) {
+        $("#PeopleList").find(".list-group-item").show();
+    }
 });
 
 var isCustomDocumentIssuedBy = false;
@@ -829,6 +845,9 @@ function accountCorrectData(form) {
 
 $("#accountModal").on("hide.bs.modal", function () {
     $("#AccountList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($("#AccountList").find(".list-group-item").length === 1) {
+        $("#AccountList").find(".list-group-item").show();
+    }
 });
 
 $("#accountAdd").on("click", function (e) {
@@ -914,6 +933,9 @@ $('body').on("click", ".org-delete-btn", function (e) {
 
 $("#orgModal").on("hide.bs.modal", function () {
     $("#OrgList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($("#OrgList").find(".list-group-item").length === 1) {
+        $("#OrgList").find(".list-group-item").show();
+    }
 });
 
 $("#orgModal").on("show.bs.modal", function () {
@@ -982,6 +1004,9 @@ $("#docModal").on("hide.bs.modal", function () {
     var target = $(this).data("target");
     var documents = $(".rr-" + target + "-documents-card ul li.list-group-item");
     documents.filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($(".rr-" + target + "-documents-card ul li.list-group-item").length === 1) {
+        $(".rr-" + target + "-documents-card ul li.list-group-item").show();
+    }
 });
 
 

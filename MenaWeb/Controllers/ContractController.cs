@@ -51,7 +51,7 @@ namespace MenaWeb.Controllers
         {
             ViewBag.Action = ActionTypeEnum.Create;
             var contract = dataService.CreateContract(idContract);
-            return View("Contract", dataService.GetViewModel(contract));
+            return View("Contract", dataService.GetViewModel(contract, idContract != null));
         }
 
         [HttpPost]
@@ -61,7 +61,7 @@ namespace MenaWeb.Controllers
                 return NotFound();
             if (ModelState.IsValid)
             {
-                dataService.Create(contractVM.Contract);
+                dataService.Create(contractVM.Contract, contractVM.WarrantTemplatesVM);
                 return RedirectToAction("Details", new { contractVM.Contract.IdContract });
             }
             ViewBag.Action = ActionTypeEnum.Create;
@@ -90,7 +90,7 @@ namespace MenaWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                dataService.Edit(contractVM.Contract);
+                dataService.Edit(contractVM.Contract, contractVM.WarrantTemplatesVM);
                 return RedirectToAction("Details", new { contractVM.Contract.IdContract });
             }
             ViewBag.Action = ActionTypeEnum.Edit;
