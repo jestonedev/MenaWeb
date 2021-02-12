@@ -539,6 +539,8 @@ $('body').on('click', '.person-open-btn, .person-edit-btn', function (e) {
     var personElem = $(this).closest('.list-group-item');
     var modal = $("#personModal");
     modal.data("index", personElem.index());
+    var templateSelect = modal.find("#Person_IdTemplate");
+    templateSelect.val("");
     personElem.find("input, select")
         .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes"); })
         .each(function (idx, elem) {
@@ -547,6 +549,7 @@ $('body').on('click', '.person-open-btn, .person-edit-btn', function (e) {
         modal.find("[name='Person." + name + "']").val($(elem).val());
     });
 
+    templateSelect.change();
     modal.modal('show');
     e.preventDefault();
 });
@@ -577,6 +580,13 @@ $("#personModal").on("click", "#savePersonModalBtn", function (e) {
                 }
             }
         });
+        
+        
+        var idObject = parseInt($(personElem).find("input[id$='_IdPerson']").val());
+
+        var wrapper = form.find(".m-variables-wrapper");
+        var variables = getVariablesFromDialog(wrapper);
+        updateVariablesGlobal(idObject, "Person", variables);
 
         $(personElem).removeData("in-process");
         $("#personModal").modal('hide');
@@ -588,6 +598,11 @@ $("#personModal").on("click", "#savePersonModalBtn", function (e) {
 $('body').on("click", ".person-delete-btn", function (e) {
     var container = $("#PeopleList");
     var personElem = $(this).closest('.list-group-item');
+
+    var idObject = parseInt(personElem.find("input[id$='_IdPerson']").val());
+    removeVariablesGlobal(idObject, "Person");
+    updateVariablesGlobalIndexes();
+
     personElem.remove();
     if (container.find(".list-group-item").length === 1) {
         container.find(".list-group-item.rr-list-group-item-empty").show();
@@ -707,8 +722,13 @@ $("#personAdd").on("click", function (e) {
             people.each(function (idx, elem) {
                 updateControl(idx, elem, namePropRegex, idPropRegex);
             });
-            $("#PeopleList").find(".list-group-item").last().data("in-process", true).find("input[name$='Sex']").val("");
-            $("#PeopleList").find(".list-group-item").last().find(".person-edit-btn").click();
+            var person = $("#PeopleList").find(".list-group-item").last();
+            person.data("in-process", true).find("input[name$='Sex']").val("");
+
+            var id = getNewWarrantObjectId();
+            person.find("input[id$='_IdPerson']").val(id);
+
+            person.find(".person-edit-btn").click();
         }
     });
     e.preventDefault();
@@ -1009,9 +1029,9 @@ $("#docModal").on("hide.bs.modal", function () {
     }
 });
 
-
-$("#Doc_IdWarrantTemplate").on("change", function (e) {
+$("#Doc_IdWarrantTemplate, #Person_IdTemplate").on("change", function (e) {
     var idTemplate = parseInt($(this).val());
+    var self = this;
     var wrapper = $(this).closest(".modal-dialog").find(".m-variables-wrapper");
     wrapper.empty();
     if (isNaN(idTemplate)) return;
@@ -1021,16 +1041,26 @@ $("#Doc_IdWarrantTemplate").on("change", function (e) {
         data: { idTemplate },
         async: false,
         success: function (metaVariables) {
-            var target = $("#docModal").data("target");
-            var index = $("#docModal").data("index");
-            var documents = $(".rr-" + target + "-documents-card ul li.list-group-item");
-            var document = documents[index];
-            var idObject = parseInt($(document).find("input[id$='_IdWarrantApartment']").val());
+            var index = wrapper.closest(".modal").data("index");
+            var idObject = undefined;
+            var objectType = undefined;
+            if ($(self).attr("id") === "Doc_IdWarrantTemplate") {
+                var target = wrapper.closest(".modal").data("target");
+                var documents = $(".rr-" + target + "-documents-card ul li.list-group-item");
+                var document = documents[index];
+                idObject = parseInt($(document).find("input[id$='_IdWarrantApartment']").val());
+                objectType = "Apartment";
+            } else if ($(self).attr("id") === "Person_IdTemplate") {
+                var persons = $("#PeopleList li.list-group-item");
+                var person = persons[index];
+                idObject = parseInt($(person).find("input[id$='_IdPerson']").val());
+                objectType = "Person";
+            }
             var variables = [];
             if (!isNaN(idObject)) {
-                variables = getVariablesFromGlobal(idObject);
+                variables = getVariablesFromGlobal(idObject, objectType);
             }
-            buildVariableFields(metaVariables, variables, wrapper);
+            buildVariableFields(metaVariables, variables, wrapper, "col-6");
         }
     });
 });
@@ -1197,21 +1227,22 @@ function getVariablesFromDialog(wrapper) {
     }).toArray();
 }
 
-function getVariablesFromGlobal(idObject) {
+function getVariablesFromGlobal(idObject, objectType) {
     var variables = $(".m-variables .m-variable").map(function (idx, elem) {
         return {
             IdObject: parseInt($(elem).closest(".m-warrant").find("input[id$='_IdWarrantObject']").val()),
+            ObjectType: $(elem).closest(".m-warrant").find("input[id$='_ObjectType']").val(),
             IdTemplateVariable: parseInt($(elem).find("input[id$='_IdTemplateVariable']").val()),
             IdTemplateVariableMeta: parseInt($(elem).find("input[id$='_IdTemplateVariableMeta']").val()),
             Value: $(elem).find("input[id$='_Value']").val()
         };
-    }).filter(function (idx, elem) { return elem.IdObject === idObject; }).toArray();
+    }).filter(function (idx, elem) { return elem.IdObject === idObject && elem.ObjectType === objectType; }).toArray();
     return variables;
 }
 
-function buildVariableFields(metaVariables, variables, wrapper) {
+function buildVariableFields(metaVariables, variables, wrapper, variablesCssClass) {
     $(metaVariables).each(function (idx, metaVariable) {
-        var pattern = '<div class="form-group col-12">'+
+        var pattern = '<div class="form-group ' + variablesCssClass+'">'+
             '<label>{0}</label>'+
             '<input {1} type="{2}" class="form-control" data-pattern="{4}" data-id-var-meta="{3}" title="{0}" maxlength="255" name="var-{3}" value="{5}">'+
             '</div>';

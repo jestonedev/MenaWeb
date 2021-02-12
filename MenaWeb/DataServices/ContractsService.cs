@@ -112,11 +112,6 @@ namespace MenaWeb.DataServices
                     status.IdContract = 0;
                     status.IdHistoryStatus = 0;
                 }
-                foreach (var person in contract.ApartmentSide2.People)
-                {
-                    person.IdApartment = 0;
-                    person.IdPerson = 0;
-                }
                 foreach (var bankInfo in contract.ApartmentSide2.BankInfos)
                 {
                     bankInfo.IdApartment = 0;
@@ -148,14 +143,52 @@ namespace MenaWeb.DataServices
                     db.ContractStatusHistory.Remove(status);
                 }
             }
-            foreach (var person in db.People.Where(r => r.IdApartment == contract.ApartmentSide2.IdApartment).AsNoTracking())
+            // Persons
+            // Составляем ассоциативный словарь идентификаторов для сопроставления переменных после сохранения ассоциаций
+            var personsIdsAssocDic = new Dictionary<int, Person>();
+            foreach (var warrant in warrantTemplateVM.Where(r => r.IdWarrantObject < 0 && r.ObjectType == WarrantObjectType.Person))
             {
+                var person = contract.ApartmentSide2.People.FirstOrDefault(r => r.IdPerson == warrant.IdWarrantObject);
+                if (person != null)
+                    personsIdsAssocDic.Add(warrant.IdWarrantObject.Value, person);
+                person.IdPerson = 0;
+            }
+            foreach (var person in db.People.Where(r => r.IdApartment == contract.ApartmentSide2.IdApartment).AsNoTracking().ToList())
+            {
+                // Удаляем из БД все переменные шаблонов
+                var variables = db.TemplateVariables.Include(r => r.TemplateVariableMeta).ThenInclude(r => r.WarrantTemplate)
+                    .Where(r => r.IdObject == person.IdPerson &&
+                    r.TemplateVariableMeta.WarrantTemplate.IdWarrantTemplateType == 4).AsNoTracking().ToList();
+                db.TemplateVariables.RemoveRange(variables);
+
+                // Удаляем из БД удаленные связи
                 if (!contract.ApartmentSide2.People.Any(r => r.IdPerson == person.IdPerson))
                 {
                     person.Deleted = true;
                     db.People.Update(person);
                 }
+
+                // Вставляем свежие переменные шаблонов для старых ассоциаций
+                if (person.IdPerson > 0)
+                {
+                    var warrantTemplate = warrantTemplateVM.FirstOrDefault(r => r.IdWarrantObject == person.IdPerson && r.ObjectType == WarrantObjectType.Person);
+                    if (warrantTemplate != null && warrantTemplate.Variables != null)
+                    {
+                        foreach (var variable in warrantTemplate.Variables)
+                        {
+                            if (string.IsNullOrEmpty(variable.Value)) continue;
+                            db.TemplateVariables.Add(new TemplateVariable
+                            {
+                                IdObject = person.IdPerson,
+                                IdTemplateVariable = variable.IdTemplateVariable,
+                                IdTemplateVariableMeta = variable.IdTemplateVariableMeta,
+                                Value = variable.Value
+                            });
+                        }
+                    }
+                }
             }
+
             foreach (var bankInfo in db.BankInfos.Where(r => r.IdApartment == contract.ApartmentSide2.IdApartment).AsNoTracking())
             {
                 if (!contract.ApartmentSide2.BankInfos.Any(r => r.IdBank == bankInfo.IdBank))
@@ -246,6 +279,26 @@ namespace MenaWeb.DataServices
                     }
                 }
             }
+            foreach (var personPair in personsIdsAssocDic)
+            {
+                var oldId = personPair.Key;
+                var person = personPair.Value;
+                var warrantTemplate = warrantTemplateVM.FirstOrDefault(r => r.IdWarrantObject == oldId && r.ObjectType == WarrantObjectType.Person);
+                if (warrantTemplate != null && warrantTemplate.Variables != null)
+                {
+                    foreach (var variable in warrantTemplate.Variables)
+                    {
+                        if (string.IsNullOrEmpty(variable.Value)) continue;
+                        db.TemplateVariables.Add(new TemplateVariable
+                        {
+                            IdObject = person.IdPerson,
+                            IdTemplateVariable = variable.IdTemplateVariable,
+                            IdTemplateVariableMeta = variable.IdTemplateVariableMeta,
+                            Value = variable.Value
+                        });
+                    }
+                }
+            }
 
             db.SaveChanges();
         }
@@ -273,6 +326,15 @@ namespace MenaWeb.DataServices
                 warrantApartment.IdWarrantApartment = 0;
             }
 
+            var personsIdsAssocDic = new Dictionary<int, Person>();
+            foreach (var warrant in warrantTemplateVM.Where(r => r.IdWarrantObject < 0 && r.ObjectType == WarrantObjectType.Person))
+            {
+                var person = contract.ApartmentSide2.People.FirstOrDefault(r => r.IdPerson == warrant.IdWarrantObject);
+                if (person != null)
+                    personsIdsAssocDic.Add(warrant.IdWarrantObject.Value, person);
+                person.IdPerson = 0;
+            }
+
             db.Contracts.Add(contract);
             db.SaveChanges();
 
@@ -290,6 +352,26 @@ namespace MenaWeb.DataServices
                         db.TemplateVariables.Add(new TemplateVariable
                         {
                             IdObject = warrantApartment.IdWarrantApartment,
+                            IdTemplateVariable = variable.IdTemplateVariable,
+                            IdTemplateVariableMeta = variable.IdTemplateVariableMeta,
+                            Value = variable.Value
+                        });
+                    }
+                }
+            }
+            foreach (var personPair in personsIdsAssocDic)
+            {
+                var oldId = personPair.Key;
+                var person = personPair.Value;
+                var warrantTemplate = warrantTemplateVM.FirstOrDefault(r => r.IdWarrantObject == oldId && r.ObjectType == WarrantObjectType.Person);
+                if (warrantTemplate != null && warrantTemplate.Variables != null)
+                {
+                    foreach (var variable in warrantTemplate.Variables)
+                    {
+                        if (string.IsNullOrEmpty(variable.Value)) continue;
+                        db.TemplateVariables.Add(new TemplateVariable
+                        {
+                            IdObject = person.IdPerson,
                             IdTemplateVariable = variable.IdTemplateVariable,
                             IdTemplateVariableMeta = variable.IdTemplateVariableMeta,
                             Value = variable.Value
@@ -392,19 +474,31 @@ namespace MenaWeb.DataServices
             foreach(var person in contract.ApartmentSide2.People)
             {
                 var idWarrant = person.IdTemplate;
-                if (idWarrant == null) continue;
                 var warrantTemplate = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == idWarrant);
                 var templateVM = new WarrantTemplateVM
                 {
-                    IdWarrantTemplate = idWarrant.Value,
+                    IdWarrantTemplate = idWarrant,
                     IdWarrantObject = person.IdPerson,
                     IdObject = person.IdPerson,
                     ObjectType = WarrantObjectType.Person,
-                    WarrantTemplateBody = db.WarrantTemplates.FirstOrDefault(r => r.IdWarrantTemplate == idWarrant)?.WarrantTemplateBody,
+                    WarrantTemplateBody = warrantTemplate?.WarrantTemplateBody,
                     Variables = db.TemplateVariables.Include(r => r.TemplateVariableMeta)
                         .Where(r => r.TemplateVariableMeta.IdWarrantTemplate == idWarrant && r.IdObject == person.IdPerson)
                         .ToList()
                 };
+                if (isContractCopy)
+                {
+                    templateVM.IdWarrantObject = idTmp;
+                    templateVM.IdObject = 0;
+                    person.IdPerson = idTmp;
+                    person.IdApartment = 0;
+                    idTmp++;
+                    foreach (var variable in templateVM.Variables)
+                    {
+                        variable.IdObject = idTmp;
+                        variable.IdTemplateVariable = 0;
+                    }
+                }
                 vm.WarrantTemplatesVM.Add(templateVM);
             }
             return vm;

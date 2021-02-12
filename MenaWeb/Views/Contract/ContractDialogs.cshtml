@@ -288,6 +288,23 @@
                                 }
                             </select>
                         </div>
+                        <div class="form-group col-12">
+                            <label for="Person_IdTemplate">Доверенность</label>
+                            <select disabled class="selectpicker form-control" data-width="100%" data-live-search="true" title="Доверенность" name="Person.IdTemplate"
+                                    id="Person_IdTemplate">
+                                <option></option>
+                                @foreach (var option in Model.WarrantsPersons)
+                                {
+                                    <option data-tokens="@option.WarrantTemplateName" title="@option.WarrantTemplateName"
+                                            data-template-name="@option.WarrantTemplateName"
+                                            data-template-body="@option.WarrantTemplateBody" value="@option.IdWarrantTemplate">
+                                        @(option.WarrantTemplateName?.Length > 75 ? option.WarrantTemplateName.Substring(0, 75) + "..." : option.WarrantTemplateName)
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="m-variables-wrapper row">
                     </div>
                 </div>
                 <div class="modal-footer">
