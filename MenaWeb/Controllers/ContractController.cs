@@ -124,7 +124,10 @@ namespace MenaWeb.Controllers
 
         public IActionResult ContractReports(PageOptions pageOptions)
         {
-            return null;
+            var ids = GetSessionContractsIds();
+            var viewModel = dataService.GetContractsViewModelForMassReports(ids, pageOptions);
+            ViewBag.Count = viewModel.Contracts.Count();
+            return View("ContractReports", viewModel);
         }
 
         [HttpPost]

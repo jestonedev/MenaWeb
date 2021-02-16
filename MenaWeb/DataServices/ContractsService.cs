@@ -621,5 +621,28 @@ namespace MenaWeb.DataServices
                     (r.ApartmentSide2 != null && r.ApartmentSide2.Flat != null && r.ApartmentSide2.Flat.ToLowerInvariant().Contains(flat)));
             return query;
         }
+
+        public IQueryable<Contract> GetContractsForMassReports(List<int> ids)
+        {
+            return GetQuery().Where(c => ids.Contains(c.IdContract));
+        }
+
+        public ContractListVM GetContractsViewModelForMassReports(List<int> ids, PageOptions pageOptions)
+        {
+            var vm = new ContractListVM();
+            vm.OrderOptions = vm.OrderOptions;
+            vm.PageOptions = pageOptions ?? vm.PageOptions;
+            vm.FilterOptions = vm.FilterOptions;
+            var contracts = GetContractsForMassReports(ids);
+            var count = contracts.Count();
+            vm.PageOptions.TotalRows = count;
+            vm.PageOptions.Rows = count;
+            vm.PageOptions.TotalPages = (int)Math.Ceiling(count / (double)vm.PageOptions.SizePage);
+            if (vm.PageOptions.TotalPages < vm.PageOptions.CurrentPage)
+                vm.PageOptions.CurrentPage = 1;
+            vm.Contracts = GetQueryPage(contracts, vm.PageOptions).ToList();
+            vm.Streets = GetActualStreets(vm.Contracts);
+            return vm;
+        }
     }
 }

@@ -84,8 +84,15 @@ function uuidv4() {
 
 $('.page-link').off("click");
 $('.page-link').click(function (e) {
-    $('input[name="PageOptions.CurrentPage"]').val($(this).data("page"));
-    $("form.filterForm").submit();
+    var path = location.pathname;
+    var page = $(this).data("page");
+
+    if ($('input[name="PageOptions.CurrentPage"]').length > 0) {
+        $('input[name="PageOptions.CurrentPage"]').val(page);
+        $("form.filterForm").submit();
+    } else {
+        location.href = path + "?PageOptions.CurrentPage=" + page;
+    }
     e.preventDefault();
 }); 
 
