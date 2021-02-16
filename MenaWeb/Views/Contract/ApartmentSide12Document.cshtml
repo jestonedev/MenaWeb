@@ -7,14 +7,14 @@
     var index = (int)ViewData["Index"];
 }
 
-<li class="list-group-item">
+<li class="list-group-item pt-2 pb-3 pl-3 pr-3">
     <input type="hidden" asp-for="Contract.ApartmentSide12.WarrantApartments[index].IdWarrantApartment" />
     <input type="hidden" asp-for="Contract.ApartmentSide12.WarrantApartments[index].IdApartment" />
     <input type="hidden" asp-for="Contract.ApartmentSide12.WarrantApartments[index].IdWarrantTemplate" />
 
     <div class="form-row">
-        <div class="form-group @(ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create ? "col-9" : "col-10")">
-            <label>Документ</label>
+        <div class="form-group mb-0 @(ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create ? "col-9" : "col-10")">
+            <label class="mb-1">Документ</label>
             @{
                 var idWarrantTemplate = Model.Contract.ApartmentSide12.WarrantApartments[index].IdWarrantTemplate;
                 var idObject = Model.Contract.ApartmentSide12.WarrantApartments[index].IdWarrantApartment;

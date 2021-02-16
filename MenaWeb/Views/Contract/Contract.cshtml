@@ -93,20 +93,20 @@
                 </div>
             </div>
         </div>
-        <div class="card-body" id="Contract">
+        <div class="card-body pt-3 pb-3 pl-3 pr-3" id="Contract">
             <input type="hidden" asp-for="Contract.IdContract" />
             <input type="hidden" value="@ViewBag.ReturnUrl" name="ReturnUrl" />
             <div class="row">
-                <div class="form-group col-md-6">
-                    <label asp-for="Contract.IdDelegate">В лице</label>
+                <div class="form-group col-md-6 mb-2">
+                    <label class="mb-1" asp-for="Contract.IdDelegate">В лице</label>
                     <select disabled class="selectpicker form-control" asp-for="Contract.IdDelegate" asp-items="@(new SelectList(Model.Delegates, "IdDelegate", "Fio"))"
                             title="В лице" data-val="true" data-val-required="Выберите значение из выпадающего списка">
                         <option></option>
                     </select>
                     <span asp-validation-for="Contract.IdDelegate" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
-                    <label>Состояние</label>
+                <div class="form-group col-md-6 mb-2">
+                    <label class="mb-1">Состояние</label>
                     <div class="m-statuses-hidden-wrapper">
                         @for (var i = 0; i < Model.Contract.ContractStatusHistory.Count; i++)
                         {
@@ -136,27 +136,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-lg-3 col-md-6">
-                    <label asp-for="Contract.ContractRegistrationDate">Дата регистрации</label>
+                <div class="form-group col-lg-3 col-md-6 mb-2">
+                    <label class="mb-1" asp-for="Contract.ContractRegistrationDate">Дата регистрации</label>
                     <input disabled type="date" class="form-control" asp-for="Contract.ContractRegistrationDate"
                            value="@(Model.Contract.ContractRegistrationDate.HasValue ? Model.Contract.ContractRegistrationDate.Value.ToString("yyyy-MM-dd") : "")" title="Дата регистрации">
                 </div>
-                <div class="form-group col-lg-3 col-md-6">
-                    <label asp-for="Contract.FillingDate">Дата получения ключей</label>
+                <div class="form-group col-lg-3 col-md-6 mb-2">
+                    <label class="mb-1" asp-for="Contract.FillingDate">Дата получения ключей</label>
                     <input disabled type="date" class="form-control" asp-for="Contract.FillingDate"
                            value="@(Model.Contract.FillingDate.HasValue ? Model.Contract.FillingDate.Value.ToString("yyyy-MM-dd") : "")" title="Дата получения ключей">
                 </div>
-                <div class="form-group col-lg-3 col-md-6">
-                    <label asp-for="Contract.OrderNumber">Номер постановления</label>
+                <div class="form-group col-lg-3 col-md-6 mb-2">
+                    <label class="mb-1" asp-for="Contract.OrderNumber">Номер постановления</label>
                     <input disabled type="text" class="form-control" title="Номер постановления" maxlength="20" asp-for="Contract.OrderNumber">
                 </div>
-                <div class="form-group col-lg-3 col-md-6">
-                    <label asp-for="Contract.OrderDate">Дата постановления</label>
+                <div class="form-group col-lg-3 mb-2">
+                    <label class="mb-1" asp-for="Contract.OrderDate">Дата постановления</label>
                     <input disabled type="date" class="form-control" asp-for="Contract.OrderDate"
                            value="@(Model.Contract.OrderDate.HasValue ? Model.Contract.OrderDate.Value.ToString("yyyy-MM-dd") : "")" title="Дата постановления">
                 </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Contract.IdExecutor">Подготовил</label>
+                <div class="form-group col-md-6 mb-3">
+                    <label class="mb-1" asp-for="Contract.IdExecutor">Подготовил</label>
                     @{
                         var signers = Model.Signers.Select(s => new
                         {
@@ -170,12 +170,12 @@
                     </select>
                     <span asp-validation-for="Contract.IdExecutor" class="text-danger"></span>
                 </div>
-                <div class="form-check col-md-6 m-contract-eviction-required-checkbox">
+                <div class="form-check col-md-6 m-contract-eviction-required-checkbox mb-3">
                     <input disabled type="checkbox" class="form-check-input" asp-for="Contract.EvictionRequired">
                     <label class="form-check-label" asp-for="Contract.EvictionRequired" title="Требуется снятие с учета участников">Требуется снятие с учета участников</label>
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-2">
                 <div class="col-lg-6 mb-3 mb-lg-0">
                     <partial name="ApartmentSide1" model="Model" />
                 </div>
@@ -183,12 +183,12 @@
                     <partial name="ApartmentSide2" model="Model" />
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-2">
                 <div class="col-12">
                     <partial name="Persons" model="Model" />
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-2">
                 <div class="col-12">
                     <partial name="AdditionalInfo" model="Model" />
                 </div>

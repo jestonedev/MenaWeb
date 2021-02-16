@@ -7,22 +7,22 @@
     var index = (int)ViewData["Index"];
 }
 
-<li class="list-group-item">
+<li class="list-group-item pt-3 pb-3 pl-3 pr-3">
     <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdEvaluation" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdApartment" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdOrganization" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.RedEvaluations[index].EvaluationPrice" />
 
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <label>Наименование организации</label>
+        <div class="form-group col-md-6 @(ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete ? "col-lg-7" : "") mb-2">
+            <label class="mb-1">Наименование организации</label>
             <select class="selectpicker form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.RedEvaluations[index].IdOrganization"
                     asp-items="@(new SelectList(Model.RedOrganizations, "IdOrganization", "Name"))" title="Наименование организации">
                 <option></option>
             </select>
         </div>
-        <div class="form-group col-md-4 col-9">
-            <label>Размер возмещения</label>
+        <div class="form-group col-md-4 @(ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete ? "col-10" : "col-9") mb-2">
+            <label class="mb-1">Размер возмещения</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.RedEvaluations[index].EvaluationPrice" title="Размер возмещения">
         </div>
 
@@ -37,7 +37,7 @@
         }
         @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
         {
-            <div class="text-right col-3 col-md-2 m-org-view-buttons">
+            <div class="text-right col-2 col-lg-1 m-org-view-buttons">
                 <a class="btn btn-primary org-open-btn" href="#" title="Открытьинформацию об источники финансирования"
                    aria-label="Открыть информацию об источники финансирования">
                     <span class="oi oi-eye"></span>
