@@ -3,15 +3,15 @@
 @model ContractVM
 
 <div class="card rr-redemption-card">
-    <div class="card-header d-flex justify-content-between">
-        <h3>Информация о выкупе</h3>
+    <div class="card-header d-flex justify-content-between pt-2 pb-2">
+        <h4 class="mt-1">Информация о выкупе</h4>
         <div class="btn-group" role="group">
             <a href="#" data-for="RedemptionWrapper" class="form-control btn btn-primary contract-toggler" title="Развернуть панель информации о выкупе" style="font-weight:bold;">∨</a>
         </div>
     </div>
-    <dib class="card-body toggle-hide" id="RedemptionWrapper">
+    <dib class="card-body pt-3 pb-3 pl-3 pr-3 toggle-hide" id="RedemptionWrapper">
         <div class="row">
-            <div class="col-12 mb-3">
+            <div class="col-12 mb-2">
                 <partial name="Accounts" model="Model" />
             </div>
 
@@ -21,10 +21,10 @@
                     Model.Contract.ApartmentSide2.ApartmentRedemptions.Add(new ApartmentRedemption());
                 }
             }
-            <div class="form-group col-lg-3 col-md-6 mb-4">
+            <div class="form-group col-lg-3 col-md-6 mb-3">
                 <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].IdApartmentRedemption" />
                 <input type="hidden" asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].IdApartment" />
-                <label asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption">Дата передачи ЖП</label>
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption">Дата передачи ЖП</label>
                 <input disabled type="date" class="form-control" asp-for="Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption"
                        value="@(Model.Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption.HasValue ?
                             Model.Contract.ApartmentSide2.ApartmentRedemptions[0].DateRedemption.Value.ToString("yyyy-MM-dd") : "")" title="Дата передачи ЖП">

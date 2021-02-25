@@ -23,7 +23,10 @@ namespace MenaWeb.ViewModels
         public IList<Document> Documents { get; set; }
         public IList<DocumentIssued> DocumentIssueds { get; set; }
         public IList<RedOrganization> RedOrganizations { get; set; }
+        public IList<WarrantTemplate> WarrantsMunicipal { get; set; }
+        public IList<WarrantTemplate> WarrantsOwnership { get; set; }
+        public IList<WarrantTemplate> WarrantsPersons { get; set; }
+        public IList<WarrantTemplateVM> WarrantTemplatesVM { get; set; }
         public IList<WarrantTemplate> WarrantTemplates { get; set; }
-        public IList<Signer> ReportSigners { get; set; }
-    }
+        public IList<Signer> ReportSigners { get; set; }    }
 }

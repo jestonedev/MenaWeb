@@ -7,7 +7,7 @@
     var index = (int)ViewData["Index"];
 }
 
-<li class="list-group-item">
+<li class="list-group-item pt-3 pb-3 pl-3 pr-3">
     <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].IdBank" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].IdApartment" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].Account" />
@@ -16,20 +16,20 @@
     <input type="hidden" asp-for="Contract.ApartmentSide2.BankInfos[index].Sum" />
 
     <div class="form-row">
-        <div class="form-group col-md-4">
-            <label>Лицевой счет</label>
+        <div class="form-group col-md-4 mb-2">
+            <label class="mb-1">Лицевой счет</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].Account" title="Лицевой счет">
         </div>
-        <div class="form-group col-md-4">
-            <label>Держатель</label>
+        <div class="form-group col-md-4 mb-2">
+            <label class="mb-1">Держатель</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].AccountHolder" title="Держатель счета">
         </div>
-        <div class="form-group col-md-4">
-            <label>Сумма</label>
+        <div class="form-group col-md-4 mb-2">
+            <label class="mb-1">Сумма</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].Sum" title="Сумма">
         </div>
-        <div class="form-group col-9 col-md-10">
-            <label>Банк</label>
+        <div class="form-group col-9 col-md-10 mb-2">
+            <label class="mb-1">Банк</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.BankInfos[index].Bank" title="Сумма">
         </div>
 

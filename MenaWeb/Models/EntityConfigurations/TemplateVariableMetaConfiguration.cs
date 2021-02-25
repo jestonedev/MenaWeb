@@ -29,7 +29,7 @@ namespace MenaWeb.Models.EntityConfigurations
                 .HasColumnType("int(11)")
                 .IsRequired();
 
-            builder.Property(e => e.Patternt)
+            builder.Property(e => e.Pattern)
                 .HasColumnName("pattern")
                 .HasMaxLength(255);
 

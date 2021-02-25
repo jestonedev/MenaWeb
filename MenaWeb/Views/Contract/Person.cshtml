@@ -7,7 +7,7 @@
     var index = (int)ViewData["Index"];
 }
 
-<li class="list-group-item">
+<li class="list-group-item pt-3 pb-3 pl-3 pr-3">
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdPerson" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdApartment" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdContractor" />
@@ -32,27 +32,27 @@
         value="@Model.Contract.ApartmentSide2.People[index].LastChangeDate.ToString("yyyy-MM-dd HH:mm:ss")" />
 
     <div class="form-row">
-        <div class="form-group col-md-4">
-            <label>Фамилия</label>
+        <div class="form-group col-md-4 mb-2">
+            <label class="mb-1">Фамилия</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].Family" title="Фамилия">
         </div>
-        <div class="form-group col-md-4">
-            <label>Имя</label>
+        <div class="form-group col-md-4 mb-2">
+            <label class="mb-1">Имя</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].Name" title="Имя">
         </div>
-        <div class="form-group col-md-4">
-            <label>Отчество</label>
+        <div class="form-group col-md-4 mb-2">
+            <label class="mb-1">Отчество</label>
             <input type="text" class="form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].Father" title="Отчество">
         </div>
-        <div class="form-group col-md-5">
-            <label>Статус</label>
+        <div class="form-group col-md-5 mb-2">
+            <label class="mb-1">Статус</label>
             <select class="selectpicker form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].IdPersonStatus"
                     asp-items="@(new SelectList(Model.PersonStatuses, "IdPersonStatus", "Status"))" title="Статус">
                 <option></option>
             </select>
         </div>
-        <div class="form-group col-9 col-md-5">
-            <label>Признак</label>
+        <div class="form-group col-9 col-md-5 mb-2">
+            <label class="mb-1">Признак</label>
             <select class="selectpicker form-control m-input--disable-alwayes" disabled asp-for="Contract.ApartmentSide2.People[index].IdContractor"
                     asp-items="@(new SelectList(Model.Contractors, "IdContractor", "ContractorName"))" title="Признак">
                 <option></option>

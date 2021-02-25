@@ -1,0 +1,48 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+@{
+    Layout = null;
+    var index = (int)ViewData["Index"];
+}
+
+<li class="list-group-item pt-2 pb-3 pl-3 pr-3">
+    <input type="hidden" asp-for="Contract.ApartmentSide2.WarrantApartments[index].IdWarrantApartment" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.WarrantApartments[index].IdApartment" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.WarrantApartments[index].IdWarrantTemplate" />
+
+    <div class="form-row">
+        <div class="form-group mb-0 @(ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create ? "col-9" : "col-10")">
+            <label class="mb-1">Документ</label>
+            @{ 
+                var idWarrantTemplate = Model.Contract.ApartmentSide2.WarrantApartments[index].IdWarrantTemplate;
+                var idObject = Model.Contract.ApartmentSide2.WarrantApartments[index].IdWarrantApartment;
+                var warrantTemplate = Model.WarrantTemplatesVM.FirstOrDefault(r => r.IdWarrantTemplate == idWarrantTemplate && 
+                    r.IdWarrantObject == idObject);
+                var document = warrantTemplate.WarrantTemplateComplete;
+            }
+            <input type="text" class="form-control m-input--disable-alwayes m-apartment-document-title" 
+                   value="@document" disabled title="@document" data-template="@warrantTemplate?.WarrantTemplateBody">
+        </div>
+
+        @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+        {
+            <div class="text-right col-3 m-apartment-document-edit-buttons">
+                <div class="btn-group edit-del-panel" role="group" aria-label="Панель реадктирования">
+                    <a class="btn btn-primary apartment-document-edit-btn" data-target="apartment-side2" title="Редактировать" aria-label="Редактировать" href="#"><span class="oi oi-pencil"></span></a>
+                    <a class="btn btn-danger apartment-document-delete-btn" title="Удалить" aria-label="Удалить" href="#"><span class="oi oi-x delete"></span></a>
+                </div>
+            </div>
+        }
+        @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+        {
+            <div class="text-right col-2 m-apartment-document-view-buttons">
+                <a class="btn btn-primary apartment-document-open-btn" data-target="apartment-side2" href="#" title="Открыть документ"
+                   aria-label="Открыть документе">
+                    <span class="oi oi-eye"></span>
+                </a>
+            </div>
+        }
+    </div>
+</li>

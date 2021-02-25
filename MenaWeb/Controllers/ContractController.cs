@@ -51,7 +51,7 @@ namespace MenaWeb.Controllers
         {
             ViewBag.Action = ActionTypeEnum.Create;
             var contract = dataService.CreateContract(idContract);
-            return View("Contract", dataService.GetViewModel(contract));
+            return View("Contract", dataService.GetViewModel(contract, idContract != null));
         }
 
         [HttpPost]
@@ -61,7 +61,7 @@ namespace MenaWeb.Controllers
                 return NotFound();
             if (ModelState.IsValid)
             {
-                dataService.Create(contractVM.Contract);
+                dataService.Create(contractVM.Contract, contractVM.WarrantTemplatesVM);
                 return RedirectToAction("Details", new { contractVM.Contract.IdContract });
             }
             ViewBag.Action = ActionTypeEnum.Create;
@@ -90,7 +90,7 @@ namespace MenaWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                dataService.Edit(contractVM.Contract);
+                dataService.Edit(contractVM.Contract, contractVM.WarrantTemplatesVM);
                 return RedirectToAction("Details", new { contractVM.Contract.IdContract });
             }
             ViewBag.Action = ActionTypeEnum.Edit;
@@ -124,7 +124,10 @@ namespace MenaWeb.Controllers
 
         public IActionResult ContractReports(PageOptions pageOptions)
         {
-            return null;
+            var ids = GetSessionContractsIds();
+            var viewModel = dataService.GetContractsViewModelForMassReports(ids, pageOptions);
+            ViewBag.Count = viewModel.Contracts.Count();
+            return View("ContractReports", viewModel);
         }
 
         [HttpPost]
@@ -253,6 +256,32 @@ namespace MenaWeb.Controllers
             var contract = dataService.CreateContract(null);
             contract.ApartmentSide2.RedEvaluations.Add(new Models.Entities.RedEvaluation());
             return PartialView("Organization", dataService.GetViewModel(contract));
+        }
+
+        public IActionResult AddApartmentDocument(ActionTypeEnum action, string target)
+        {
+            ViewBag.Action = action;
+            ViewBag.Index = 0;
+            var contract = dataService.CreateContract(null);
+            switch(target)
+            {
+                case "apartment-side12":
+                    contract.ApartmentSide12.WarrantApartments.Add(new Models.Entities.WarrantApartment());
+                    return PartialView("ApartmentSide12Document", dataService.GetViewModel(contract));
+                case "apartment-side1":
+                    contract.ApartmentSide1.WarrantApartments.Add(new Models.Entities.WarrantApartment());
+                    return PartialView("ApartmentSide1Document", dataService.GetViewModel(contract));
+                case "apartment-side2":
+                    contract.ApartmentSide2.WarrantApartments.Add(new Models.Entities.WarrantApartment());
+                    return PartialView("ApartmentSide2Document", dataService.GetViewModel(contract));
+            }
+            return StatusCode(404);
+        }
+
+        [HttpPost]
+        public IActionResult GetWarrantVariablesMeta(int idTemplate)
+        {
+            return Json(dataService.WarrantVariablesMeta(idTemplate));
         }
     }
 }

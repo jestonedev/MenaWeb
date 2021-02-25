@@ -2,60 +2,60 @@
 @model ContractVM
 
 <div class="card rr-apartment-side-1-card">
-    <div class="card-header d-flex justify-content-between">
-        <h3>Сторона 2</h3>
+    <div class="card-header d-flex justify-content-between pt-2 pb-2">
+        <h4 class="mt-1">Сторона 2</h4>
         <div class="btn-group" role="group">
             <a href="#" data-for="ApartmentSide2" class="form-control btn btn-primary contract-toggler" title="Развернуть панель" style="font-weight:bold;">∧</a>
         </div>
     </div>
-    <div class="card-body" id="ApartmentSide2">
+    <div class="card-body pt-3 pb-3 pl-3 pr-3" id="ApartmentSide2">
         <input type="hidden" asp-for="Contract.ApartmentSide2.IdApartment" />
         <div class="form-row">
-            <div class="form-group col-12">
-                <label asp-for="Contract.ApartmentSide2.IdStreet">Улица</label>
+            <div class="form-group col-12 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.IdStreet">Улица</label>
                 <select disabled class="selectpicker form-control" data-live-search="true" asp-for="Contract.ApartmentSide2.IdStreet" title="Улица"
                         asp-items="@{new SelectList(Model.Streets, "IdStreet", "StreetName", Model.Contract.ApartmentSide2.IdStreet)}">
                     <option></option>
                 </select>
             </div>
-            <div class="form-group col-4">
-                <label asp-for="Contract.ApartmentSide2.House">Дом</label>
+            <div class="form-group col-4 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.House">Дом</label>
                 <input disabled type="text" class="form-control input-house" asp-for="Contract.ApartmentSide2.House" maxlength="5" title="Номер дома">
             </div>
-            <div class="form-group col-4">
-                <label asp-for="Contract.ApartmentSide2.Flat">Квартира</label>
+            <div class="form-group col-4 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.Flat">Квартира</label>
                 <input disabled type="text" class="form-control input-premise-num" asp-for="Contract.ApartmentSide2.Flat" maxlength="10" title="Номер квартиры">
             </div>
-            <div class="form-group col-4">
-                <label asp-for="Contract.ApartmentSide2.Room">Комната</label>
+            <div class="form-group col-4 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.Room">Комната</label>
                 <input disabled type="text" class="form-control input-premise-num" asp-for="Contract.ApartmentSide2.Room" maxlength="5" title="Номер комнаты">
             </div>
-            <div class="form-group col-8">
-                <label asp-for="Contract.ApartmentSide2.IdApartmentType">Тип помещения</label>
+            <div class="form-group col-8 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.IdApartmentType">Тип помещения</label>
                 <select disabled class="selectpicker form-control" data-live-search="true" asp-for="Contract.ApartmentSide2.IdApartmentType" title="Тип помещения"
                         asp-items="@{new SelectList(Model.ApartmentTypes, "IdApartmentType", "ApartmentTypeName", Model.Contract.ApartmentSide2.IdApartmentType)}"></select>
             </div>
-            <div class="form-group col-4">
-                <label asp-for="Contract.ApartmentSide2.TotalArea">Общая площадь</label>
+            <div class="form-group col-4 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.TotalArea">Общая площадь</label>
                 <input disabled type="text" class="form-control input-decimal" asp-for="Contract.ApartmentSide2.TotalArea" title="Общая площадь">
                 <span asp-validation-for="Contract.ApartmentSide2.TotalArea" class="text-danger"></span>
             </div>
-            <div class="form-group col-8">
-                <label asp-for="Contract.ApartmentSide2.InventoryNumber">Кадастровый номер</label>
+            <div class="form-group col-8 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.InventoryNumber">Кадастровый номер</label>
                 <input disabled type="text" class="form-control input-cadastral-num" asp-for="Contract.ApartmentSide2.InventoryNumber" maxlength="50" title="Кадастровый номер">
             </div>
-            <div class="form-group col-4">
-                <label asp-for="Contract.ApartmentSide2.Part">Доля</label>
+            <div class="form-group col-4 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.Part">Доля</label>
                 <input disabled type="text" class="form-control" asp-for="Contract.ApartmentSide2.Part" maxlength="5" title="Доля"
                        data-val="true" data-val-required="Укажите долю">
                 <span asp-validation-for="Contract.ApartmentSide2.Part" class="text-danger"></span>
             </div>
-            <div class="form-group col-12">
-                <label asp-for="Contract.ApartmentSide2.CadastralPrice">Кадастровая стоимость</label>
+            <div class="form-group col-12 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.CadastralPrice">Кадастровая стоимость</label>
                 <input disabled type="text" class="form-control input-decimal" asp-for="Contract.ApartmentSide2.CadastralPrice" title="Кадастровая стоимость">
             </div>
-            <div class="form-group col-12 m-evaluator" data-side="ApartmentSide2">
-                <label>Оценка</label>
+            <div class="form-group col-12 m-evaluator mb-2" data-side="ApartmentSide2">
+                <label class="mb-1">Оценка</label>
                 <div class="m-evaluator-hidden-wrapper">
                     @{
                         string evaluatorTitle = null;
@@ -95,8 +95,8 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-12 m-land" data-side="ApartmentSide2">
-                <label>Земельный участок</label>
+            <div class="form-group col-12 m-land mb-3" data-side="ApartmentSide2">
+                <label class="mb-1">Земельный участок</label>
                 <div class="m-land-hidden-wrapper">
                     @{
                         string landAddress = null;
@@ -130,6 +130,10 @@
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-12 mb-3">
+                <partial name="ApartmentSide2Documents" model="Model" />
             </div>
         </div>
     </div>

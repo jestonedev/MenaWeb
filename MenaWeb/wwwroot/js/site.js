@@ -34,11 +34,11 @@ $('.input-filter-numbers, .input-numbers').inputFilter(function (value) {
 });
 
 $('.input-filter-chars, .input-chars').inputFilter(function (value) {
-    return /^[а-яА-Я]*$/.test(value);
+    return /^[а-яА-ЯёЁ]*$/.test(value);
 });
 
 $('.input-filter-snp, .input-snp').inputFilter(function (value) {
-    return /^([а-яА-Я]+[ ]?)*$/.test(value);
+    return /^([а-яА-ЯёЁ]+[ ]?)*$/.test(value);
 });
 
 $('.input-filter-cadastral-num, .input-cadastral-num').inputFilter(function (value) {
@@ -84,8 +84,15 @@ function uuidv4() {
 
 $('.page-link').off("click");
 $('.page-link').click(function (e) {
-    $('input[name="PageOptions.CurrentPage"]').val($(this).data("page"));
-    $("form.filterForm").submit();
+    var path = location.pathname;
+    var page = $(this).data("page");
+
+    if ($('input[name="PageOptions.CurrentPage"]').length > 0) {
+        $('input[name="PageOptions.CurrentPage"]').val(page);
+        $("form.filterForm").submit();
+    } else {
+        location.href = path + "?PageOptions.CurrentPage=" + page;
+    }
     e.preventDefault();
 }); 
 
@@ -272,13 +279,26 @@ $(".m-contract__add-side-12-btn").on("click", function (e) {
 });
 
 $(".m-contract__remove-side-12-btn").on("click", function (e) {
-    $(".m-contract__add-side-12-btn").removeClass("d-none");
+
+    var documents = $(".rr-apartment-side12-documents-card .list-group-item").filter(function (idx, elem) {
+        return !$(elem).hasClass("rr-list-group-item-empty");
+    });
+    var warrantIds = documents.map(function (idx, elem) { return parseInt($(elem).find("input[id$='_IdWarrantApartment']").val()); }).toArray();
+    $(".m-variables .m-warrant").filter(function (idx, elem) {
+        return warrantIds.indexOf(parseInt($(elem).find("input[id$='_IdWarrantObject']").val())) > -1;
+    }).remove();
+    documents.remove();
+    $(".rr-apartment-side12-documents-card .list-group-item.rr-list-group-item-empty").show();
+
     $(".side-12-container").find("input, select, textarea").val("");
     $("#Contract_ApartmentSide12_Part").val("1");
     $("#Contract_ApartmentSide12_IdApartmentType").val("1");
     $(".side-12-container .m-evaluator-hidden-wrapper").empty();
     $(".side-12-container input[name$='.EvaluatorTitle']").val("");
+
     $(".side-12-container").find("select").selectpicker("refresh");
+
+    $(".m-contract__add-side-12-btn").removeClass("d-none");
     $(".side-12-container").addClass("d-none");
     e.preventDefault();
 });
@@ -526,14 +546,17 @@ $('body').on('click', '.person-open-btn, .person-edit-btn', function (e) {
     var personElem = $(this).closest('.list-group-item');
     var modal = $("#personModal");
     modal.data("index", personElem.index());
+    var templateSelect = modal.find("#Person_IdTemplate");
+    templateSelect.val("");
     personElem.find("input, select")
-        .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes") })
+        .filter(function (idx, elem) { return !$(elem).hasClass("m-input--disable-alwayes"); })
         .each(function (idx, elem) {
         var nameParts = $(elem).attr("name").split(".");
         var name = nameParts[nameParts.length - 1];
         modal.find("[name='Person." + name + "']").val($(elem).val());
     });
 
+    templateSelect.change();
     modal.modal('show');
     e.preventDefault();
 });
@@ -564,20 +587,29 @@ $("#personModal").on("click", "#savePersonModalBtn", function (e) {
                 }
             }
         });
+        
+        
+        var idObject = parseInt($(personElem).find("input[id$='_IdPerson']").val());
+
+        var wrapper = form.find(".m-variables-wrapper");
+        var variables = getVariablesFromDialog(wrapper);
+        updateVariablesGlobal(idObject, "Person", variables);
 
         $(personElem).removeData("in-process");
         $("#personModal").modal('hide');
     } else {
         fixBootstrapSelectHighlight(form);
-        $([document.documentElement, document.body]).animate({
-            scrollTop: form.find(".input-validation-error").first().offset().top - 35
-        }, 1000);
     }
 });
 
 $('body').on("click", ".person-delete-btn", function (e) {
     var container = $("#PeopleList");
     var personElem = $(this).closest('.list-group-item');
+
+    var idObject = parseInt(personElem.find("input[id$='_IdPerson']").val());
+    removeVariablesGlobal(idObject, "Person");
+    updateVariablesGlobalIndexes();
+
     personElem.remove();
     if (container.find(".list-group-item").length === 1) {
         container.find(".list-group-item.rr-list-group-item-empty").show();
@@ -611,7 +643,10 @@ $("#personModal").on("hide.bs.modal", function () {
     $(this).find(".field-validation-error").removeClass("field-validation-error").addClass("field-validation-valid").text("");
     $("#cancelDocumentIssuedBtn").click();
 
-    $("#PeopleList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process") }).remove();
+    $("#PeopleList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($("#PeopleList").find(".list-group-item").length === 1) {
+        $("#PeopleList").find(".list-group-item").show();
+    }
 });
 
 var isCustomDocumentIssuedBy = false;
@@ -694,8 +729,13 @@ $("#personAdd").on("click", function (e) {
             people.each(function (idx, elem) {
                 updateControl(idx, elem, namePropRegex, idPropRegex);
             });
-            $("#PeopleList").find(".list-group-item").last().data("in-process", true).find("input[name$='Sex']").val("");
-            $("#PeopleList").find(".list-group-item").last().find(".person-edit-btn").click();
+            var person = $("#PeopleList").find(".list-group-item").last();
+            person.data("in-process", true).find("input[name$='Sex']").val("");
+
+            var id = getNewWarrantObjectId();
+            person.find("input[id$='_IdPerson']").val(id);
+
+            person.find(".person-edit-btn").click();
         }
     });
     e.preventDefault();
@@ -832,6 +872,9 @@ function accountCorrectData(form) {
 
 $("#accountModal").on("hide.bs.modal", function () {
     $("#AccountList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($("#AccountList").find(".list-group-item").length === 1) {
+        $("#AccountList").find(".list-group-item").show();
+    }
 });
 
 $("#accountAdd").on("click", function (e) {
@@ -910,7 +953,6 @@ $('body').on("click", ".org-delete-btn", function (e) {
     var orgs = $("#OrgList > .list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
     orgs.each(function (idx, elem) {
         updateControl(idx, elem, namePropRegex, idPropRegex);
-        // TODO - update bootstrap selectpicker
     });
 
     e.preventDefault();
@@ -918,6 +960,9 @@ $('body').on("click", ".org-delete-btn", function (e) {
 
 $("#orgModal").on("hide.bs.modal", function () {
     $("#OrgList").find(".list-group-item").filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($("#OrgList").find(".list-group-item").length === 1) {
+        $("#OrgList").find(".list-group-item").show();
+    }
 });
 
 $("#orgModal").on("show.bs.modal", function () {
@@ -946,8 +991,6 @@ $("#orgAdd").on("click", function (e) {
     e.preventDefault();
 });
 
-
-
 function downloadFile(url) {
     var link = document.createElement('a');
     link.href = url;
@@ -955,4 +998,303 @@ function downloadFile(url) {
     link.style.display = "none";
     document.getElementsByTagName("body")[0].appendChild(link);
     link.click();
+}
+
+// Warrants
+var warrantTemplateOptions = undefined;
+
+$('body').on('click', '.apartment-document-open-btn, .apartment-document-edit-btn', function (e) {
+    var docElem = $(this).closest('.list-group-item');
+    var modal = $("#docModal");
+    modal.data("index", docElem.index());
+    modal.data("target", $(this).data("target"));
+    modal.find(".m-variables-wrapper").empty();
+    var warrantTemplateSelect = modal.find("#Doc_IdWarrantTemplate");
+    warrantTemplateSelect.val("");
+    warrantType = "municipal";
+    if ($(this).data("target") === "apartment-side2") {
+        var warrantType = "ownership";
+    }
+    if (warrantTemplateOptions === undefined) {
+        warrantTemplateOptions = warrantTemplateSelect.find("option[data-warrant-type]").clone(true);
+    }
+    warrantTemplateSelect.find("option[data-warrant-type]").remove();
+    $(warrantTemplateOptions).each(function (idx, option) {
+        if ($(option).data("warrantType") === warrantType) {
+            warrantTemplateSelect.append($(option));
+        }
+    });
+
+    var idWarrantTemplate = docElem.find("input[id$='_IdWarrantTemplate']").val();
+    warrantTemplateSelect.val(idWarrantTemplate).change();
+
+    modal.modal('show');
+    e.preventDefault();
+});
+
+$("#docModal").on("show.bs.modal", function () {
+    $(this).find("select").selectpicker("refresh");
+});
+
+$("#docModal").on("hide.bs.modal", function () {
+    var target = $(this).data("target");
+    var documents = $(".rr-" + target + "-documents-card ul li.list-group-item");
+    documents.filter(function (idx, elem) { return $(elem).data("in-process"); }).remove();
+    if ($(".rr-" + target + "-documents-card ul li.list-group-item").length === 1) {
+        $(".rr-" + target + "-documents-card ul li.list-group-item").show();
+    }
+});
+
+$("#Doc_IdWarrantTemplate, #Person_IdTemplate").on("change", function (e) {
+    var idTemplate = parseInt($(this).val());
+    var self = this;
+    var wrapper = $(this).closest(".modal-dialog").find(".m-variables-wrapper");
+    wrapper.empty();
+    if (isNaN(idTemplate)) return;
+    $.ajax({
+        type: 'POST',
+        url: window.location.origin + '/Contract/GetWarrantVariablesMeta',
+        data: { idTemplate },
+        async: false,
+        success: function (metaVariables) {
+            var index = wrapper.closest(".modal").data("index");
+            var idObject = undefined;
+            var objectType = undefined;
+            if ($(self).attr("id") === "Doc_IdWarrantTemplate") {
+                var target = wrapper.closest(".modal").data("target");
+                var documents = $(".rr-" + target + "-documents-card ul li.list-group-item");
+                var document = documents[index];
+                idObject = parseInt($(document).find("input[id$='_IdWarrantApartment']").val());
+                objectType = "Apartment";
+            } else if ($(self).attr("id") === "Person_IdTemplate") {
+                var persons = $("#PeopleList li.list-group-item");
+                var person = persons[index];
+                idObject = parseInt($(person).find("input[id$='_IdPerson']").val());
+                objectType = "Person";
+            }
+            var variables = [];
+            if (!isNaN(idObject)) {
+                variables = getVariablesFromGlobal(idObject, objectType);
+            }
+            buildVariableFields(metaVariables, variables, wrapper, "col-6");
+        }
+    });
+});
+
+$("#docModal").on("click", "#saveDocModalBtn", function (e) {
+    var form = $("#docForm");
+    var isValid = form.valid();
+
+    if (isValid) {
+        var index = $(this).closest("#docModal").data("index");
+        var target = $(this).closest("#docModal").data("target");
+        var docElem = $(".rr-" + target + "-documents-card ul li.list-group-item")[index];
+
+        var idTemplate = parseInt(form.find("#Doc_IdWarrantTemplate").val());
+        var template = form.find("#Doc_IdWarrantTemplate option[value='" + idTemplate + "']").data("template-body");
+
+        $(docElem).find("input[id$='_IdWarrantTemplate']").val(idTemplate);
+        var idObject = parseInt($(docElem).find("input[id$='_IdWarrantApartment']").val());
+
+        var wrapper = form.find(".m-variables-wrapper");
+        var variables = getVariablesFromDialog(wrapper);
+
+        for (var i = 0; i < variables.length; i++) {
+            var variable = variables[i];
+            value = variable.Value;
+            if (variable.Type === "date" && value !== "" && value !== null) {
+                valueParts = value.split("-");
+                if (valueParts.length === 3)
+                    value = valueParts[2] + "." + valueParts[1] + "." + valueParts[0];
+            }
+            template = template.replace(new RegExp(variable.Pattern, "g"), value);
+        }
+        $(docElem).find(".m-apartment-document-title").val(template).attr("title", template);
+
+        updateVariablesGlobal(idObject, "Apartment", variables);
+
+        $(docElem).removeData("in-process");
+        $("#docModal").modal('hide');
+    } else {
+        fixBootstrapSelectHighlight(form);
+    }
+});
+
+$('body').on("click", ".apartment-document-delete-btn", function (e) {
+    var container = $(this).closest("ul");
+    var apartmentElem = $(this).closest('.list-group-item');
+    var idObject = parseInt(apartmentElem.find("input[id$='_IdWarrantApartment']").val());
+    removeVariablesGlobal(idObject, "Apartment");
+    updateVariablesGlobalIndexes();
+    apartmentElem.remove();
+    if (container.find(".list-group-item").length === 1) {
+        container.find(".list-group-item.rr-list-group-item-empty").show();
+    }
+    var namePropRegex = /(WarrantApartments)\[\d+\]/;
+    var idPropRegex = /(WarrantApartments)_\d+__/;
+    var apartmentElems = container.find(".list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+    apartmentElems.each(function (idx, elem) {
+        updateControl(idx, elem, namePropRegex, idPropRegex);
+    });
+    e.preventDefault();
+});
+
+$("#apartmentSide1DocumentAdd, #apartmentSide2DocumentAdd, #apartmentSide12DocumentAdd").on("click", function (e) {
+    let action = $('#ContractForm').data('action');
+    let target = $(this).data("target");
+    let documentsWrapper = $(this).closest(".card").find("ul");
+    $.ajax({
+        type: 'POST',
+        url: window.location.origin + '/Contract/AddApartmentDocument',
+        data: { action, target },
+        success: function (elem) {
+            documentsWrapper.find(".list-group-item.rr-list-group-item-empty").hide();
+            documentsWrapper.append(elem);
+            var namePropRegex = /(WarrantApartments)\[\d+\]/;
+            var idPropRegex = /(WarrantApartments)_\d+__/;
+            var documents = documentsWrapper.find(".list-group-item").filter(function (idx, elem) { return !$(elem).hasClass("rr-list-group-item-empty"); });
+            documents.each(function (idx, elem) {
+                updateControl(idx, elem, namePropRegex, idPropRegex);
+            });
+            var document = documentsWrapper.find(".list-group-item").last();
+            document.data("in-process", true);
+
+            var id = getNewWarrantObjectId();
+            document.find("input[id$='_IdWarrantApartment']").val(id);
+
+            document.find(".apartment-document-edit-btn").click();
+        }
+    });
+    e.preventDefault();
+});
+
+function getNewWarrantObjectId() {
+    var id = -Math.pow(2, 31) + 1;
+    var ids = $(".m-variables .m-warrant").map(function (idx, elem) {
+        return parseInt($(elem).find("input[id$='_IdWarrantObject']").val());
+    }).toArray();
+    while (ids.indexOf(id) !== -1) {
+        id++;
+    }
+    return id;
+}
+
+function updateVariablesGlobalIndexes() {
+    var namePropRegex = /(WarrantTemplatesVM)\[\d+\]/;
+    var idPropRegex = /(WarrantTemplatesVM)_\d+__/;
+    var varNamePropRegex = /(Variables)\[\d+\]/;
+    var varIdPropRegex = /(Variables)_\d+__/;
+    var varWarrants = $(".m-variables .m-warrant");
+    varWarrants.each(function (idx, elem) {
+        updateControl(idx, elem, namePropRegex, idPropRegex);
+        $(elem).find(".m-variable").each(function (idxVar, elemVar) {
+            updateControl(idxVar, elemVar, varNamePropRegex, varIdPropRegex);
+        });
+    });
+}
+
+function removeVariablesGlobal(idObject, objectType) {
+    var oldWarrant = $(".m-variables .m-warrant").filter(function (idx, elem) {
+        return parseInt($(elem).find("input[id$='_IdWarrantObject']").val()) === idObject &&
+            $(elem).find("input[id$='_ObjectType']").val() == objectType;
+    });
+    oldWarrant.remove();
+}
+
+function updateVariablesGlobal(idObject, objectType, variables) {
+    removeVariablesGlobal(idObject, objectType);
+    $(".m-variables").append("<div class='m-warrant'>" +
+        "<input type='hidden' id='WarrantTemplatesVM_0__IdWarrantObject' name='WarrantTemplatesVM[0].IdWarrantObject' value='" + idObject + "'>" +
+        "<input type='hidden' id='WarrantTemplatesVM_0__ObjectType' name='WarrantTemplatesVM[0].ObjectType' value='" + objectType + "'>" +
+        "</div>");
+    var variableWrapper = $(".m-variables .m-warrant").last();
+    var variablePattern = '<div class="m-variable">' +
+        '<input type="hidden" data-val="true" data-val-required="The IdTemplateVariable field is required." ' +
+        'id="WarrantTemplatesVM_0__Variables_0__IdTemplateVariable" name="WarrantTemplatesVM[0].Variables[0].IdTemplateVariable" value = "0" >' +
+        '<input type="hidden" data-val="true" data-val-required="The IdTemplateVariableMeta field is required." ' +
+        'id="WarrantTemplatesVM_0__Variables_0__IdTemplateVariableMeta" name = "WarrantTemplatesVM[0].Variables[0].IdTemplateVariableMeta" value = "{0}" >' +
+        '<input type="hidden" id="WarrantTemplatesVM_0__Variables_0__Value" name="WarrantTemplatesVM[0].Variables[0].Value" value="{1}">' +
+        '</div>';
+    for (var i = 0; i < variables.length; i++) {
+        var variable = variables[i];
+        var variableHtml = variablePattern;
+        variableHtml = variableHtml.replace('{0}', variable.IdTemplateVariableMeta);
+        value = variable.Value;
+        if (variable.Type === "date" && value !== "" && value !== null) {
+            valueParts = value.split("-");
+            if (valueParts.length === 3)
+                value = valueParts[2] + "." + valueParts[1] + "." + valueParts[0];
+        }
+        variableHtml = variableHtml.replace('{1}', value);
+        variableWrapper.append(variableHtml);
+    }
+
+    updateVariablesGlobalIndexes();
+}
+
+function getVariablesFromDialog(wrapper) {
+    return wrapper.find(".form-group input").map(function (idx, elem) {
+        return {
+            IdTemplateVariableMeta: $(elem).data("id-var-meta"),
+            Pattern: $(elem).data("pattern"),
+            Value: $(elem).val(),
+            Type: $(elem).attr("type")
+        };
+    }).toArray();
+}
+
+function getVariablesFromGlobal(idObject, objectType) {
+    var variables = $(".m-variables .m-variable").map(function (idx, elem) {
+        return {
+            IdObject: parseInt($(elem).closest(".m-warrant").find("input[id$='_IdWarrantObject']").val()),
+            ObjectType: $(elem).closest(".m-warrant").find("input[id$='_ObjectType']").val(),
+            IdTemplateVariable: parseInt($(elem).find("input[id$='_IdTemplateVariable']").val()),
+            IdTemplateVariableMeta: parseInt($(elem).find("input[id$='_IdTemplateVariableMeta']").val()),
+            Value: $(elem).find("input[id$='_Value']").val()
+        };
+    }).filter(function (idx, elem) { return elem.IdObject === idObject && elem.ObjectType === objectType; }).toArray();
+    return variables;
+}
+
+function buildVariableFields(metaVariables, variables, wrapper, variablesCssClass) {
+    $(metaVariables).each(function (idx, metaVariable) {
+        var pattern = '<div class="form-group ' + variablesCssClass+'">'+
+            '<label>{0}</label>'+
+            '<input {1} type="{2}" class="form-control" data-pattern="{4}" data-id-var-meta="{3}" title="{0}" maxlength="255" name="var-{3}" value="{5}">'+
+            '</div>';
+        var label = metaVariable.label.substring(0, 1).toUpperCase() + metaVariable.label.substring(1);
+        pattern = pattern.replace(/\{0\}/g, label);
+        var action = $("#ContractForm").data("action");
+        if (action === "Edit" || action === "Create") {
+            pattern = pattern.replace(/\{1\}/g, "");
+        } else {
+            pattern = pattern.replace(/\{1\}/g, "disabled");
+        }
+        var value = "";
+        variable = $(variables).filter(function (idx, v) {
+            return v.IdTemplateVariableMeta === metaVariable.idTemplateVariableMeta;
+        });
+        if (variable.length > 0) {
+            value = variable[0].Value;
+        }
+        switch (metaVariable.type.toUpperCase()) {
+            case "EDIT":
+                pattern = pattern.replace(/\{2\}/g, "text");
+                break;
+            case "DATE":
+                pattern = pattern.replace(/\{2\}/g, "date");
+                if (value !== "") {
+                    var valueParts = value.split(".");
+                    if (valueParts.length !== 3)
+                        value = "";
+                    else
+                        value = valueParts[2] + "-" + valueParts[1] + "-" + valueParts[0];
+                }
+                break;
+        }
+        pattern = pattern.replace(/\{3\}/g, metaVariable.idTemplateVariableMeta);
+        pattern = pattern.replace(/\{4\}/g, metaVariable.pattern);
+        pattern = pattern.replace(/\{5\}/g, value);
+        wrapper.append(pattern);
+    });
 }

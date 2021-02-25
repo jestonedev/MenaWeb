@@ -288,6 +288,23 @@
                                 }
                             </select>
                         </div>
+                        <div class="form-group col-12">
+                            <label for="Person_IdTemplate">Доверенность</label>
+                            <select disabled class="selectpicker form-control" data-width="100%" data-live-search="true" title="Доверенность" name="Person.IdTemplate"
+                                    id="Person_IdTemplate">
+                                <option></option>
+                                @foreach (var option in Model.WarrantsPersons)
+                                {
+                                    <option data-tokens="@option.WarrantTemplateName" title="@option.WarrantTemplateName"
+                                            data-template-name="@option.WarrantTemplateName"
+                                            data-template-body="@option.WarrantTemplateBody" value="@option.IdWarrantTemplate">
+                                        @(option.WarrantTemplateName?.Length > 75 ? option.WarrantTemplateName.Substring(0, 75) + "..." : option.WarrantTemplateName)
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="m-variables-wrapper row">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -305,7 +322,6 @@
         </div>
     </div>
 </form>
-
 
 <form id="accountModalForm">
     <div class="modal fade" id="accountModal" data-index="0" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -403,6 +419,62 @@
                     @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
                     {
                         <button id="closeOrgModalBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="docForm">
+    <div class="modal fade" id="docModal" data-index="0" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Документ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Doc_IdWarrantTemplate">Вид документа</label>
+                            <select disabled class="selectpicker form-control" data-width="100%" data-live-search="true" title="Вид документа" name="Doc.IdWarrantTemplate"
+                                    id="Doc_IdWarrantTemplate"
+                                    data-val="true" data-val-required="Выберите вид документа">
+                                <option></option>
+                                @foreach (var option in Model.WarrantsMunicipal)
+                                {
+                                    <option data-tokens="@option.WarrantTemplateName" title="@option.WarrantTemplateName" data-warrant-type="municipal"
+                                        data-template-name="@option.WarrantTemplateName"
+                                        data-template-body="@option.WarrantTemplateBody" value="@option.IdWarrantTemplate">
+                                            @(option.WarrantTemplateName?.Length > 75 ? option.WarrantTemplateName.Substring(0, 75) +"..." : option.WarrantTemplateName)</option>
+                                }
+                                @foreach (var option in Model.WarrantsOwnership)
+                                {
+                                    <option data-tokens="@option.WarrantTemplateName" title="@option.WarrantTemplateName" data-warrant-type="ownership"
+                                            data-template-name="@option.WarrantTemplateName"
+                                            data-template-body="@option.WarrantTemplateBody" value="@option.IdWarrantTemplate">
+                                        @(option.WarrantTemplateName?.Length > 75 ? option.WarrantTemplateName.Substring(0, 75) + "..." : option.WarrantTemplateName)
+                                    </option>
+                                }
+                            </select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Doc.IdWarrantTemplate" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="m-variables-wrapper row">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+                    {
+                        <button id="saveDocModalBtn" type="button" class="btn btn-secondary">Сохранить</button>
+                        <button id="cancelDocModalBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    }
+                    @if (ViewBag.Action == ActionTypeEnum.Details || ViewBag.Action == ActionTypeEnum.Delete)
+                    {
+                        <button id="closeDocModalBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     }
                 </div>
             </div>

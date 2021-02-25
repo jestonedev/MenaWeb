@@ -1,0 +1,29 @@
+﻿@using MenaWeb.Models.Entities;
+@using MenaWeb.ViewModels
+@model ContractVM
+
+<div class="card rr-apartment-side1-documents-card">
+    <div class="card-header d-flex justify-content-between pt-2 pb-2">
+        <h4 class="mt-1">Документы</h4>
+        <div class="btn-group" role="group">
+            @if (ViewBag.Action == ActionTypeEnum.Edit || ViewBag.Action == ActionTypeEnum.Create)
+            {
+                <a href="#" id="apartmentSide1DocumentAdd" data-target="apartment-side1" class="form-control btn btn-success" title="Добавить документ">&#10010;</a>
+            }
+        </div>
+    </div>
+    <ul class="list-group list-group-flush" id="ApartmentSide1DocumentList">
+        <li class="list-group-item text-center rr-list-group-item-empty"
+            style="@((Model.Contract.ApartmentSide1.WarrantApartments != null && Model.Contract.ApartmentSide1.WarrantApartments.Any()) ? "display: none" : "")">
+            <i>Документы отсутствуют</i>
+        </li>
+        @if (Model != null && Model.Contract.ApartmentSide1.WarrantApartments.Any())
+        {
+            for (var i = 0; i < Model.Contract.ApartmentSide1.WarrantApartments.Count; i++)
+            {
+                ViewData["Index"] = i;
+                <partial name="ApartmentSide1Document" model="Model" />
+            }
+        }
+    </ul>
+</div>

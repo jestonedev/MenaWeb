@@ -85,21 +85,31 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
     padding-left: 2.2rem;
 }
 
-.m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons {
-    margin-top: 28px;
+.m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons,
+.m-apartment-document-view-buttons, .m-apartment-document-edit-buttons {
+    margin-top: 24px;
 }
 
 .m-tools-dropdown-menu.show {
     display: flex;
 }
 
+.m-table > tbody td {
+    padding: 0.4rem 0.75rem;
+}
+
+.m-table th {
+    white-space: nowrap;
+}
+
 @media(min-width: 768px) {
     .m-contract-eviction-required-checkbox {
-        margin-top: 2.4rem;
+        margin-top: 2.2rem;
         padding-left: 2.2rem;
     }
 
-    .m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons {
-        margin-top: 32px;
+    .m-person-edit-buttons, .m-person-view-buttons, .m-account-edit-buttons, .m-account-view-buttons, .m-org-edit-buttons, .m-org-view-buttons,
+    .m-apartment-document-view-buttons, .m-apartment-document-edit-buttons {
+        margin-top: 27px;
     }
 }
