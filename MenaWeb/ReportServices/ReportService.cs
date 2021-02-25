@@ -18,7 +18,7 @@ namespace MenaWeb.ReportServices
         private readonly string connString;
         protected readonly string activityManagerPath;
         private readonly string attachmentsPath;
-
+        
         public ReportService(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             sqlDriver = config.GetValue<string>("SqlDriver");
@@ -26,7 +26,7 @@ namespace MenaWeb.ReportServices
             activityManagerPath = config.GetValue<string>("ActivityManagerPath");
             attachmentsPath = config.GetValue<string>("AttachmentsPath");
         }
-
+        
         protected string GenerateReport(Dictionary<string, object> arguments, string config)
         {
             var logStr = new StringBuilder();
@@ -102,9 +102,11 @@ namespace MenaWeb.ReportServices
         {
             var argumentsString = "";
             foreach (var argument in arguments)
+            {
                 argumentsString += string.Format(CultureInfo.InvariantCulture, "{0}=\"{1}\" ",
                     argument.Key.Replace("\"", "\\\""),
                     argument.Value == null ? "" : argument.Value.ToString().Replace("\"", "\\\""));
+            }
             return argumentsString;
         }
 

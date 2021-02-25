@@ -945,3 +945,14 @@ $("#orgAdd").on("click", function (e) {
     });
     e.preventDefault();
 });
+
+
+
+function downloadFile(url) {
+    var link = document.createElement('a');
+    link.href = url;
+    link.target = "_blank";
+    link.style.display = "none";
+    document.getElementsByTagName("body")[0].appendChild(link);
+    link.click();
+}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MenaWeb.ViewModels
 {
-    public class ContractVM
+    public class ContractVM: IContractReportVM
     {
         public Contract Contract { get; set; }
         public IList<Signer> Signers { get; set; }
@@ -23,5 +23,7 @@ namespace MenaWeb.ViewModels
         public IList<Document> Documents { get; set; }
         public IList<DocumentIssued> DocumentIssueds { get; set; }
         public IList<RedOrganization> RedOrganizations { get; set; }
+        public IList<WarrantTemplate> WarrantTemplates { get; set; }
+        public IList<Signer> ReportSigners { get; set; }
     }
 }

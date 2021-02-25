@@ -45,10 +45,10 @@ namespace MenaWeb.DataServices
             var count = query.Count();
             vm.PageOptions.Rows = count;
             vm.PageOptions.TotalPages = Math.Max((int)Math.Ceiling(count / (double)vm.PageOptions.SizePage), 1);
-
             filteredContractsIds = query.Select(r => r.IdContract).ToList();
-
             vm.PageOptions.CurrentPage = Math.Min(vm.PageOptions.CurrentPage, vm.PageOptions.TotalPages);
+            vm.ReportSigners = db.Signers.ToList();
+            vm.WarrantTemplates = db.WarrantTemplates.Where(r => r.IdWarrantTemplateType == 13 || r.IdWarrantTemplateType == 14 || r.IdWarrantTemplateType==9).ToList();
             vm.Contracts = GetQueryPage(query, vm.PageOptions).ToList();
             vm.Streets = GetActualStreets(vm.Contracts);
             return vm;
@@ -235,8 +235,10 @@ namespace MenaWeb.DataServices
                 PersonStatuses = db.PersonStatuses.ToList(),
                 Documents = db.Documents.ToList(),
                 DocumentIssueds = db.DocumentIssueds.ToList(),
-                RedOrganizations = db.RedOrganizations.ToList()
-            };
+                RedOrganizations = db.RedOrganizations.ToList(),
+                ReportSigners = db.Signers.ToList(),
+                WarrantTemplates = db.WarrantTemplates.Where(r => r.IdWarrantTemplateType == 13 || r.IdWarrantTemplateType == 14 || r.IdWarrantTemplateType == 9).ToList()
+        };
             return vm;
         }
 
@@ -251,6 +253,11 @@ namespace MenaWeb.DataServices
             db.DocumentIssueds.Add(documentIssued);
             db.SaveChanges();
             return documentIssued.IdDocumentIssued;
+        }
+
+        private List<WarrantTemplate> GetWarrantTemplates ()
+        {
+            return db.WarrantTemplates.Where(r => r.IdWarrantTemplateType == 13 && r.IdWarrantTemplateType == 14).ToList();
         }
 
         private List<KladrStreet> GetActualStreets(List<Contract> contracts)

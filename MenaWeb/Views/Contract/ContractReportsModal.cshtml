@@ -1,0 +1,348 @@
+﻿@model MenaWeb.ViewModels.IContractReportVM
+
+@{
+    var executor = Model.ReportSigners.Select(s => new
+    {
+        s.IdSigner,
+        s.IdSignerType,
+        Snp = s.Family + " " + s.Name + " " + s.Father
+    });
+    var templatesList = new SelectList(Model.WarrantTemplates.Where(c => c.IdWarrantTemplateType == 13), "IdWarrantTemplate", "WarrantTemplateName");
+    var districtList = new SelectList(Model.WarrantTemplates.Where(c => c.IdWarrantTemplateType == 14), "IdWarrantTemplate", "WarrantTemplateName");
+    var resTemplateList = new SelectList(Model.WarrantTemplates.Where(c => c.IdWarrantTemplateType == 9 && c.Deleted == false), "IdWarrantTemplate", "WarrantTemplateName");
+}
+<a id="target" style="display: none"></a>
+
+<!--Предварительный договор-->
+<form id="preContractForm">
+    <div class="modal fade" id="preContractModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Предварительный договор</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="PreContract.idContract" />
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="PreContract.idPreamble">Район</label>
+                            <select class="selectpicker form-control" title="Район" name="PreContract.idPreamble"
+                                    data-val="true" data-val-required="Выберите район" id="PreContract_idPreamble" asp-items="@districtList"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="PreContract.idPreamble" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="PreContract.idDep">Шаблон</label>
+                            <select class="selectpicker form-control" title="Шаблон" name="PreContract.idDep"
+                                    data-val="true" data-val-required="Выберите шаблон" id="PreContract_idDep" asp-items="@templatesList"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="PreContract.idDep" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary rr-report-submit">Сформировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Уведомления-->
+<form id="notifyMenaForm">
+    <div class="modal fade" id="notifyMenaModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Уведомление</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="NotifyMena.notifyType" />
+                    <input type="hidden" name="NotifyMena.idContract" />
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="NotifyMena.idSigner">Подпись</label>
+                            <select class="selectpicker form-control" title="Подпись" name="NotifyMena.idSigner"
+                                    data-val="true" data-val-required="Выберите подписывающего" id="NotifyMena_idSigner"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==2), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="NotifyMena.idSigner" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="NotifyMena.idPrepared">Подготовил</label>
+                            <select class="selectpicker form-control" name="NotifyMena.idPrepared"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"
+                                    title="Подготовил" data-val="true" data-val-required="Выберите составителя договора">
+                                <option></option>
+                            </select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="NotifyMena.idPrepared" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary rr-report-submit">Сформировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Запрос в МВД-->
+<form id="requestMvdForm">
+    <div class="modal fade" id="requestMvdModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Запрос в МВД</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="RequestMvd.requestType" />
+                    <input type="hidden" name="RequestMvd.idContract" />
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="RequestMvd.idSigner">Подпись</label>
+                            <select class="selectpicker form-control" title="Подпись" name="RequestMvd.idSigner"
+                                    data-val="true" data-val-required="Выберите подписывающего" id="RequestMvd_idSigner"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==2), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="RequestMvd.idSigner" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="RequestMena.idPrepared">Подготовил</label>
+                            <select class="selectpicker form-control" name="RequestMvd.idPrepared"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"
+                                    title="Подготовил" data-val="true" data-val-required="Выберите составителя договора">
+                                <option></option>
+                            </select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="RequestMvd.idPrepared" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary rr-report-submit">Сформировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Постановление-->
+<form id="resolutionForm">
+    <div class="modal fade" id="resolutionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Постановление</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Resolution.idContract" />
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Resolution.idSigner">Подпись</label>
+                            <select class="selectpicker form-control" title="Подпись" name="Resolution.idSigner"
+                                    data-val="true" data-val-required="Выберите подписывающего" id="Resolution_idSigner"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==1), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.idSigner" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Resolution.idPrepared">Подготовил</label>
+                            <select class="selectpicker form-control" name="Resolution.idPrepared"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==2), "IdSigner", "Snp"))"
+                                    title="Подготовил" id="Resolution_idPrepared" data-val="true" data-val-required="Выберите составителя договора">
+                                <option></option>
+                            </select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.idPrepared" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Resolution.Executor">Юрист</label>
+                            <select class="selectpicker form-control" title="Юрист" name="Resolution.Lawyer"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_Lawyer"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==3), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.Lawyer" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Resolution.Executor">Исполнитель</label>
+                            <select class="selectpicker form-control" title="Исполнитель" name="Resolution.Executor"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_Executor"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.Executor" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Resolution.idAgree">Согласовано</label>
+                            <select class="selectpicker form-control" title="Согласовано" name="Resolution.idAgree"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_idAgree">
+                                <option value="-1"></option>
+                                <option value="0">Ризман М.А.</option>
+                                <option value="1">Обожина С.Н.</option>
+                                <option value="2">Басаргина И.Г.</option>
+                            </select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.idAgree" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Resolution.idWarrantTemplate">Шаблон</label>
+                            <select class="selectpicker form-control" title="Шаблон" name="Resolution.idWarrantTemplate"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_idWarrantTemplate" asp-items="@resTemplateList"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.idWarrantTemplate" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary rr-report-submit">Сформировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Соглашение-->
+<form id="agreementForm">
+    <div class="modal fade" id="agreementModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Соглашение</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Agreement.idContract" />
+                    <input type="hidden" name="Agreement.agreementType" />
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Agreement.idSigner">Подпись</label>
+                            <select class="selectpicker form-control" title="Подпись" name="Agreement.idSigner"
+                                    data-val="true" data-val-required="Выберите подписывающего" id="Agreement_idSigner"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==2), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Agreement.idSigner" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Agreement.Date">Дата</label>
+                            <input type="date" title="Дата" class="form-control" data-val="true" name="Agreement.Date" id="Agreement_Date">
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Agreement.Date" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary rr-report-submit">Сформировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Распоряжение-->
+<form id="raspForm">
+    <div class="modal fade" id="raspModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Распоряжение</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Rasp.idContract" />
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Rasp.idSigner">Подпись</label>
+                            <select class="selectpicker form-control" title="Подпись" name="Rasp.idSigner"
+                                    data-val="true" data-val-required="Выберите подписывающего" id="Rasp_idSigner"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==1), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.idSigner" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Rasp.idPrepared">Подготовил</label>
+                            <select class="selectpicker form-control" name="Rasp.idPrepared"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==2), "IdSigner", "Snp"))"
+                                    title="Подготовил" id="Rasp_idPrepared" data-val="true" data-val-required="Выберите составителя договора">
+                                <option></option>
+                            </select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.idPrepared" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Rasp.Executor">Юрист</label>
+                            <select class="selectpicker form-control" title="Юрист" name="Rasp.Lawyer"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Rasp_Lawyer"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==3), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.Lawyer" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="Rasp.Executor">Исполнитель</label>
+                            <select class="selectpicker form-control" title="Исполнитель" name="Rasp.Executor"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Rasp_Executor"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"></select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.Executor" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <label>Распоряжение зам.мэра</label>
+                            <div class="form-group col-12">
+                                <label for="Rasp.Date">Дата</label>
+                                <input type="date" title="Дата" class="form-control" data-val="true" name="Rasp.Date" id="Rasp_Date">
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="Rasp.Number">Номер</label>
+                                <input type="text" title="Номер" class="form-control" data-val="true" name="Rasp.Number" id="Rasp_Number">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Служебная записка</label>
+                            <div class="form-group col-12">
+                                <label for="RaspNote.Date">Дата</label>
+                                <input type="date" title="Дата" class="form-control" data-val="true" name="RaspNote.Date" id="RaspNote_Date">
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="RaspNote.Number">Номер</label>
+                                <input type="text" title="Номер" class="form-control" data-val="true" name="RaspNote.Number" id="RaspNote_Number">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary rr-report-submit">Сформировать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
