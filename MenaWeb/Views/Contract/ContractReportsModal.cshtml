@@ -175,33 +175,34 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label for="Resolution.Executor">Юрист</label>
-                            <select class="selectpicker form-control" title="Юрист" name="Resolution.Lawyer"
-                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_Lawyer"
+                            <label for="Resolution.idExecutor">Юрист</label>
+                            <select class="selectpicker form-control" title="Юрист" name="Resolution.idLawyer"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_idLawyer"
                                     asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==3), "IdSigner", "Snp"))"></select>
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.Lawyer" data-valmsg-replace="true"></span>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.idLawyer" data-valmsg-replace="true"></span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label for="Resolution.Executor">Исполнитель</label>
-                            <select class="selectpicker form-control" title="Исполнитель" name="Resolution.Executor"
-                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_Executor"
+                            <label for="Resolution.idExecutor">Исполнитель</label>
+                            <select class="selectpicker form-control" title="Исполнитель" name="Resolution.idExecutor"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_idExecutor"
                                     asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"></select>
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.Executor" data-valmsg-replace="true"></span>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.idExecutor" data-valmsg-replace="true"></span>
                         </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="Resolution.idAgree">Согласовано</label>
-                            <select class="selectpicker form-control" title="Согласовано" name="Resolution.idAgree"
-                                    data-val="true" data-val-required="Обязателен для заполнения" id="Resolution_idAgree">
-                                <option value="-1"></option>
+                            <select class="selectpicker form-control" title="Выбрать, если подписывающий Серебренников С.В." name="Resolution.idAgree"
+                                    data-val="true" id="Resolution_idAgree">
+                                <option selected disabled hidden>Выберите</option>
+                                <option></option>
                                 <option value="0">Ризман М.А.</option>
                                 <option value="1">Обожина С.Н.</option>
                                 <option value="2">Басаргина И.Г.</option>
                             </select>
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Resolution.idAgree" data-valmsg-replace="true"></span>
                         </div>
                     </div>
                     <div class="form-row">
@@ -248,7 +249,7 @@
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="Agreement.Date">Дата</label>
-                            <input type="date" title="Дата" class="form-control" data-val="true" name="Agreement.Date" id="Agreement_Date">
+                            <input type="date" title="Дата" class="form-control" data-val-required="Поле обязательно для заполнения" data-val="true" name="Agreement.Date" id="Agreement_Date">
                             <span class="text-danger field-validation-valid" data-valmsg-for="Agreement.Date" data-valmsg-replace="true"></span>
                         </div>
                     </div>
@@ -297,20 +298,20 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label for="Rasp.Executor">Юрист</label>
-                            <select class="selectpicker form-control" title="Юрист" name="Rasp.Lawyer"
-                                    data-val="true" data-val-required="Обязателен для заполнения" id="Rasp_Lawyer"
+                            <label for="Rasp.idLawyer">Юрист</label>
+                            <select class="selectpicker form-control" title="Юрист" name="Rasp.idLawyer"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Rasp_idLawyer"
                                     asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==3), "IdSigner", "Snp"))"></select>
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.Lawyer" data-valmsg-replace="true"></span>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.idLawyer" data-valmsg-replace="true"></span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label for="Rasp.Executor">Исполнитель</label>
-                            <select class="selectpicker form-control" title="Исполнитель" name="Rasp.Executor"
-                                    data-val="true" data-val-required="Обязателен для заполнения" id="Rasp_Executor"
+                            <label for="Rasp.idExecutor">Исполнитель</label>
+                            <select class="selectpicker form-control" title="Исполнитель" name="Rasp.idExecutor"
+                                    data-val="true" data-val-required="Обязателен для заполнения" id="Rasp_idExecutor"
                                     asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"></select>
-                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.Executor" data-valmsg-replace="true"></span>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Rasp.idExecutor" data-valmsg-replace="true"></span>
                         </div>
                     </div>
                     <div class="form-row">
@@ -318,7 +319,7 @@
                             <label>Распоряжение зам.мэра</label>
                             <div class="form-group col-12">
                                 <label for="Rasp.Date">Дата</label>
-                                <input type="date" title="Дата" class="form-control" data-val="true" name="Rasp.Date" id="Rasp_Date">
+                                <input type="text" title="Дата" class="form-control" data-val="true" name="Rasp.Date" id="Rasp_Date">
                             </div>
                             <div class="form-group col-12">
                                 <label for="Rasp.Number">Номер</label>
@@ -329,7 +330,7 @@
                             <label>Служебная записка</label>
                             <div class="form-group col-12">
                                 <label for="RaspNote.Date">Дата</label>
-                                <input type="date" title="Дата" class="form-control" data-val="true" name="RaspNote.Date" id="RaspNote_Date">
+                                <input type="text" title="Дата" class="form-control" data-val="true" name="RaspNote.Date" id="RaspNote_Date">
                             </div>
                             <div class="form-group col-12">
                                 <label for="RaspNote.Number">Номер</label>
@@ -346,3 +347,5 @@
         </div>
     </div>
 </form>
+
+

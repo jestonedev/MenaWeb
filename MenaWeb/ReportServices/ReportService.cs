@@ -34,7 +34,7 @@ namespace MenaWeb.ReportServices
             {
                 var configXml = activityManagerPath + "templates\\" + config + ".xml";
                 var configParts = config.Split('\\');
-                var fileNameReport = configParts[configParts.Length - 1] + Guid.NewGuid().ToString() + ".docx";
+                var fileNameReport = configParts[configParts.Length - 1] + Guid.NewGuid().ToString() + ".odt";
                 var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", fileNameReport);
                 arguments.Add("config", configXml);
                 arguments.Add("destFileName", destFileName);
@@ -60,7 +60,7 @@ namespace MenaWeb.ReportServices
                 throw new Exception(logStr.ToString());
             }
         }
-
+        
         protected string GenerateMultiFileReport(Dictionary<string, object> arguments, string config)
         {
             var logStr = new StringBuilder();
@@ -68,13 +68,14 @@ namespace MenaWeb.ReportServices
             {
                 var configXml = activityManagerPath + "templates\\" + config + ".xml";
                 var configParts = config.Split('\\');
-                var directoryName = configParts[configParts.Length - 1] + Guid.NewGuid().ToString();
-                var destDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", directoryName);
-                Directory.CreateDirectory(destDirectory);
-
+                var nameFile = arguments.Values.First().ToString();
+                var fileNameReport = configParts[configParts.Length - 1] + "_"+ nameFile + ".odt";
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", fileNameReport);
                 arguments.Add("config", configXml);
-                arguments.Add("destDirectoryName", destDirectory);
+                arguments.Add("destFileName", destFileName);
+                arguments.Add("force-move-to", destFileName);
                 arguments.Add("connectionString", "Driver={" + sqlDriver + "};" + connString);
+
                 using (var p = new Process())
                 {
                     p.StartInfo.UseShellExecute = false;
@@ -86,10 +87,7 @@ namespace MenaWeb.ReportServices
                     p.WaitForExit();
                 }
 
-                var destZipFile = destDirectory + ".zip";
-                ZipFile.CreateFromDirectory(destDirectory, destZipFile);
-                Directory.Delete(destDirectory, true);
-                return destZipFile;
+                return fileNameReport;
             }
             catch (Exception ex)
             {

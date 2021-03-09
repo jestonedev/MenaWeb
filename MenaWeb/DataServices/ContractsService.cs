@@ -649,7 +649,85 @@ namespace MenaWeb.DataServices
                 vm.PageOptions.CurrentPage = 1;
             vm.Contracts = GetQueryPage(contracts, vm.PageOptions).ToList();
             vm.Streets = GetActualStreets(vm.Contracts);
+            vm.ReportSigners = db.Signers.ToList();
+            vm.WarrantTemplates = db.WarrantTemplates.Where(r => r.IdWarrantTemplateType == 13 || r.IdWarrantTemplateType == 14 || r.IdWarrantTemplateType == 9).ToList();
             return vm;
+        }
+
+        public void UpdateDocumentSigners(int? idContract, int idSigner, int idPrepared, int idLawyer, int idExecutor, string typeForView)
+        {
+            var docSigners = db.DocumentSigners.FirstOrDefault(c => c.IdContract == idContract);
+            if (typeForView.Equals("res"))
+            {
+                docSigners.IdOrderBoss = idSigner;
+                docSigners.IdOrderCommitetSigner = idPrepared;
+                docSigners.IdOrderVerifyLawyer = idLawyer;
+                docSigners.IdOrderWorker = idExecutor;
+                db.DocumentSigners.Update(docSigners);
+            }
+            if (typeForView.Equals("rasp"))
+            {
+                docSigners.IdRaspBoss = idSigner;
+                docSigners.IdRaspVerify = idPrepared;
+                docSigners.IdRaspLawyer = idLawyer;
+                docSigners.IdRaspExecutor = idExecutor;
+                db.DocumentSigners.Update(docSigners);
+            }
+            db.SaveChanges();
+        }
+
+        public void UpdateMultiDocumentSigners(List<int> ids, int idSigner, int idPrepared, int idLawyer, int idExecutor)
+        {
+            foreach(var doc in ids)
+            {
+                var docSigners = db.DocumentSigners.FirstOrDefault(c => c.IdContract == doc);
+                docSigners.IdRaspBoss = idSigner;
+                docSigners.IdRaspVerify = idPrepared;
+                docSigners.IdRaspLawyer = idLawyer;
+                docSigners.IdRaspExecutor = idExecutor;
+                db.DocumentSigners.Update(docSigners);
+            }
+             db.SaveChanges();
+        }
+
+        public bool CheckForFullnessReport(int? idContract)
+        {
+            if (idContract != null)
+            {
+                var contract = db.Contracts.FirstOrDefault(c => c.IdContract == idContract);
+                if (contract.IdApartmentSide1 != null || contract.IdApartmentSide2 != null)
+                    if (db.People.FirstOrDefault(c => c.IdApartment == contract.IdApartmentSide2) != null)
+                        return true;
+                return false;
+            }
+            return true;
+        }
+
+        public void CheckForFullnessMultiReport(List<int> ids, out List<int> processingIds, out List<int> errorIds)
+        {
+            processingIds = new List<int>();
+            errorIds = new List<int>();
+            foreach (var id in ids)
+            {
+                var idContract = id;
+                var contract = db.Contracts.FirstOrDefault(c => c.IdContract == idContract);
+                if (contract.IdApartmentSide1 != null || contract.IdApartmentSide2 != null)
+                {
+                    if (db.People.FirstOrDefault(c => c.IdApartment == contract.IdApartmentSide2) != null)
+                    {
+                        processingIds.Add(idContract);
+                    }
+                    else
+                    {
+                        errorIds.Add(idContract);
+                    }
+                }
+                else
+                {
+                    errorIds.Add(idContract);
+                }
+            }
+            return;
         }
     }
 }

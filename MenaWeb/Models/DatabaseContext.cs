@@ -36,6 +36,7 @@ namespace MenaWeb.Models
         public DbSet<PersonStatus> PersonStatuses { get; set; }
         public DbSet<DocumentIssued> DocumentIssueds { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentSigner> DocumentSigners { get; set; }
         public DbSet<Additional> Additionals { get; set; }
         public DbSet<Predost> Predosts { get; set; }
         public DbSet<Osnovanie> Osnovanies { get; set; }
@@ -71,6 +72,7 @@ namespace MenaWeb.Models
             modelBuilder.ApplyConfiguration(new ContractConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new DelegateConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new SignerConfiguration(nameDatebase));
+            modelBuilder.ApplyConfiguration(new DocumentSignerConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new ApartmentConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new ApartmentTypeConfiguration(nameDatebase));
             modelBuilder.ApplyConfiguration(new PreContractIssuedConfiguration(nameDatebase));

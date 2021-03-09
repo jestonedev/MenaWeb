@@ -154,17 +154,16 @@
         var idContract = $("#resolutionModal").find("[name='Resolution.idContract']").val();
         var idPrepared = $("#resolutionModal").find("[name='Resolution.idPrepared']").val();
         var idSigner = $("#resolutionModal").find("[name='Resolution.idSigner']").val();
-        var Lawyer = $("#resolutionModal").find("[name='Resolution.Lawyer']").val();
-        var Executor = $("#resolutionModal").find("[name='Resolution.Executor']").val();
+        var idLawyer = $("#resolutionModal").find("[name='Resolution.idLawyer']").val();
+        var idExecutor = $("#resolutionModal").find("[name='Resolution.idExecutor']").val();
         var idWarrantTemplate = $("#resolutionModal").find("[name='Resolution.idWarrantTemplate']").val();
         var idAgree = $("#resolutionModal").find("[name='Resolution.idAgree']").val();
         if ($("#resolutionModal").find(".input-validation-error").length > 0) {
             return false;
         }
 
-        var url = "/ContractReport/GetResolution?idContract=" + idContract + "&idWarrantTemplate=" + idWarrantTemplate +
-            +"&idAgree=" + idAgree + "&idSigner=" + idSigner + "&idPrepared="+
-            + idPrepared + "&Lawyer=" + Lawyer + "&Executor=" + Executor;
+        var url = "/ContractReport/GetResolution?idContract=" + idContract + "&idWarrantTemplate=" + idWarrantTemplate + "&idAgree=" + idAgree
+            + "&idSigner=" + idSigner + "&idPrepared=" + idPrepared + "&idLawyer=" + idLawyer + "&idExecutor=" + idExecutor;
 
         if (url !== undefined) {
             downloadFile(url);
@@ -221,6 +220,10 @@
             return false;
         }
         var idContract = $("#raspModal").find("[name='Rasp.idContract']").val();
+        var idPrepared = $("#raspModal").find("[name='Rasp.idPrepared']").val();
+        var idSigner = $("#raspModal").find("[name='Rasp.idSigner']").val();
+        var idLawyer = $("#raspModal").find("[name='Rasp.idLawyer']").val();
+        var idExecutor = $("#raspModal").find("[name='Rasp.idExecutor']").val();
         var dateNote = $("#raspModal").find("[name='RaspNote.Date']").val();
         var numberNote = $("#raspModal").find("[name='RaspNote.Number']").val();
         var dateRasp = $("#raspModal").find("[name='Rasp.Date']").val();
@@ -229,7 +232,9 @@
             return false;
         }
 
-        var url = "/ContractReport/GetRasp?idContract=" + idContract + "&dateNote=" + dateNote + "&numberNote=" + numberNote + "&dateRasp=" + dateRasp + "&numberRasp=" + numberRasp;
+        var url = "/ContractReport/GetRasp?idContract=" + idContract + "&dateNote=" + dateNote + "&numberNote=" + numberNote + "&dateRasp=" + dateRasp
+            + "&numberRasp=" + numberRasp
+            + "&idSigner=" + idSigner + "&idPrepared=" + idPrepared + "&idLawyer=" + idLawyer + "&idExecutor=" + idExecutor;
 
         if (url !== undefined) {
             downloadFile(url);
