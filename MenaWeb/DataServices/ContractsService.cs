@@ -56,12 +56,34 @@ namespace MenaWeb.DataServices
 
         public Contract CreateContract(int? idContract)
         {
-            Contract contract = new Contract();
+            Contract contract = null;
             if (idContract != null)
             {
-                var contractForCopy = GetContract(idContract);
-                contract.ApartmentSide1.WarrantApartments = contractForCopy.ApartmentSide1.WarrantApartments;
-                contract.ApartmentSide12.WarrantApartments = contractForCopy.ApartmentSide12.WarrantApartments;
+                contract = GetContract(idContract);
+                contract.IdContract = 0;
+                contract.IdApartmentSide1 = null;
+                contract.IdApartmentSide2 = null;
+                contract.IdApartmentSide12 = null;
+                contract.ApartmentSide1.IdApartment = 0;
+                contract.ApartmentSide2.IdApartment = 0;
+                contract.ApartmentSide12.IdApartment = 0;
+                if (contract.ApartmentSide1.ApartmentEvaluations != null && contract.ApartmentSide1.ApartmentEvaluations.Any())
+                {
+                    contract.ApartmentSide1.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
+                    contract.ApartmentSide1.ApartmentEvaluations[0].IdApartment = 0;
+                }
+                if (contract.ApartmentSide12.ApartmentEvaluations != null && contract.ApartmentSide12.ApartmentEvaluations.Any())
+                {
+                    contract.ApartmentSide12.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
+                    contract.ApartmentSide12.ApartmentEvaluations[0].IdApartment = 0;
+                }
+                contract.ApartmentSide2 = new Apartment();
+                contract.Additionals = new List<Additional> { new Additional() };
+                contract.ContractStatusHistory = new List<ContractStatusHistory>();
+            }
+            if (contract == null)
+            {
+                contract = new Contract();
             }
             return contract;
         }
