@@ -56,71 +56,12 @@ namespace MenaWeb.DataServices
 
         public Contract CreateContract(int? idContract)
         {
-            Contract contract = null;
+            Contract contract = new Contract();
             if (idContract != null)
             {
-                contract = GetContract(idContract);
-                contract.IdContract = 0;
-                contract.IdApartmentSide1 = null;
-                contract.IdApartmentSide2 = null;
-                contract.IdApartmentSide12 = null;
-                contract.ApartmentSide1.IdApartment = 0;
-                contract.ApartmentSide2.IdApartment = 0;
-                contract.ApartmentSide12.IdApartment = 0;
-                if (contract.ApartmentSide1.ApartmentEvaluations != null && contract.ApartmentSide1.ApartmentEvaluations.Any())
-                {
-                    contract.ApartmentSide1.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
-                    contract.ApartmentSide1.ApartmentEvaluations[0].IdApartment = 0;
-                }
-                if (contract.ApartmentSide12.ApartmentEvaluations != null && contract.ApartmentSide12.ApartmentEvaluations.Any())
-                {
-                    contract.ApartmentSide12.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
-                    contract.ApartmentSide12.ApartmentEvaluations[0].IdApartment = 0;
-                }
-                if (contract.ApartmentSide2.ApartmentEvaluations != null && contract.ApartmentSide2.ApartmentEvaluations.Any())
-                {
-                    contract.ApartmentSide2.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
-                    contract.ApartmentSide2.ApartmentEvaluations[0].IdApartment = 0;
-                }
-                if (contract.ApartmentSide2.Land != null && contract.ApartmentSide2.Land.Any())
-                {
-                    contract.ApartmentSide2.Land[0].IdLand = 0;
-                    contract.ApartmentSide2.Land[0].IdApartment = 0;
-                }
-                if (contract.Additionals != null && contract.Additionals.Any())
-                {
-                    contract.Additionals[0].IdAddit = 0;
-                    contract.Additionals[0].IdContract = 0;
-                    contract.Additionals[0].IdApartment1 = 0;
-                    contract.Additionals[0].IdApartment2 = 0;
-                }
-                if (contract.ApartmentSide2.ApartmentRedemptions != null && contract.ApartmentSide2.ApartmentRedemptions.Any())
-                {
-                    contract.ApartmentSide2.ApartmentRedemptions[0].IdApartmentRedemption = 0;
-                    contract.ApartmentSide2.ApartmentRedemptions[0].IdApartment = 0;
-                }
-                if (contract.ApartmentSide2.RedEvaluations != null)
-                {
-                    foreach (var evaluation in contract.ApartmentSide2.RedEvaluations)
-                    {
-                        evaluation.IdApartment = 0;
-                        evaluation.IdEvaluation = 0;
-                    }
-                }
-                foreach (var status in contract.ContractStatusHistory)
-                {
-                    status.IdContract = 0;
-                    status.IdHistoryStatus = 0;
-                }
-                foreach (var bankInfo in contract.ApartmentSide2.BankInfos)
-                {
-                    bankInfo.IdApartment = 0;
-                    bankInfo.IdBank = 0;
-                }
-            }
-            if (contract == null)
-            {
-                contract = new Contract();
+                var contractForCopy = GetContract(idContract);
+                contract.ApartmentSide1.WarrantApartments = contractForCopy.ApartmentSide1.WarrantApartments;
+                contract.ApartmentSide12.WarrantApartments = contractForCopy.ApartmentSide12.WarrantApartments;
             }
             return contract;
         }

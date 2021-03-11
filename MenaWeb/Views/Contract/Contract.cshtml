@@ -35,7 +35,7 @@
                                     <a class="btn btn-outline-dark oi oi-pencil" title="Изменить" aria-label="Изменить"
                                        asp-controller="Contract" asp-action="Edit" asp-route-idContract="@Model.Contract.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
 
-                                    <a class="btn btn-outline-dark oi oi-layers" title="Копировать" aria-label="Копировать"
+                                    <a class="btn btn-outline-dark oi oi-layers" title="Копировать (только документы Стороны 1)" aria-label="Копировать (только документы Стороны 1)"
                                        asp-controller="Contract" asp-action="Create" asp-route-idContract="@Model.Contract.IdContract" asp-route-action="Create" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
 
 
