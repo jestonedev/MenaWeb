@@ -77,46 +77,9 @@ namespace MenaWeb.DataServices
                     contract.ApartmentSide12.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
                     contract.ApartmentSide12.ApartmentEvaluations[0].IdApartment = 0;
                 }
-                if (contract.ApartmentSide2.ApartmentEvaluations != null && contract.ApartmentSide2.ApartmentEvaluations.Any())
-                {
-                    contract.ApartmentSide2.ApartmentEvaluations[0].IdApartmentEvaluation = 0;
-                    contract.ApartmentSide2.ApartmentEvaluations[0].IdApartment = 0;
-                }
-                if (contract.ApartmentSide2.Land != null && contract.ApartmentSide2.Land.Any())
-                {
-                    contract.ApartmentSide2.Land[0].IdLand = 0;
-                    contract.ApartmentSide2.Land[0].IdApartment = 0;
-                }
-                if (contract.Additionals != null && contract.Additionals.Any())
-                {
-                    contract.Additionals[0].IdAddit = 0;
-                    contract.Additionals[0].IdContract = 0;
-                    contract.Additionals[0].IdApartment1 = 0;
-                    contract.Additionals[0].IdApartment2 = 0;
-                }
-                if (contract.ApartmentSide2.ApartmentRedemptions != null && contract.ApartmentSide2.ApartmentRedemptions.Any())
-                {
-                    contract.ApartmentSide2.ApartmentRedemptions[0].IdApartmentRedemption = 0;
-                    contract.ApartmentSide2.ApartmentRedemptions[0].IdApartment = 0;
-                }
-                if (contract.ApartmentSide2.RedEvaluations != null)
-                {
-                    foreach (var evaluation in contract.ApartmentSide2.RedEvaluations)
-                    {
-                        evaluation.IdApartment = 0;
-                        evaluation.IdEvaluation = 0;
-                    }
-                }
-                foreach (var status in contract.ContractStatusHistory)
-                {
-                    status.IdContract = 0;
-                    status.IdHistoryStatus = 0;
-                }
-                foreach (var bankInfo in contract.ApartmentSide2.BankInfos)
-                {
-                    bankInfo.IdApartment = 0;
-                    bankInfo.IdBank = 0;
-                }
+                contract.ApartmentSide2 = new Apartment();
+                contract.Additionals = new List<Additional> { new Additional() };
+                contract.ContractStatusHistory = new List<ContractStatusHistory>();
             }
             if (contract == null)
             {
