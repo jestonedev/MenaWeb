@@ -70,6 +70,7 @@
         var notifyType = $(this).data("notify-type");
         $("#notifyMenaModal").find("[name='NotifyMena.idContract']").val(idContract);
         $("#notifyMenaModal").find("[name='NotifyMena.notifyType']").val(notifyType);
+        $("#notifyMenaModal").find("input, textarea, select").prop("disabled", false);
         $("#notifyMenaModal").modal("show");
         e.preventDefault();
     });
@@ -77,8 +78,8 @@
     $("#notifyMenaModal .rr-report-submit").on("click", function (e) {
         e.preventDefault();
         var isValid = $(this).closest("#notifyMenaForm").valid();
+        fixBootstrapSelectHighlight($(this).closest("#notifyMenaForm"));
         if (!isValid) {
-            fixBootstrapSelectHighlight($(this).closest("#notifyMenaForm"));
             return false;
         }
         var notifyType = $("#notifyMenaModal").find("[name='NotifyMena.notifyType']").val();
@@ -134,8 +135,7 @@
 
         $("#requestMvdModal").modal("hide");
     });
-
-
+    
     //постановление
     $("body").on('click', ".rr-report-resolution", function (e) {
         var idContract = $(this).data("id-contract");
@@ -205,6 +205,7 @@
 
         $("#agreementModal").modal("hide");
     });
+
     //Распоряжение
     $("body").on('click', ".rr-report-rasp", function (e) {
         var idContract = $(this).data("id-contract");
@@ -243,6 +244,10 @@
         $("#raspModal").modal("hide");
     });
 
+    $("#preContractModal select, #notifyMenaModal select, #requestMvdModal select, #resolutionModal select, #agreementModal select, #raspModal select").on("change", function () {
+        $(this).valid();
+        fixBootstrapSelectHighlightOnChange($(this));
+    });
 });
 
 

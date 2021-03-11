@@ -78,11 +78,9 @@
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="NotifyMena.idPrepared">Подготовил</label>
-                            <select class="selectpicker form-control" name="NotifyMena.idPrepared"
-                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"
-                                    title="Подготовил" data-val="true" data-val-required="Выберите составителя договора">
-                                <option></option>
-                            </select>
+                            <select class="selectpicker form-control" title="Подготовил"name="NotifyMena.idPrepared"
+                                    data-val="true" data-val-required="Выберите составителя договора" id="NotifyMena_idPrepared"
+                                    asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"></select>
                             <span class="text-danger field-validation-valid" data-valmsg-for="NotifyMena.idPrepared" data-valmsg-replace="true"></span>
                         </div>
                     </div>
@@ -121,10 +119,10 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label for="RequestMena.idPrepared">Подготовил</label>
+                            <label for="RequestMvd.idPrepared">Подготовил</label>
                             <select class="selectpicker form-control" name="RequestMvd.idPrepared"
                                     asp-items="@(new SelectList(executor.Where(c=> c.IdSignerType==4), "IdSigner", "Snp"))"
-                                    title="Подготовил" data-val="true" data-val-required="Выберите составителя договора">
+                                    title="Подготовил" id="RequestMvd_idPrepared" data-val="true" data-val-required="Выберите составителя договора">
                                 <option></option>
                             </select>
                             <span class="text-danger field-validation-valid" data-valmsg-for="RequestMvd.idPrepared" data-valmsg-replace="true"></span>
