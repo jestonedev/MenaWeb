@@ -36,7 +36,10 @@ namespace MenaWeb.Controllers
                     var check = contractService.CheckForFullnessReport(idContract);
                     if (check == false)
                     {
-                        throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
+                      
                     }
                     var file = reportService.PreContract(ids, idContract, idPreamble, idDep, reportPath);
                     return File(file, odtMime, string.Format(@"Предварительный договор № {0}.odt", idContract));
@@ -69,7 +72,9 @@ namespace MenaWeb.Controllers
                     var check = contractService.CheckForFullnessReport(idContract);
                     if (check == false)
                     {
-                        throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
                     }
                     var file = reportService.ContractWithDate(ids, idContract, reportPath);
                     return File(file, odtMime, string.Format(@"Договор мены с датами № {0}.odt", idContract));
@@ -102,7 +107,9 @@ namespace MenaWeb.Controllers
                     var check = contractService.CheckForFullnessReport(idContract);
                     if (check == false)
                     {
-                        throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
                     }
                     var file = reportService.ContractWithoutDate(ids, idContract, reportPath);
                     return File(file, odtMime, string.Format(@"Договор мены без дат № {0}.odt", idContract));
@@ -135,7 +142,9 @@ namespace MenaWeb.Controllers
                     var check = contractService.CheckForFullnessReport(idContract);
                     if (check == false)
                     {
-                        throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
                     }
                     var file = reportService.DksrContract(ids, idContract, reportPath);
                     return File(file, odtMime, string.Format(@"Договор (ДКСР) № {0}.odt", idContract));
@@ -185,7 +194,9 @@ namespace MenaWeb.Controllers
                     var check = contractService.CheckForFullnessReport(idContract);
                     if (check == false)
                     {
-                        throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
                     }
                     var file = reportService.NotifyMena(ids, idContract, idSigner, idPrepared, reportPath, notifyType);
                     switch (notifyType)
@@ -240,7 +251,9 @@ namespace MenaWeb.Controllers
                     var check = contractService.CheckForFullnessReport(idContract);
                     if (check == false)
                     {
-                        throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
                     }
                     var file = reportService.RequestToMvd(ids, idContract, idSigner, idPrepared, reportPath, requestType);
                     switch (requestType)
@@ -284,7 +297,9 @@ namespace MenaWeb.Controllers
                 var check = contractService.CheckForFullnessReport(idContract);
                 if (check == false)
                 {
-                    throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                    ViewData["Controller"] = "ContractReport";
+                    ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                    return View("Error");
                 }
                 var file = reportService.Agreement(idContract, idSigner, reportPath, agreementType, date);
                 switch(agreementType)
@@ -309,7 +324,9 @@ namespace MenaWeb.Controllers
                 var check = contractService.CheckForFullnessReport(idContract);
                 if (check == false)
                 {
-                    throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                    ViewData["Controller"] = "ContractReport";
+                    ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                    return View("Error");
                 }
                 var file = reportService.AgreementTransfer(idContract, reportPath);
                 return File(file, odtMime, string.Format(@"Соглашение о передаче в мун. собственность № {0}.odt", idContract));
@@ -335,7 +352,9 @@ namespace MenaWeb.Controllers
                     var check = contractService.CheckForFullnessReport(idContract);
                     if (check == false)
                     {
-                        throw new Exception(string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract));
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
                     }
                     contractService.UpdateDocumentSigners(idContract, idSigner, idPrepared, idLawyer, idExecutor, typeForView);
                     var file = reportService.Rasp(ids, idContract, reportPath, datenomRasp, datenomNote);

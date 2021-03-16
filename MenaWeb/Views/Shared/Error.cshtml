@@ -10,6 +10,13 @@
             </div>
         </div>
     }
+    if (ViewData["Controller"].ToString() == "ContractReport")
+    {
+        <div class="container mt-4 text-center">
+            <h2 class="text-danger">Ошибка!</h2>
+            <h5 class="text-danger text-break offset-md-1 col-md-10">@ViewData["TextError"]</h5>
+        </div>
+    }
     else
     {
         <div class="container mt-4 text-center">
