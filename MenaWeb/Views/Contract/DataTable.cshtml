@@ -21,13 +21,12 @@
             <th class="align-middle d-none d-md-table-cell">
                 Участники мены
             </th>
-            <th class="align-middle"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Contracts)
         {
-            <tr>
+            <tr style="position: relative">
                 @if (ids.Contains(item.IdContract))
                 {
                     check = "checked";
@@ -230,43 +229,38 @@
                     {
                         <i class="text-danger">отсутствуют</i>
                     }
-                </td>
-                <td>
-                    <div class="btn-group" role="group" aria-label="Панель доступа">
-                        <div class="btn-group" role="group" aria-label="Панель доступа">
-                            <button class="btn btn-primary oi oi-wrench dropdown-toggle" type="button" title="Инструменты" aria-label="Инструменты" id="toolsBtn_@item.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                            <div class="dropdown-menu dropdown-menu-right but text-center m-tools-dropdown-menu" aria-labelledby="toolsBtn_@item.IdContract">
-                                <a class="btn btn-primary oi oi-eye" style="margin-left: 10px; margin-right: 2px" title="Подробнее" aria-label="Подробнее"
-                                   asp-controller="Contract" asp-action="Details" asp-route-idContract="@item.IdContract" asp-route-action="Details" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
-                                <a class="btn btn-outline-dark oi oi-pencil" style="margin-left: 2px; margin-right: 2px" title="Изменить" aria-label="Изменить"
-                                   asp-controller="Contract" asp-action="Edit" asp-route-idContract="@item.IdContract" asp-route-action="Edit" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
-                                <a class="btn btn-outline-dark oi oi-layers" style="margin-left: 2px; margin-right: 2px" title="Копировать" aria-label="Копировать"
-                                   asp-controller="Contract" asp-action="Create" asp-route-idContract="@item.IdContract" asp-route-action="Create" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
-                                <a class="btn btn-danger oi oi-x" style="margin-left: 2px; margin-right: 10px" title="Удалить" aria-label="Удалить"
-                                   asp-controller="Contract" asp-action="Delete" asp-route-idContract="@item.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+
+                        <div class="btn-group m-opacity-item-menu" role="group" aria-label="Панель доступа">
+                            <a class="btn btn-primary oi oi-eye" title="Подробнее" aria-label="Подробнее"
+                               asp-controller="Contract" asp-action="Details" asp-route-idContract="@item.IdContract" asp-route-action="Details" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                            <a class="btn btn-outline-dark oi oi-pencil" title="Изменить" aria-label="Изменить"
+                               asp-controller="Contract" asp-action="Edit" asp-route-idContract="@item.IdContract" asp-route-action="Edit" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                            <a class="btn btn-outline-dark oi oi-layers" title="Копировать" aria-label="Копировать"
+                               asp-controller="Contract" asp-action="Create" asp-route-idContract="@item.IdContract" asp-route-action="Create" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                            <a class="btn btn-danger oi oi-x" title="Удалить" aria-label="Удалить"
+                               asp-controller="Contract" asp-action="Delete" asp-route-idContract="@item.IdContract" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")"></a>
+                            <div class="btn-group" role="group" aria-label="Отчеты">
+                                <button class="btn btn-success oi oi-document dropdown-toggle" type="button" title="Отчеты" aria-label="Отчеты" id="reportsBtn_@item.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="reportsBtn_@item.IdContract">
+                                    <a class="dropdown-item rr-report-resolution" data-toggle="modal" href="#" title='Постановление' aria-label='Постановление' data-id-contract="@item.IdContract">Постановление</a>
+                                    <a class="dropdown-item rr-report-agreement" href="#" title='Соглашение' aria-label='Соглашение' data-agreement-type="1" data-id-contract="@item.IdContract">Соглашение</a>
+                                    <a class="dropdown-item rr-report-agreement-transfer" href="#" title='Соглашение о передаче в мун. собственность' aria-label='Соглашение о передаче в мун. собственность' data-id-contract="@item.IdContract">Соглашение о передаче в мун. собственность</a>
+                                    <a class="dropdown-item rr-report-agreement" href="#" title='Соглашение о возмещении за изымаемое помещение' data-agreement-type="2" aria-label='Соглашение о возмещении за изымаемое помещение' data-id-contract="@item.IdContract">Соглашение о возмещении за изымаемое помещение</a>
+                                    <a class="dropdown-item rr-report-rasp " href="#" title='Распоряжение' aria-label='Распоряжение' data-id-contract="@item.IdContract">Распоряжение</a>
+                                    <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "прибыть" на мену' aria-label='Уведомление "прибыть" на мену' data-notify-type="1" data-id-contract="@item.IdContract">Уведомление "прибыть" на мену</a>
+                                    <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "прибыть" для суда - нотариус' aria-label='Уведомление "прибыть" для суда - нотариус' data-notify-type="2" data-id-contract="@item.IdContract">Уведомление "прибыть" для суда - нотариус</a>
+                                    <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "прибыть" для суда - 1 собственник' aria-label='Уведомление "прибыть" для суда - 1 собственник' data-notify-type="3" data-id-contract="@item.IdContract">Уведомление "прибыть" для суда - 1 собственник</a>
+                                    <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "правоустанавливающие документы по наследству"' aria-label='Уведомление "правоустанавливающие документы по наследству"' data-notify-type="4" data-id-contract="@item.IdContract">Уведомление "правоустанавливающие документы по наследству"</a>
+                                    <a class="dropdown-item rr-report-request-mvd" href="#" title='Запрос в МВД (новый)' aria-label='Запрос в МВД (новый)' data-request-type="1" data-id-contract="@item.IdContract">Запрос в МВД (новый)</a>
+                                    <a class="dropdown-item rr-report-request-mvd" href="#" title='Запрос в МВД (старый)' aria-label='Запрос в МВД (старый)' data-request-type="2" data-id-contract="@item.IdContract">Запрос в МВД (старый)</a>
+                                    <a class="dropdown-item rr-report-contract-date" href="#" title='Договор с датами' aria-label='Договор с датами' data-id-contract="@item.IdContract">Договор с датами</a>
+                                    <a class="dropdown-item rr-report-contract-without-date" href="#" title='Договор без дат' aria-label='Договор без дат' data-id-contract="@item.IdContract">Договор без дат</a>
+                                    <a class="dropdown-item rr-report-contract-pre" href="#" title='Предварительный договор' aria-label='Предварительный договор' data-id-contract="@item.IdContract">Предварительный договор</a>
+                                    <a class="dropdown-item rr-report-dksr-contract" href="#" title='Договор для ДКСР' aria-label='Договор для ДКСР' data-id-contract="@item.IdContract">Договор для ДКСР</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="btn-group" role="group" aria-label="Отчеты">
-                            <button class="btn btn-success oi oi-document dropdown-toggle" type="button" title="Отчеты" aria-label="Отчеты" id="reportsBtn_@item.IdContract" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="reportsBtn_@item.IdContract">
-                                <a class="dropdown-item rr-report-resolution" data-toggle="modal" href="#" title='Постановление' aria-label='Постановление' data-id-contract="@item.IdContract">Постановление</a>
-                                <a class="dropdown-item rr-report-agreement" href="#" title='Соглашение' aria-label='Соглашение' data-agreement-type="1" data-id-contract="@item.IdContract">Соглашение</a>
-                                <a class="dropdown-item rr-report-agreement-transfer" href="#" title='Соглашение о передаче в мун. собственность' aria-label='Соглашение о передаче в мун. собственность' data-id-contract="@item.IdContract">Соглашение о передаче в мун. собственность</a>
-                                <a class="dropdown-item rr-report-agreement" href="#" title='Соглашение о возмещении за изымаемое помещение' data-agreement-type="2" aria-label='Соглашение о возмещении за изымаемое помещение' data-id-contract="@item.IdContract">Соглашение о возмещении за изымаемое помещение</a>
-                                <a class="dropdown-item rr-report-rasp " href="#" title='Распоряжение' aria-label='Распоряжение' data-id-contract="@item.IdContract">Распоряжение</a>
-                                <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "прибыть" на мену' aria-label='Уведомление "прибыть" на мену' data-notify-type="1" data-id-contract="@item.IdContract">Уведомление "прибыть" на мену</a>
-                                <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "прибыть" для суда - нотариус' aria-label='Уведомление "прибыть" для суда - нотариус' data-notify-type="2" data-id-contract="@item.IdContract">Уведомление "прибыть" для суда - нотариус</a>
-                                <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "прибыть" для суда - 1 собственник' aria-label='Уведомление "прибыть" для суда - 1 собственник' data-notify-type="3" data-id-contract="@item.IdContract">Уведомление "прибыть" для суда - 1 собственник</a>
-                                <a class="dropdown-item rr-report-notification" href="#" title='Уведомление "правоустанавливающие документы по наследству"' aria-label='Уведомление "правоустанавливающие документы по наследству"' data-notify-type="4" data-id-contract="@item.IdContract">Уведомление "правоустанавливающие документы по наследству"</a>
-                                <a class="dropdown-item rr-report-request-mvd" href="#" title='Запрос в МВД (новый)' aria-label='Запрос в МВД (новый)' data-request-type="1" data-id-contract="@item.IdContract">Запрос в МВД (новый)</a>
-                                <a class="dropdown-item rr-report-request-mvd" href="#" title='Запрос в МВД (старый)' aria-label='Запрос в МВД (старый)' data-request-type="2" data-id-contract="@item.IdContract">Запрос в МВД (старый)</a>
-                                <a class="dropdown-item rr-report-contract-date" href="#" title='Договор с датами' aria-label='Договор с датами' data-id-contract="@item.IdContract">Договор с датами</a>
-                                <a class="dropdown-item rr-report-contract-without-date" href="#" title='Договор без дат' aria-label='Договор без дат' data-id-contract="@item.IdContract">Договор без дат</a>
-                                <a class="dropdown-item rr-report-contract-pre" href="#" title='Предварительный договор' aria-label='Предварительный договор' data-id-contract="@item.IdContract">Предварительный договор</a>
-                                <a class="dropdown-item rr-report-dksr-contract" href="#" title='Договор для ДКСР' aria-label='Договор для ДКСР' data-id-contract="@item.IdContract">Договор для ДКСР</a>
-                            </div>
-                        </div>
-                    </div>
+
                 </td>
             </tr>
         }

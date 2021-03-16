@@ -176,6 +176,29 @@ function isExpandElemntArrow(elemntArrow) {
     return false;
 }
 
+var timeout = undefined;
+
+
+$(".btn-group .dropdown-toggle, .btn-group .dropdown-menu").hover(function () {
+    if (timeout !== undefined) {
+        clearTimeout(timeout);
+        timeout = undefined;
+    }
+    if ($(this).closest(".btn-group").hasClass("show")) return;
+    $(this).closest(".btn-group").find(".dropdown-toggle").dropdown('toggle');
+}, function () {
+    if (!$(this).closest(".btn-group").hasClass("show")) return;
+    var self = this;
+    timeout = setTimeout(function () {
+        if (timeout !== undefined) {
+            clearTimeout(timeout);
+            timeout = undefined;
+        }
+        if (!$(self).closest(".btn-group").hasClass("show")) return;
+        $(self).closest(".btn-group").find(".dropdown-toggle").dropdown('toggle');
+    }, 200);
+});
+
 $(".m-contract-filter__type").on("click", function () {
     var text = $(this).text();
     var className = $(this).data("class");
