@@ -40,21 +40,25 @@ namespace MenaWeb.ReportServices
             }
             else
             {
+                string destDirGuid = Guid.NewGuid().ToString();
                 foreach (var file in ids)
                 {
                     idContract = file;
                     var arg = new Dictionary<string, object>
                     {
                         { "id_contract", idContract },
-                        { "reportPath", reportPath }
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
                     };
                     var fileRep = GenerateMultiFileReport(arg, "mena\\contract_dksr");
                 }
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files");
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
                 var destZipFile = destFileName + ".zip";
                 ZipFile.CreateFromDirectory(destFileName, destZipFile);
                 foreach (var files in Directory.GetFiles(destFileName))
                 { File.Delete(files); }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
                 return DownloadFile(destZipFile);
             }
         }
@@ -72,23 +76,27 @@ namespace MenaWeb.ReportServices
             }
             else
             {
+                string destDirGuid = Guid.NewGuid().ToString();
                 foreach (var file in ids)
                 {
                     idContract = file;
                     var arg = new Dictionary<string, object>
                     {
                         { "id_contract", idContract },
-                        { "reportPath", reportPath }
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
                     };
                     var fileRep = GenerateMultiFileReport(arg, "mena\\contract_2");
                 }
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files");
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
                 var destZipFile = destFileName + ".zip";
                 ZipFile.CreateFromDirectory(destFileName, destZipFile);
                 foreach (var files in Directory.GetFiles(destFileName))
                 {
                     File.Delete(files);
                 }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
                 return DownloadFile(destZipFile);
             }
         }
@@ -106,23 +114,27 @@ namespace MenaWeb.ReportServices
             }
             else
             {
+                string destDirGuid = Guid.NewGuid().ToString();
                 foreach (var file in ids)
                 {
                     idContract = file;
                     var arg = new Dictionary<string, object>
                     {
                         { "id_contract", idContract },
-                        { "reportPath", reportPath }
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
                     };
                     var fileRep = GenerateMultiFileReport(arg, "mena\\contract_date_2");
                 }
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files");
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
                 var destZipFile = destFileName + ".zip";
                 ZipFile.CreateFromDirectory(destFileName, destZipFile);
                 foreach (var files in Directory.GetFiles(destFileName))
                 {
                     File.Delete(files);
                 }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
                 return DownloadFile(destZipFile);
             }
         }
@@ -142,6 +154,7 @@ namespace MenaWeb.ReportServices
             }
             else
             {
+                string destDirGuid = Guid.NewGuid().ToString();
                 foreach (var file in ids)
                 {
                     idContract = file;
@@ -150,17 +163,20 @@ namespace MenaWeb.ReportServices
                         { "id_contract", idContract },
                         { "idPreamble", idPreamble },
                         { "idDep", idDep },
-                        { "reportPath", reportPath }
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
                     };
                     var fileRep = GenerateMultiFileReport(arg, "mena\\precontract");
                 }
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files");
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
                 var destZipFile = destFileName + ".zip";
                 ZipFile.CreateFromDirectory(destFileName, destZipFile);
                 foreach (var files in Directory.GetFiles(destFileName))
                 {
                     File.Delete(files);
                 }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
                 return DownloadFile(destZipFile);
             }
         }
@@ -196,6 +212,7 @@ namespace MenaWeb.ReportServices
             }
             else
             {
+                string destDirGuid = Guid.NewGuid().ToString();
                 foreach (var file in ids)
                 {
                     idContract = file;
@@ -204,7 +221,8 @@ namespace MenaWeb.ReportServices
                         { "id_contract", idContract },
                         { "id_signer", idSigner },
                         { "id_worker", idPrepared },
-                        { "reportPath", reportPath }
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
                     };
                     var fileName = "";
                     switch (notifyType)
@@ -224,13 +242,15 @@ namespace MenaWeb.ReportServices
                     }
                     var fileRep = GenerateMultiFileReport(arg, fileName);
                 }
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files");
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
                 var destZipFile = destFileName + ".zip";
                 ZipFile.CreateFromDirectory(destFileName, destZipFile);
                 foreach (var files in Directory.GetFiles(destFileName))
                 {
                     File.Delete(files);
                 }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
                 return DownloadFile(destZipFile);
             }
         }
@@ -260,6 +280,7 @@ namespace MenaWeb.ReportServices
             }
             else
             {
+                string destDirGuid = Guid.NewGuid().ToString();
                 foreach (var file in ids)
                 {
                     idContract = file;
@@ -268,7 +289,8 @@ namespace MenaWeb.ReportServices
                         { "id_contract", idContract },
                         { "signer_id", idSigner },
                         { "worker_id", idPrepared },
-                        { "reportPath", reportPath }
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
                     };
                     var fileName = "";
                     switch (requestType)
@@ -282,13 +304,15 @@ namespace MenaWeb.ReportServices
                     }
                     var fileRep = GenerateMultiFileReport(arg, fileName);
                 }
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files");
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
                 var destZipFile = destFileName + ".zip";
                 ZipFile.CreateFromDirectory(destFileName, destZipFile);
                 foreach (var files in Directory.GetFiles(destFileName))
                 {
                     File.Delete(files);
                 }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
                 return DownloadFile(destZipFile);
             }
         }
@@ -346,6 +370,7 @@ namespace MenaWeb.ReportServices
             }
             else
             {
+                string destDirGuid = Guid.NewGuid().ToString();
                 foreach (var file in ids)
                 {
                     idContract = file;
@@ -354,17 +379,65 @@ namespace MenaWeb.ReportServices
                         { "id_contract", idContract },
                         { "reportPath", reportPath },
                         { "datenom_rasp", datenomRasp },
-                        { "datenom_memo", datenomNote }
+                        { "datenom_memo", datenomNote },
+                        { "destDirGuid", destDirGuid }
                     };
                     var fileRep = GenerateMultiFileReport(arg, "mena\\rasp");
                 }
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files");
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
                 var destZipFile = destFileName + ".zip";
                 ZipFile.CreateFromDirectory(destFileName, destZipFile);
                 foreach (var files in Directory.GetFiles(destFileName))
                 {
                     File.Delete(files);
                 }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
+                return DownloadFile(destZipFile);
+            }
+        }
+        public byte[] TakeoverAgreement(int idContract, string[] array_idsPersons, int idSigner, string reportPath, DateTime date)
+        {
+            if (array_idsPersons.Length == 1)
+            {
+                var arguments = new Dictionary<string, object>
+                {
+                    { "id_person", array_idsPersons[0] },
+                    { "id_contract", idContract },
+                    { "id_signer", idSigner },
+                    { "agreeDate", date },
+                    { "reportPath", reportPath }
+                };
+                var fileNameReport = GenerateReport(arguments, "mena\\takeover_agreement");
+                return DownloadFile(fileNameReport);
+            }
+            else
+            {
+                string destDirGuid = Guid.NewGuid().ToString(); 
+                foreach (var file in array_idsPersons)
+                {
+                    var idPerson = file;
+                    var arguments = new Dictionary<string, object>
+                    {
+                        { "id_person", idPerson },
+                        { "id_contract", idContract },
+                        { "id_signer", idSigner },
+                        { "agreeDate", date },
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
+                    };
+                    var fileRep = GenerateMultiFileReport(arguments, "mena\\takeover_agreement");
+                }
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
+                var destZipFile = destFileName + ".zip";
+                if (File.Exists(destZipFile)) File.Delete(destZipFile);
+                ZipFile.CreateFromDirectory(destFileName, destZipFile);
+                foreach (var files in Directory.GetFiles(destFileName))
+                {
+                    File.Delete(files);
+                }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
                 return DownloadFile(destZipFile);
             }
         }

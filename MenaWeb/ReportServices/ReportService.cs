@@ -70,7 +70,12 @@ namespace MenaWeb.ReportServices
                 var configParts = config.Split('\\');
                 var nameFile = arguments.Values.First().ToString();
                 var fileNameReport = configParts[configParts.Length - 1] + "_"+ nameFile + ".odt";
-                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", fileNameReport);
+                var destDirGuid = arguments.Values.Last().ToString();
+                arguments.Remove("destDirGuid");
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
+                var destFileName = Path.Combine(path, fileNameReport);
+                DirectoryInfo dir = new DirectoryInfo(path);
+                if (!dir.Exists) dir.Create();
                 arguments.Add("config", configXml);
                 arguments.Add("destFileName", destFileName);
                 arguments.Add("force-move-to", destFileName);
@@ -86,7 +91,6 @@ namespace MenaWeb.ReportServices
                     p.Start();
                     p.WaitForExit();
                 }
-
                 return fileNameReport;
             }
             catch (Exception ex)
