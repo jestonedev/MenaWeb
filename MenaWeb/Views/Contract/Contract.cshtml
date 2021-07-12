@@ -175,7 +175,7 @@
                     <span asp-validation-for="Contract.IdExecutor" class="text-danger"></span>
                 </div>
                 <div class="form-check col-md-6 m-contract-eviction-required-checkbox mb-3">
-                    <input disabled type="checkbox" class="form-check-input" >
+                    <input disabled type="checkbox" class="form-check-input" asp-for="Contract.EvictionRequired">
                     <label class="form-check-label" title="Требуется снятие с учета участников">Требуется снятие с учета участников</label>
                 </div>
             </div>
