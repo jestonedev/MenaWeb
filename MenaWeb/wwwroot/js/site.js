@@ -414,6 +414,8 @@ $(".m-land-btn").on("click", function (e) {
         modal.find("select, input, textarea").each(function (idx, elem) {
             var value = $(elem).val();
             var name = $(elem).attr("name");
+            if (name === undefined)
+                return;
             var nameParts = name.split('.');
             var fieldName = nameParts[nameParts.length - 1];
             var inputFieldName = "Contract." + apartmentSide + ".Land[0]." + fieldName;
