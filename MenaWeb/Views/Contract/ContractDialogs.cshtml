@@ -69,7 +69,7 @@
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="Land.IdStreet">Улица</label>
-                            <select disabled class="selectpicker form-control" title="Улица" name="Land.IdStreet"
+                            <select disabled class="selectpicker form-control" data-live-search="true"  title="Улица" name="Land.IdStreet"
                                     id="Land_IdStreet"
                                     asp-items="@(new SelectList(Model.Streets, "IdStreet", "StreetName"))">
                                 <option></option>

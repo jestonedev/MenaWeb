@@ -22,6 +22,7 @@ namespace MenaWeb.Models.Entities
         public string RoomCount { get; set; }
         public string Room { get; set; }
         public decimal? CadastralPrice { get; set; }
+        public bool DisasterHousing { get; set; }
         public virtual List<Contract> Side1Contracts { get; set; }
         public virtual List<Contract> Side2Contracts { get; set; }
         public virtual List<Contract> Side12Contracts { get; set; }
@@ -38,6 +39,7 @@ namespace MenaWeb.Models.Entities
         {
             IdApartmentType = 1;
             Part = "1";
+          
             WarrantApartments = new List<WarrantApartment>();
             ApartmentEvaluations = new List<ApartmentEvaluation>();
             People = new List<Person>();
@@ -49,7 +51,7 @@ namespace MenaWeb.Models.Entities
 
         public bool IsEmpty()
         {
-            return IdStreet == null && House == null && Flat == null && Room == null && TotalArea == null && CadastralPrice == null && InventoryNumber == null &&
+            return IdStreet == null && House == null && Flat == null && Room == null && TotalArea == null && CadastralPrice == null && InventoryNumber == null && 
                 (IdApartmentType == 1 || IdApartmentType == 0) && (Part == "1" || Part == null) && (WarrantApartments == null || !WarrantApartments.Any()) &&
                  (ApartmentEvaluations == null || !ApartmentEvaluations.Any());
         }

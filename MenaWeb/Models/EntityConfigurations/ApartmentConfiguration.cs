@@ -85,7 +85,13 @@ namespace MenaWeb.Models.EntityConfigurations
             builder.Property(e => e.CadastralPrice)
                 .HasColumnName("cadastral_price")
                 .HasColumnType("decimal(19,2)");
-
+            
+            builder.Property(e => e.DisasterHousing)
+               .HasColumnName("disaster_housing")
+               .HasColumnType("tinyint(1)")
+               .IsRequired()
+               .HasDefaultValue(0);
+               
             builder.HasOne(r => r.ApartmentType)
                 .WithMany(r => r.Apartments)
                 .HasForeignKey(r => r.IdApartmentType)

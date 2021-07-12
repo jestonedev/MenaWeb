@@ -240,6 +240,7 @@ namespace MenaWeb.Controllers
                 return View("Error");
             }
         }
+       
         public IActionResult GetRequestToMvd(int? idContract, int idSigner, int idPrepared, int requestType)
         {
             try
@@ -386,7 +387,7 @@ namespace MenaWeb.Controllers
                 return HttpContext.Session.Get<List<int>>("idContracts");
             return new List<int>();
         }
-        public IActionResult GetTakeoverAgreement(int idContract, string idsPersons, int idSigner, DateTime date)
+        public IActionResult GetTakeoverAgreement(int idContract, string idsPersons, int idSigner, DateTime date, string numResolution, DateTime dateResolution, bool disHousing)
         {
             try
             {
@@ -398,7 +399,7 @@ namespace MenaWeb.Controllers
                     return View("Error");
                 }
                 string[] array_idsPersons = idsPersons.Split(';', StringSplitOptions.RemoveEmptyEntries);
-                var files = reportService.TakeoverAgreement(idContract, array_idsPersons, idSigner, reportPath, date);
+                var files = reportService.TakeoverAgreement(idContract, array_idsPersons, idSigner, reportPath, date, numResolution, dateResolution);
                 if (array_idsPersons.Length == 1) {
                     return File(files, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", array_idsPersons[0]));
                 } else  
@@ -411,5 +412,46 @@ namespace MenaWeb.Controllers
                 return View("Error");
             }
         }
+
+        public IActionResult GetCoverLetterToTakeoverAgreement(int? idContract, int idSigner, int idPrepared)
+        {
+            try
+            {
+                var ids = GetSessionIds();
+
+                if (idContract != null)
+                {
+                    var check = contractService.CheckForFullnessReport(idContract);
+                    if (check == false)
+                    {
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
+                        return View("Error");
+                    }
+                    var file = reportService.CoverLetterToTakeoverAgreement(ids, idContract, idSigner, idPrepared, reportPath);
+                    return File(file, odtMime, string.Format(@"Сопроводительное письмо к соглашению об изъятии имущества '  № {0}.odt", idContract));
+                }
+                else
+                {
+                    contractService.CheckForFullnessMultiReport(ids, out List<int> processingIds, out List<int> errorIds);
+                    if (errorIds.Any())
+                    {
+                        ViewData["Controller"] = "ContractReport";
+                        ViewData["TextError"] = string.Format("В договор{1} №{0} не указан адрес и/или участник", errorIds.Select(c => c.ToString()).Aggregate((a, s) => a + "," + s),
+                            errorIds.Count == 1 ? "e" : "ах");
+                        return View("Error");
+                    }
+                    var file = reportService.CoverLetterToTakeoverAgreement(ids, idContract, idSigner, idPrepared, reportPath);
+                    return File(file, zipMime, @"Сопроводительные письма к соглашению об изъятии имущества.zip");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewData["Controller"] = "ContractReport";
+                ViewData["TextError"] = ex;
+                return View("Error");
+            }
+        }
+           
     }
 }

@@ -131,7 +131,10 @@
                     </div>
                 </div>
             </div>
-
+            <div class="form-check col-12 mb-3 form-check-inline">
+                <input disabled type="checkbox" class="form-check-input" asp-for="Contract.ApartmentSide2.DisasterHousing"> 
+                <label class="form-check-label" asp-for="Contract.ApartmentSide2.DisasterHousing" title="Признать жилье аварийным">Признать жилье аварийным</label>
+            </div>
             <div class="col-12 mb-3">
                 <partial name="ApartmentSide2Documents" model="Model" />
             </div>

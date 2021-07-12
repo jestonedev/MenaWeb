@@ -14,6 +14,7 @@
     $("body").on('click', ".rr-report-takeover-agreement", function (e) {
         var idContract = $(this).data("id-contract");
         var idsPers = $(this).data("ids-persons");
+       
         $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idContract']").val(idContract);
         $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idsPersons']").val(idsPers);
         $("#takeoverAgreementModal").modal("show");
@@ -34,11 +35,14 @@
         var idContract = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idContract']").val();
         var idSigner = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idSigner']").val();
         var date = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.Date']").val();
+        
+        var numRes = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.NumResolution']").val();
+        var dateRes = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.DateResolution']").val();
         if ($("#takeoverAgreementModal").find(".input-validation-error").length > 0) {
             return false;
         }
 
-        var url = "/ContractReport/GetTakeoverAgreement?idContract=" + idContract + "&idsPersons=" + idsPersons + "&idSigner=" + idSigner + "&date=" + date;
+        var url = "/ContractReport/GetTakeoverAgreement?idContract=" + idContract + "&idsPersons=" + idsPersons + "&idSigner=" + idSigner + "&date=" + date + "&numResolution=" + numRes + "&dateResolution=" + dateRes;
 
         if (url !== undefined) {
             downloadFile(url);
@@ -145,6 +149,38 @@
         }
 
         $("#notifyMenaModal").modal("hide");
+    });
+
+    //сопроводительное письмо
+    $("body").on('click', ".rr-report-cover-letter", function (e) {
+        var idContract = $(this).data("id-contract");
+        $("#coverLetterMenaModal").find("[name='CoverLetterMena.idContract']").val(idContract);
+        $("#coverLetterMenaModal").find("input, textarea, select").prop("disabled", false);
+        $("#coverLetterMenaModal").modal("show");
+        e.preventDefault();
+    });
+
+    $("#coverLetterMenaModal .rr-report-submit").on("click", function (e) {
+        e.preventDefault();
+        var isValid = $(this).closest("#coverLetterMenaForm").valid();
+        fixBootstrapSelectHighlight($(this).closest("#coverLetterMenaForm"));
+        if (!isValid) {
+            return false;
+        }
+        var idContract = $("#coverLetterMenaModal").find("[name='CoverLetterMena.idContract']").val();
+        var idSigner = $("#coverLetterMenaModal").find("[name='CoverLetterMena.idSigner']").val();
+        var idPrepered = $("#coverLetterMenaModal").find("[name='CoverLetterMena.idPrepared']").val();
+        if ($("#coverLetterMenaModal").find(".input-validation-error").length > 0) {
+            return false;
+        }
+
+        var url = "/ContractReport/GetCoverLetterToTakeoverAgreement?idContract=" + idContract +  "&idPrepared=" + idPrepered  + "&idSigner=" + idSigner;
+
+        if (url !== undefined) {
+            downloadFile(url);
+        }
+
+        $("#letterMenaModal").modal("hide");
     });
 
     //запрос в мвд
