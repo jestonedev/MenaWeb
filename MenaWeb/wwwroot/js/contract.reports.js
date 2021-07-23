@@ -1,22 +1,9 @@
 ﻿$(document).ready(function () {
-    
-    function pers() {
-        //$("#PeopleList").find(".list-group-item").find("input[id$='__IdPerson']").each(function (idx, elem) {
-        var list = "";
-        $("#PeopleList").find(".list-group-item").find("input[id$='__IdPerson']").each(function (idx, elem) {
-            var peopleId = $(elem).val();
-            list += peopleId + ";";
-        });
-        return list;
-    };
-
     //Соглашение об изъятии
     $("body").on('click', ".rr-report-takeover-agreement", function (e) {
         var idContract = $(this).data("id-contract");
-        var idsPers = $(this).data("ids-persons");
        
         $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idContract']").val(idContract);
-        $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idsPersons']").val(idsPers);
         $("#takeoverAgreementModal").modal("show");
         e.preventDefault();
     });
@@ -28,21 +15,14 @@
         if (!isValid) {
             return false;
         }
-        var idsPersons = pers();
-        if (idsPersons == "") {
-            idsPersons = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idsPersons']").val();
-        }
         var idContract = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idContract']").val();
         var idSigner = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idSigner']").val();
         var date = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.Date']").val();
-        
-        var numRes = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.NumResolution']").val();
-        var dateRes = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.DateResolution']").val();
         if ($("#takeoverAgreementModal").find(".input-validation-error").length > 0) {
             return false;
         }
 
-        var url = "/ContractReport/GetTakeoverAgreement?idContract=" + idContract + "&idsPersons=" + idsPersons + "&idSigner=" + idSigner + "&date=" + date + "&numResolution=" + numRes + "&dateResolution=" + dateRes;
+        var url = "/ContractReport/GetTakeoverAgreement?idContract=" + idContract + "&idSigner=" + idSigner + "&date=" + date;
 
         if (url !== undefined) {
             downloadFile(url);

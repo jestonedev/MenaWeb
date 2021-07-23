@@ -99,7 +99,23 @@ namespace MenaWeb.DataServices
                 contract.ApartmentSide12 = null;
                 contract.IdApartmentSide12 = null;
             }
-            foreach(var status in db.ContractStatusHistory.Where(r => r.IdContract == contract.IdContract).AsNoTracking())
+            if (contract.ApartmentSide1 != null && contract.ApartmentSide1.IdStreet == null)
+            {
+                contract.ApartmentSide1.IdStreet = "00000000000000000";
+            }
+            if (contract.ApartmentSide2 != null && contract.ApartmentSide2.IdStreet == null)
+            {
+                contract.ApartmentSide2.IdStreet = "00000000000000000";
+                if (contract.ApartmentSide2.Land != null)
+                {
+                    foreach (var land in contract.ApartmentSide2.Land)
+                    {
+                        land.IdStreet = "00000000000000000";
+                    }
+                }
+            }
+
+            foreach (var status in db.ContractStatusHistory.Where(r => r.IdContract == contract.IdContract).AsNoTracking())
             {
                 if (!contract.ContractStatusHistory.Any(r => r.IdHistoryStatus == status.IdHistoryStatus))
                 {
@@ -273,6 +289,21 @@ namespace MenaWeb.DataServices
             if (contract.ApartmentSide12 != null && contract.ApartmentSide12.IsEmpty())
             {
                 contract.ApartmentSide12 = null;
+            }
+            if (contract.ApartmentSide1 != null && contract.ApartmentSide1.IdStreet == null)
+            {
+                contract.ApartmentSide1.IdStreet = "00000000000000000";
+            }
+            if (contract.ApartmentSide2 != null && contract.ApartmentSide2.IdStreet == null)
+            {
+                contract.ApartmentSide2.IdStreet = "00000000000000000";
+                if (contract.ApartmentSide2.Land != null)
+                {
+                    foreach(var land in contract.ApartmentSide2.Land)
+                    {
+                        land.IdStreet = "00000000000000000";
+                    }
+                }
             }
 
             var warrantsIdsAssocDic = new Dictionary<int, WarrantApartment>();
@@ -664,6 +695,12 @@ namespace MenaWeb.DataServices
                 return false;
             }
             return true;
+        }
+
+        public List<Person> GetPersonsByContract(int idContract)
+        {
+            var contract = db.Contracts.FirstOrDefault(c => c.IdContract == idContract);
+            return db.People.Where(c => c.IdApartment == contract.IdApartmentSide2).ToList();
         }
 
         public void CheckForFullnessMultiReport(List<int> ids, out List<int> processingIds, out List<int> errorIds)

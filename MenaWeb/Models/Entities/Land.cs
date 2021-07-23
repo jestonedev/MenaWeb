@@ -13,6 +13,8 @@ namespace MenaWeb.Models.Entities
         public string House { get; set; }
         public string InventoryNumber { get; set; }
         public decimal? TotalArea { get; set; }
+        public string ResolutionNumber { get; set; }
+        public DateTime? ResolutionDate { get; set; }
         public Apartment Apartment { get; set; }
     }
 }

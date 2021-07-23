@@ -10,26 +10,32 @@
 <li class="list-group-item pt-3 pb-3 pl-3 pr-3">
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdPerson" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdApartment" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdPersonStatus" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdContractor" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Portion" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Family" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Name" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Father" />
-    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Portion" />
-    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdPersonStatus" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Sex" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Birth"
            value="@(Model.Contract.ApartmentSide2.People[index].Birth.HasValue ? Model.Contract.ApartmentSide2.People[index].Birth.Value.ToString("yyyy-MM-dd") : "")" />
-    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Sex" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].BornPlace" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdDocument" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].DocumentSeria" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].DocumentNumber" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdDocumentIssued" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].DocumentIssuerCode" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].DocumentDate"
            value="@(Model.Contract.ApartmentSide2.People[index].DocumentDate.HasValue ? Model.Contract.ApartmentSide2.People[index].DocumentDate.Value.ToString("yyyy-MM-dd") : "")" />
-    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdDocumentIssued" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdRegistrationStreet" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].RegistrationHouse" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].RegistrationFlat" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].RegistrationRoom" />
+    <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].Snils" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].IdTemplate" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].LastChangeUser" />
     <input type="hidden" asp-for="Contract.ApartmentSide2.People[index].LastChangeDate"
-        value="@Model.Contract.ApartmentSide2.People[index].LastChangeDate.ToString("yyyy-MM-dd HH:mm:ss")" />
+           value="@Model.Contract.ApartmentSide2.People[index].LastChangeDate.ToString("yyyy-MM-dd HH:mm:ss")" />
 
     <div class="form-row">
         <div class="form-group col-md-4 mb-2">

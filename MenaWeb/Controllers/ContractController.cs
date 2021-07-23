@@ -61,7 +61,7 @@ namespace MenaWeb.Controllers
                 return NotFound();
             if (ModelState.IsValid)
             {
-                dataService.Create(contractVM.Contract, contractVM.WarrantTemplatesVM);
+                dataService.Create(contractVM.Contract, contractVM.WarrantTemplatesVM ?? new List<WarrantTemplateVM>());
                 return RedirectToAction("Details", new { contractVM.Contract.IdContract });
             }
             ViewBag.Action = ActionTypeEnum.Create;
@@ -90,7 +90,7 @@ namespace MenaWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                dataService.Edit(contractVM.Contract, contractVM.WarrantTemplatesVM);
+                dataService.Edit(contractVM.Contract, contractVM.WarrantTemplatesVM ?? new List<WarrantTemplateVM>());
                 return RedirectToAction("Details", new { contractVM.Contract.IdContract });
             }
             ViewBag.Action = ActionTypeEnum.Edit;

@@ -46,6 +46,14 @@ namespace MenaWeb.Models.EntityConfigurations
                 .HasColumnName("total_area")
                 .HasColumnType("decimal(8,2)");
 
+            builder.Property(e => e.ResolutionNumber)
+                .HasColumnName("resolution_number")
+                .HasMaxLength(255);
+
+            builder.Property(e => e.ResolutionDate)
+                .HasColumnName("resolution_date")
+                .HasColumnType("datetime");
+
             builder.HasOne(r => r.Apartment)
                 .WithMany(r => r.Land)
                 .HasForeignKey(r => r.IdApartment)

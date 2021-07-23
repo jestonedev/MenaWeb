@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Compression;
+using MenaWeb.Models.Entities;
 
 namespace MenaWeb.ReportServices
 {
@@ -396,19 +397,17 @@ namespace MenaWeb.ReportServices
                 return DownloadFile(destZipFile);
             }
         }
-        public byte[] TakeoverAgreement(int idContract, string[] array_idsPersons, int idSigner, string reportPath, DateTime date, string numResolution, DateTime dateResolution)
+        public byte[] TakeoverAgreement(int idContract, int idSigner, string reportPath, DateTime date, List<Person> persons)
         {
-            if (array_idsPersons.Length == 1)
+            if (persons.Count == 1)
             {
                 var arguments = new Dictionary<string, object>
                 {
-                    { "id_person", array_idsPersons[0] },
+                    { "id_person", persons[0].IdPerson },
                     { "id_contract", idContract },
                     { "id_signer", idSigner },
                     { "agreeDate", date },
                     { "reportPath", reportPath },
-                    { "resNum", numResolution },
-                    { "resDate", dateResolution }
                 };
                 var fileNameReport = GenerateReport(arguments, "mena\\takeover_agreement");
                 return DownloadFile(fileNameReport);
@@ -416,9 +415,9 @@ namespace MenaWeb.ReportServices
             else
             {
                 string destDirGuid = Guid.NewGuid().ToString(); 
-                foreach (var file in array_idsPersons)
+                foreach (var person in persons)
                 {
-                    var idPerson = file;
+                    var idPerson = person.IdPerson;
                     var arguments = new Dictionary<string, object>
                     {
                         { "id_person", idPerson },
@@ -426,8 +425,6 @@ namespace MenaWeb.ReportServices
                         { "id_signer", idSigner },
                         { "agreeDate", date },
                         { "reportPath", reportPath },
-                        { "resNum", numResolution },
-                        { "resDate", dateResolution },
                         { "destDirGuid", destDirGuid }
                     };
                     var fileRep = GenerateMultiFileReport(arguments, "mena\\takeover_agreement");

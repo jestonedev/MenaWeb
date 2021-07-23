@@ -387,21 +387,21 @@ namespace MenaWeb.Controllers
                 return HttpContext.Session.Get<List<int>>("idContracts");
             return new List<int>();
         }
-        public IActionResult GetTakeoverAgreement(int idContract, string idsPersons, int idSigner, DateTime date, string numResolution, DateTime dateResolution, bool disHousing)
+        public IActionResult GetTakeoverAgreement(int idContract, int idSigner, DateTime date)
         {
             try
             {
                 var check = contractService.CheckForFullnessReport(idContract);
-                if (check == false && idsPersons == "")
+                if (check == false)
                 {
                     ViewData["Controller"] = "ContractReport";
                     ViewData["TextError"] = string.Format("В договоре №{0} необходимо заполнить адрес и/или участника", idContract);
                     return View("Error");
                 }
-                string[] array_idsPersons = idsPersons.Split(';', StringSplitOptions.RemoveEmptyEntries);
-                var files = reportService.TakeoverAgreement(idContract, array_idsPersons, idSigner, reportPath, date, numResolution, dateResolution);
-                if (array_idsPersons.Length == 1) {
-                    return File(files, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", array_idsPersons[0]));
+                var persons = contractService.GetPersonsByContract(idContract);
+                var files = reportService.TakeoverAgreement(idContract, idSigner, reportPath, date, persons);
+                if (persons.Count == 1) {
+                    return File(files, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", persons[0].IdPerson));
                 } else  
                     return File(files, zipMime, @"Соглашения об изъятии.zip");
             }

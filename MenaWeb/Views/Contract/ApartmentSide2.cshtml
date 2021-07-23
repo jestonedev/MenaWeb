@@ -109,6 +109,10 @@
                             <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].House" />
                             <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].InventoryNumber" />
                             <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].TotalArea" />
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].ResolutionNumber" />
+                            <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].ResolutionDate"
+                                        value="@(Model.Contract.ApartmentSide2.Land[0].ResolutionDate != null ?
+                                        Model.Contract.ApartmentSide2.Land[0].ResolutionDate.Value.ToString("yyyy-MM-dd") : "")" />
                             var land = Model.Contract.ApartmentSide2.Land.FirstOrDefault();
                             landAddress = Model.Streets.FirstOrDefault(s => s.IdStreet == land.IdStreet)?.StreetName;
                             if (!string.IsNullOrEmpty(land.House))

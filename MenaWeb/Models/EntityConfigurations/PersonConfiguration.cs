@@ -40,6 +40,12 @@ namespace MenaWeb.Models.EntityConfigurations
                 .IsRequired()
                 .HasDefaultValue(1);
 
+            builder.Property(e => e.Portion)
+                .HasColumnName("portion")
+                .IsRequired()
+                .HasMaxLength(5)
+                .HasDefaultValue("1");
+
             builder.Property(e => e.Family)
                 .HasColumnName("family")
                 .IsRequired()
@@ -54,9 +60,17 @@ namespace MenaWeb.Models.EntityConfigurations
                 .HasColumnName("father")
                 .HasMaxLength(50);
 
+            builder.Property(e => e.Sex)
+                .HasColumnName("sex")
+                .HasColumnType("tinyint(1)");
+
             builder.Property(e => e.Birth)
                 .HasColumnName("birth")
                 .HasColumnType("datetime");
+
+            builder.Property(e => e.BornPlace)
+                .HasColumnName("born_place")
+                .HasMaxLength(255);
 
             builder.Property(e => e.IdDocument)
                 .HasColumnName("id_document")
@@ -76,31 +90,41 @@ namespace MenaWeb.Models.EntityConfigurations
                 .HasColumnName("id_document_issued")
                 .HasColumnType("int(10)");
 
+            builder.Property(e => e.DocumentIssuerCode)
+                .HasColumnName("document_issuer_code")
+                .HasMaxLength(7);
+
             builder.Property(e => e.DocumentDate)
                 .HasColumnName("document_date")
                 .HasColumnType("date");
 
-            builder.Property(e => e.BornPlace)
-                .HasColumnName("born_place")
-                .HasMaxLength(255);
+            builder.Property(e => e.IdRegistrationStreet)
+                .HasColumnName("id_registration_street")
+                .HasMaxLength(17);
 
-            builder.Property(e => e.IdTemplate)
-                .HasColumnName("id_template")
-                .HasColumnType("int(11)");
+            builder.Property(e => e.RegistrationHouse)
+                .HasColumnName("registration_house")
+                .HasMaxLength(5);
 
-            builder.Property(e => e.Portion)
-                .HasColumnName("portion")
-                .IsRequired()
-                .HasMaxLength(5)
-                .HasDefaultValue("1");
+            builder.Property(e => e.RegistrationFlat)
+                .HasColumnName("regiostration_flat")
+                .HasMaxLength(10);
+
+            builder.Property(e => e.RegistrationRoom)
+                .HasColumnName("registration_room")
+                .HasMaxLength(5);
+
+            builder.Property(e => e.Snils)
+                .HasColumnName("snils")
+                .HasMaxLength(14);
 
             builder.Property(e => e.Phone)
                 .HasColumnName("phone")
                 .HasMaxLength(255);
 
-            builder.Property(e => e.Sex)
-                .HasColumnName("sex")
-                .HasColumnType("tinyint(1)");
+            builder.Property(e => e.IdTemplate)
+                .HasColumnName("id_template")
+                .HasColumnType("int(11)");
 
             builder.Property(e => e.LastChangeUser)
                 .HasColumnName("last_change_user")
