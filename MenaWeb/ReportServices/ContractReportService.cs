@@ -443,6 +443,52 @@ namespace MenaWeb.ReportServices
             }
         }
 
+        public byte[] TakeoverAgreementKumi(int idContract, int idSigner, string reportPath, DateTime date, List<Person> persons)
+        {
+            if (persons.Count == 1)
+            {
+                var arguments = new Dictionary<string, object>
+                {
+                    { "id_person", persons[0].IdPerson },
+                    { "id_contract", idContract },
+                    { "id_signer", idSigner },
+                    { "agreeDate", date },
+                    { "reportPath", reportPath },
+                };
+                var fileNameReport = GenerateReport(arguments, "mena\\takeover_agreement_kumi");
+                return DownloadFile(fileNameReport);
+            }
+            else
+            {
+                string destDirGuid = Guid.NewGuid().ToString();
+                foreach (var person in persons)
+                {
+                    var idPerson = person.IdPerson;
+                    var arguments = new Dictionary<string, object>
+                    {
+                        { "id_person", idPerson },
+                        { "id_contract", idContract },
+                        { "id_signer", idSigner },
+                        { "agreeDate", date },
+                        { "reportPath", reportPath },
+                        { "destDirGuid", destDirGuid }
+                    };
+                    var fileRep = GenerateMultiFileReport(arguments, "mena\\takeover_agreement_kumi");
+                }
+                var destFileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", destDirGuid);
+                var destZipFile = destFileName + ".zip";
+                if (File.Exists(destZipFile)) File.Delete(destZipFile);
+                ZipFile.CreateFromDirectory(destFileName, destZipFile);
+                foreach (var files in Directory.GetFiles(destFileName))
+                {
+                    File.Delete(files);
+                }
+                DirectoryInfo dir = new DirectoryInfo(destFileName);
+                if (dir.Exists) dir.Delete(true);
+                return DownloadFile(destZipFile);
+            }
+        }
+        
         public byte[] CoverLetterToTakeoverAgreement (List<int> ids, int? idContract, int idSigner, int idPrepared, string reportPath)
         {
             if (idContract != null)

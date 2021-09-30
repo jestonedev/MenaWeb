@@ -2,8 +2,9 @@
     //Соглашение об изъятии
     $("body").on('click', ".rr-report-takeover-agreement", function (e) {
         var idContract = $(this).data("id-contract");
-       
+        var takeoverType = $(this).data("takeover-type");
         $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idContract']").val(idContract);
+        $("#takeoverAgreementModal").find("[name='TakeoverAgreement.takeoverType']").val(takeoverType);
         $("#takeoverAgreementModal").modal("show");
         e.preventDefault();
     });
@@ -15,6 +16,7 @@
         if (!isValid) {
             return false;
         }
+        var takeoverType = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.takeoverType']").val();
         var idContract = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idContract']").val();
         var idSigner = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.idSigner']").val();
         var date = $("#takeoverAgreementModal").find("[name='TakeoverAgreement.Date']").val();
@@ -22,7 +24,7 @@
             return false;
         }
 
-        var url = "/ContractReport/GetTakeoverAgreement?idContract=" + idContract + "&idSigner=" + idSigner + "&date=" + date;
+        var url = "/ContractReport/GetTakeoverAgreement?idContract=" + idContract + "&idSigner=" + idSigner + "&takeoverType=" + takeoverType + "&date=" + date;
 
         if (url !== undefined) {
             downloadFile(url);

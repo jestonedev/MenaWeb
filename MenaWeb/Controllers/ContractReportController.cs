@@ -387,7 +387,7 @@ namespace MenaWeb.Controllers
                 return HttpContext.Session.Get<List<int>>("idContracts");
             return new List<int>();
         }
-        public IActionResult GetTakeoverAgreement(int idContract, int idSigner, DateTime date)
+        public IActionResult GetTakeoverAgreement(int idContract, int idSigner, int takeoverType, DateTime date)
         {
             try
             {
@@ -399,11 +399,26 @@ namespace MenaWeb.Controllers
                     return View("Error");
                 }
                 var persons = contractService.GetPersonsByContract(idContract);
-                var files = reportService.TakeoverAgreement(idContract, idSigner, reportPath, date, persons);
-                if (persons.Count == 1) {
-                    return File(files, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", persons[0].IdPerson));
-                } else  
-                    return File(files, zipMime, @"Соглашения об изъятии.zip");
+                switch (takeoverType)
+                {
+                    case 1:
+                        var files = reportService.TakeoverAgreement(idContract, idSigner, reportPath, date, persons);
+                        if (persons.Count == 1)
+                        {
+                            return File(files, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", persons[0].IdPerson));
+                        }
+                        else
+                            return File(files, zipMime, @"Соглашения об изъятии.zip");
+                }
+                var files_kumi = reportService.TakeoverAgreementKumi(idContract, idSigner, reportPath, date, persons);
+                if (persons.Count == 1)
+                {
+                    return File(files_kumi, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", persons[0].IdPerson));
+                }
+                else
+                    return File(files_kumi, zipMime, @"Соглашения об изъятии.zip");
+
+
             }
             catch (Exception ex)
             {
