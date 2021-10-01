@@ -409,7 +409,7 @@ namespace MenaWeb.DataServices
 
         public List<TemplateVariableMeta> WarrantVariablesMeta(int idTemplate)
         {
-            return db.TemplateVariablesMeta.Where(r => r.IdWarrantTemplate == idTemplate).ToList();
+            return db.TemplateVariablesMeta.Where(r => r.IdWarrantTemplate == idTemplate).OrderBy(c=> c.IdTemplateVariableMeta).ToList();
         }
 
         public ContractVM GetViewModel(Contract contract, bool isContractCopy = false)
