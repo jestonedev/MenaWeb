@@ -30,6 +30,10 @@
                 <label class="mb-1" asp-for="Contract.ApartmentSide2.Room">Комната</label>
                 <input disabled type="text" class="form-control input-premise-num" asp-for="Contract.ApartmentSide2.Room" maxlength="5" title="Номер комнаты">
             </div>
+            <div class="form-group col-4 mb-2">
+                <label class="mb-1" asp-for="Contract.ApartmentSide2.Index">Индекс</label>
+                <input disabled type="text" class="form-control input-premise-num" asp-for="Contract.ApartmentSide2.Index" maxlength="6" title="Индекс">
+            </div>
             <div class="form-group col-8 mb-2">
                 <label class="mb-1" asp-for="Contract.ApartmentSide2.IdApartmentType">Тип помещения</label>
                 <select disabled class="selectpicker form-control" data-live-search="true" asp-for="Contract.ApartmentSide2.IdApartmentType" title="Тип помещения"
@@ -40,7 +44,7 @@
                 <input disabled type="text" class="form-control input-decimal" asp-for="Contract.ApartmentSide2.TotalArea" title="Общая площадь">
                 <span asp-validation-for="Contract.ApartmentSide2.TotalArea" class="text-danger"></span>
             </div>
-            <div class="form-group col-8 mb-2">
+            <div class="form-group col-4 mb-2">
                 <label class="mb-1" asp-for="Contract.ApartmentSide2.InventoryNumber">Кадастровый номер</label>
                 <input disabled type="text" class="form-control input-cadastral-num" asp-for="Contract.ApartmentSide2.InventoryNumber" maxlength="50" title="Кадастровый номер">
             </div>
@@ -111,7 +115,7 @@
                             <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].TotalArea" />
                             <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].ResolutionNumber" />
                             <input type="hidden" asp-for="Contract.ApartmentSide2.Land[0].ResolutionDate"
-                                        value="@(Model.Contract.ApartmentSide2.Land[0].ResolutionDate != null ?
+                                   value="@(Model.Contract.ApartmentSide2.Land[0].ResolutionDate != null ?
                                         Model.Contract.ApartmentSide2.Land[0].ResolutionDate.Value.ToString("yyyy-MM-dd") : "")" />
                             var land = Model.Contract.ApartmentSide2.Land.FirstOrDefault();
                             landAddress = Model.Streets.FirstOrDefault(s => s.IdStreet == land.IdStreet)?.StreetName;
@@ -136,7 +140,7 @@
                 </div>
             </div>
             <div class="form-check col-12 mb-3 form-check-inline">
-                <input disabled type="checkbox" class="form-check-input" asp-for="Contract.ApartmentSide2.DisasterHousing"> 
+                <input disabled type="checkbox" class="form-check-input" asp-for="Contract.ApartmentSide2.DisasterHousing">
                 <label class="form-check-label" asp-for="Contract.ApartmentSide2.DisasterHousing" title="Признать жилье аварийным">Признать жилье аварийным</label>
             </div>
             <div class="col-12 mb-3">
