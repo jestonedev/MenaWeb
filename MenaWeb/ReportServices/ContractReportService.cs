@@ -409,7 +409,7 @@ namespace MenaWeb.ReportServices
                     { "agreeDate", date },
                     { "reportPath", reportPath },
                 };
-                var fileNameReport = GenerateReport(arguments, "mena\\copy_takeover_agreement");
+                var fileNameReport = GenerateReport(arguments, "mena\\takeover_agreement");
                 return DownloadFile(fileNameReport);
             }
             else
