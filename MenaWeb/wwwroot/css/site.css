@@ -136,3 +136,11 @@ input.input-validation-error, button.input-validation-error, textarea.input-vali
 .m-opacity-item-menu:hover {
     opacity: 1 !important;
 }
+
+.m-label-no-wrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    vertical-align: bottom;
+}
