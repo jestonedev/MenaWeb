@@ -409,16 +409,25 @@ namespace MenaWeb.Controllers
                         }
                         else
                             return File(files, zipMime, @"Соглашения об изъятии.zip");
+                    case 2:
+                        var files_kumi = reportService.TakeoverAgreementKumi(idContract, idSigner, reportPath, date, persons);
+                        if (persons.Count == 1)
+                        {
+                            return File(files_kumi, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", persons[0].IdPerson));
+                        }
+                        else
+                            return File(files_kumi, zipMime, @"Соглашения об изъятии.zip");
+                    case 3:
+                        var files_share = reportService.TakeoverAgreementShare(idContract, idSigner, reportPath, date, persons);
+                        if (persons.Count == 1)
+                        {
+                            return File(files_share, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", persons[0].IdPerson));
+                        }
+                        else
+                            return File(files_share, zipMime, @"Соглашения об изъятии.zip");
+                    default:
+                        throw new Exception("Неизвестный тип соглашения");
                 }
-                var files_kumi = reportService.TakeoverAgreementKumi(idContract, idSigner, reportPath, date, persons);
-                if (persons.Count == 1)
-                {
-                    return File(files_kumi, odtMime, string.Format(@"Соглашение об изъятии № {0}.odt", persons[0].IdPerson));
-                }
-                else
-                    return File(files_kumi, zipMime, @"Соглашения об изъятии.zip");
-
-
             }
             catch (Exception ex)
             {
